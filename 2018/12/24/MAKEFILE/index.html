@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TopologySmooth 项目 Makefile 编译 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="TopologySmooth 项目 Makefile 编译最近在阅读论文Topology-based Smoothing of 2D Scarlat Fields with $C^1$-Continuity 的c++源码的过程中, 遇到了编译Makefile的一些问题. 由于我之前的一些c++项目均是用cmake工具自动生成Makefile文件, 对具体的Makefile语法不是十分熟悉. 趁此机">
+<meta name="keywords" content="c++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TopologySmooth 项目 Makefile 编译">
+<meta property="og:url" content="http://zc119.github.io/2018/12/24/MAKEFILE/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="TopologySmooth 项目 Makefile 编译最近在阅读论文Topology-based Smoothing of 2D Scarlat Fields with $C^1$-Continuity 的c++源码的过程中, 遇到了编译Makefile的一些问题. 由于我之前的一些c++项目均是用cmake工具自动生成Makefile文件, 对具体的Makefile语法不是十分熟悉. 趁此机">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-12-24T12:25:44.372Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TopologySmooth 项目 Makefile 编译">
+<meta name="twitter:description" content="TopologySmooth 项目 Makefile 编译最近在阅读论文Topology-based Smoothing of 2D Scarlat Fields with $C^1$-Continuity 的c++源码的过程中, 遇到了编译Makefile的一些问题. 由于我之前的一些c++项目均是用cmake工具自动生成Makefile文件, 对具体的Makefile语法不是十分熟悉. 趁此机">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                41
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                6
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-MAKEFILE" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TopologySmooth 项目 Makefile 编译
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/12/24/MAKEFILE/">
+            <time datetime="2018-12-24T12:25:05.000Z" itemprop="datePublished">2018-12-24</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/c/">c++</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/c/">c++</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="TopologySmooth-项目-Makefile-编译"><a href="#TopologySmooth-项目-Makefile-编译" class="headerlink" title="TopologySmooth 项目 Makefile 编译"></a>TopologySmooth 项目 Makefile 编译</h1><p>最近在阅读论文Topology-based Smoothing of 2D Scarlat Fields with $C^1$-Continuity 的c++源码的过程中, 遇到了编译Makefile的一些问题. 由于我之前的一些c++项目均是用cmake工具自动生成Makefile文件, 对具体的Makefile语法不是十分熟悉. 趁此机会, 简要学习一些Makefile语法. 主要参考了CSDN陈皓博客的<a href="https://blog.csdn.net/haoel/article/month/2004/02" target="_blank" rel="noopener">《跟我一起写Makefile》</a>系列.</p>
+<a id="more"></a>
+<h2 id="Makefile"><a href="#Makefile" class="headerlink" title="Makefile"></a>Makefile</h2><p>先直接贴出项目中Makefile文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line">SOURCES = $(CXX_OBJECTS:%.o=%.cpp) $(C_OBJECTS:%.o=%.c) \</span><br><span class="line">			$(MAIN_OBJECT:%.o=%.cpp)</span><br><span class="line">LIB_OBJECTS = $(CXX_OBJECTS) $(C_OBJECTS)</span><br><span class="line">CXX_OBJECTS = monotonic_function_space.o minimath.o opt1d.o halfedge.o opt_height_field.o</span><br><span class="line">C_OBJECTS = </span><br><span class="line"><span class="comment">## The main object is assumed to be a '.cpp' file.</span></span><br><span class="line">MAIN_OBJECT = test.o</span><br><span class="line"></span><br><span class="line">ARCH = $(shell uname)</span><br><span class="line">include Makefile.$(ARCH)</span><br><span class="line"></span><br><span class="line">TARGET = toposmooth2</span><br><span class="line">LIBTARGET = lib$(TARGET).a</span><br><span class="line">DYLIBTARGET = lib$(TARGET).$(DYLIB_SUFFIX)</span><br><span class="line"></span><br><span class="line">CPPCOMPILER = g++</span><br><span class="line">CCOMPILER = gcc</span><br><span class="line"></span><br><span class="line">WARNINGFLAGS = -Wall -Wno-sign-compare -Woverloaded-virtual -fkeep-inline-functions</span><br><span class="line"></span><br><span class="line">COMPILERFLAGS = -g -O2 $(WARNINGFLAGS) -finline-functions -ftree-vectorize -msse2</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">AR = /usr/bin/ar</span><br><span class="line">ARFLAGS = -rus</span><br><span class="line"></span><br><span class="line"><span class="comment">## This comes from Makefile.$(ARCH)</span></span><br><span class="line"><span class="comment">#DYLIB_FLAGS = -shared</span></span><br><span class="line">COMPILERFLAGS += -fPIC</span><br><span class="line"></span><br><span class="line">MAKEDEPEND = $(CPPCOMPILER) -MM</span><br><span class="line">DEPENDFILE = Makefile.depend</span><br><span class="line"></span><br><span class="line">INCLUDEFLAGS	= -Iext -Iext/eigen2</span><br><span class="line">LINKTIMEFLAGS = -lm -Lext/tnc -ltnc</span><br><span class="line"></span><br><span class="line"><span class="comment"># clear out implicit rules</span></span><br><span class="line">.SUFFIXES:</span><br><span class="line"></span><br><span class="line">all: $(LIBTARGET) $(TARGET) $(DYLIBTARGET)</span><br><span class="line"></span><br><span class="line">$(TARGET): $(MAIN_OBJECT) $(LIBTARGET)</span><br><span class="line">	$(CPPCOMPILER) -o <span class="variable">$@</span> \</span><br><span class="line">	$(MAIN_OBJECT) \</span><br><span class="line">	$(LIBTARGET) \</span><br><span class="line">	$(INCLUDEFLAGS) $(LINKTIMEFLAGS) \</span><br><span class="line">	$(FRAMEWORKS)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">library: $(LIBTARGET) $(DYLIBTARGET)</span><br><span class="line"></span><br><span class="line">$(LIBTARGET): $(LIB_OBJECTS)</span><br><span class="line">	$(AR) $(ARFLAGS) <span class="variable">$@</span> $(LIB_OBJECTS)</span><br><span class="line"></span><br><span class="line">$(DYLIBTARGET): $(LIB_OBJECTS)</span><br><span class="line">	$(CPPCOMPILER) $(DYLIB_FLAGS) -o <span class="variable">$@</span> $(LIB_OBJECTS) $(LINKTIMEFLAGS)</span><br><span class="line"></span><br><span class="line">%.o: %.cpp</span><br><span class="line">	$(CPPCOMPILER) $(COMPILERFLAGS) $(INCLUDEFLAGS) -c $&lt;</span><br><span class="line"></span><br><span class="line">%.o: %.c</span><br><span class="line">	$(CCOMPILER) $(COMPILERFLAGS) $(INCLUDEFLAGS) -c $&lt;</span><br><span class="line"></span><br><span class="line">.PHONY : clean tidy</span><br><span class="line">clean: tidy</span><br><span class="line">	rm -f $(TARGET)</span><br><span class="line">	rm -f $(LIBTARGET)</span><br><span class="line">	rm -f $(DYLIBTARGET)</span><br><span class="line">	rm -f $(DEPENDFILE)</span><br><span class="line"></span><br><span class="line">tidy:</span><br><span class="line">	rm -f $(LIB_OBJECTS) $(MAIN_OBJECT)</span><br><span class="line"></span><br><span class="line">relib:</span><br><span class="line">	rm -f $(TARGET)</span><br><span class="line"></span><br><span class="line">depend:</span><br><span class="line">	$(MAKEDEPEND) $(INCLUDEFLAGS) $(SOURCES) &gt; $(DEPENDFILE)</span><br><span class="line"></span><br><span class="line">-include $(DEPENDFILE)</span><br></pre></td></tr></table></figure></p>
+<h2 id="语法与说明"><a href="#语法与说明" class="headerlink" title="语法与说明"></a>语法与说明</h2><ol>
+<li>Makefile最基本的规则如下<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">target ... : prerequisites ...</span><br><span class="line">        conmmand</span><br><span class="line">        ...</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如果依赖文件(prerequisites)的日期比目标文件(target)新, 则执行command命令.</p>
+<ol start="2">
+<li><code>ARCH = $(shell uname)</code> 变量在linux系统下为<code>Linux</code>. </li>
+</ol>
+<ol start="3">
+<li><code>.PHONY : clean tidy</code> 表示 <code>clean, tidy</code>是伪目标. </li>
+</ol>
+<ol start="4">
+<li><p><code>include Makefile.$(ARCH)</code> 表示引用<code>Makefile.Linux</code> 文件中的命令 </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">DYLIB_SUFFIX = so</span><br><span class="line">DYLIB_FLAGS = -shared</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gcc <code>-I</code> <code>-L</code> <code>l</code>区别 <code>-Iext -Iext/eigen2</code> 表示在<code>ext</code>文件夹与<code>ext/eigen2</code>文件夹中作为第一个寻找的头文件目录, 此外还有<code>/usr/include</code>, <code>/usr/local/include</code>. <code>-Lext/tnc</code> 表示作为第一个寻找库(动态)文件的目录, 此外还有<code>/usr/lib</code>, <code>/usr/local/lib</code>. <code>-lm -Lext/tnc -ltnc</code> 表示指定程序要链接的库, 数学库, 库名为<code>m</code>, 库文件名为<code>libm.so</code>. </p>
+</li>
+<li><p>gcc 优化选项 <code>-O1 -O2 -O3 -Os</code> 优化级别从低到高. <code>-g</code>可执行程序包含调试信息. </p>
+</li>
+<li><p>利用伪目标的特性使用<code>all</code>生成多个可执行文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">all: $(LIBTARGET) $(TARGET) $(DYLIBTARGET)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成多目标时, 采用自动化变量 <code>$@</code> 表示目标集. <code>$&lt;</code>表示所有依赖目标集. </p>
+</li>
+<li><p>静态模式更容易定义多目标规则. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;targets ...&gt;: &lt;target-pattern&gt;: &lt;prereq-patterns ...&gt;</span><br><span class="line">        &lt;commands&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%.o: %.cpp</span><br><span class="line">	$(CPPCOMPILER) $(COMPILERFLAGS) $(INCLUDEFLAGS) -c $&lt;</span><br></pre></td></tr></table></figure></p>
+<ol start="10">
+<li>自动生成依赖性.<br><code>MAKEDEPEND = $(CPPCOMPILER) -MM</code></li>
+</ol>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/12/24/MAKEFILE/" data-id="cjq2aoxob0007psihlzqguwdh" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2018/01/28/TensorFlow-实现卷积神经网络/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorFlow 实现卷积神经网络</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/c/">c++</a></p>
+                            <p class="item-title"><a href="/2018/12/24/MAKEFILE/" class="title">TopologySmooth 项目 Makefile 编译</a></p>
+                            <p class="item-date"><time datetime="2018-12-24T12:25:05.000Z" itemprop="datePublished">2018-12-24</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

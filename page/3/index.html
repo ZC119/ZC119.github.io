@@ -154,11 +154,11 @@
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                40
+                41
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                5
+                6
                 <span>标签</span>
             </div>
         </div>
@@ -207,6 +207,137 @@
 
             
             <section id="main">
+    <article id="post-TensorBoard-Visualizing-Learning" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2017/12/18/TensorBoard-Visualizing-Learning/">TensorBoard Visualizing Learning</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/18/TensorBoard-Visualizing-Learning/">
+            <time datetime="2017-12-18T12:45:05.000Z" itemprop="datePublished">2017-12-18</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            <p></p><p>TensorBoard 涉及到的运算，通常是在训练庞大的深度神经网络中出现的复杂而又难以理解的运算。</p><p></p>
+            <p class="article-more-link">
+                <a href="/2017/12/18/TensorBoard-Visualizing-Learning/#more">查看更多</a>
+            </p>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/18/TensorBoard-Visualizing-Learning/" data-id="cjq2aoxok000qpsih2fa63xih" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-Building-Input-Functions-with-tf-estimator" class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
@@ -262,7 +393,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/18/Building-Input-Functions-with-tf-estimator/" data-id="cjq1zv2zg0000drihywmijerl" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/18/Building-Input-Functions-with-tf-estimator/" data-id="cjq2aoxo50001psih3plcx6nl" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -393,7 +524,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/17/tf-estimator-Quickstart/" data-id="cjq1zv30e002bdrihmeyrtfr9" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/17/tf-estimator-Quickstart/" data-id="cjq2aoxp2002mpsihfzfd3783" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -535,7 +666,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/17/TensorFlow-Mechanics-101/" data-id="cjq1zv2zy000qdrihcnz7wld4" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/17/TensorFlow-Mechanics-101/" data-id="cjq2aoxok000tpsihx93yhft1" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -666,7 +797,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/13/Deep-MNIST-for-Experts/" data-id="cjq1zv2zk0002drih1jik5fqc" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/13/Deep-MNIST-for-Experts/" data-id="cjq2aoxoc0008psihl9hp6qv3" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -807,7 +938,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/11/MNIST-For-ML-Beginners/" data-id="cjq1zv2zo0008drihf59mkuvn" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/11/MNIST-For-ML-Beginners/" data-id="cjq2aoxoh000fpsihhhkskcqk" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -938,7 +1069,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/11/第十二章-避开采集陷阱/" data-id="cjq1zv30p0038drih53fl06p2" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/11/第十二章-避开采集陷阱/" data-id="cjq2aoxp70033psih252vzo86" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1069,7 +1200,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/11/第十一章-图像识别与文字处理/" data-id="cjq1zv30q003bdriheetoe4nq" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/11/第十一章-图像识别与文字处理/" data-id="cjq2aoxp90039psihnz9q1e5b" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1203,7 +1334,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/11/第十章-采集JavaScript/" data-id="cjq1zv30r003edrihycd0390t" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/11/第十章-采集JavaScript/" data-id="cjq2aoxpa003fpsihal8ztp8t" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1336,138 +1467,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2017/12/11/第九章-穿越网页表单与登录窗口进行采集/" data-id="cjq1zv30i002pdrihdo9tv2l4" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-第八章-自然语言处理" class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2017/12/11/第八章-自然语言处理/">第八章 自然语言处理</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2017/12/11/第八章-自然语言处理/">
-            <time datetime="2017-12-11T11:15:07.000Z" itemprop="datePublished">2017-12-11</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p></p><h2 id="8-1概括数据"><a href="#8-1概括数据" class="headerlink" title="8.1概括数据"></a>8.1概括数据</h2><p></p>
-            <p class="article-more-link">
-                <a href="/2017/12/11/第八章-自然语言处理/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="http://zc119.github.io/2017/12/11/第八章-自然语言处理/" data-id="cjq1zv30o0035drihnpb2syoo" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2017/12/11/第九章-穿越网页表单与登录窗口进行采集/" data-id="cjq2aoxp3002ppsih3c0i8vwb" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1544,7 +1544,7 @@
 
 
     <nav id="page-nav">
-        <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
+        <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">下一页 &raquo;</a>
     </nav>
 </section>
             
@@ -1556,6 +1556,15 @@
         <h3 class="widget-title">最新文章</h3>
         <div class="widget">
             <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/c/">c++</a></p>
+                            <p class="item-title"><a href="/2018/12/24/MAKEFILE/" class="title">TopologySmooth 项目 Makefile 编译</a></p>
+                            <p class="item-date"><time datetime="2018-12-24T12:25:05.000Z" itemprop="datePublished">2018-12-24</time></p>
+                        </div>
+                    </li>
                 
                     <li>
                         
@@ -1593,15 +1602,6 @@
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
-                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
-                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -1611,7 +1611,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
         </div>
     </div>
 
@@ -1620,7 +1620,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
         </div>
     </div>
 
@@ -1629,7 +1629,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
         </div>
     </div>
 
@@ -1638,7 +1638,7 @@
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
         </div>
     </div>
 
