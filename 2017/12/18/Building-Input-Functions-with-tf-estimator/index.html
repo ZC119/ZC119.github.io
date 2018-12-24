@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>Building Input Functions with tf.estimator | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="本教程介绍在 tf.estimator 中创建输入函数。你将会得到一个总览，关于如何构建一个 input_fn 来预处理并 feed 数据到你的模型。然后，你将应用一个 input_fn 到训练，评估和预测数据中，具体实例是用一个 NN 回归器预测房价中位数。">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Building Input Functions with tf.estimator">
+<meta property="og:url" content="http://zc119.github.io/2017/12/18/Building-Input-Functions-with-tf-estimator/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="本教程介绍在 tf.estimator 中创建输入函数。你将会得到一个总览，关于如何构建一个 input_fn 来预处理并 feed 数据到你的模型。然后，你将应用一个 input_fn 到训练，评估和预测数据中，具体实例是用一个 NN 回归器预测房价中位数。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/Building%20Input%20Functions%20with%20tf.estimator/1.png">
+<meta property="og:updated_time" content="2017-12-18T03:10:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Building Input Functions with tf.estimator">
+<meta name="twitter:description" content="本教程介绍在 tf.estimator 中创建输入函数。你将会得到一个总览，关于如何构建一个 input_fn 来预处理并 feed 数据到你的模型。然后，你将应用一个 input_fn 到训练，评估和预测数据中，具体实例是用一个 NN 回归器预测房价中位数。">
+<meta name="twitter:image" content="http://zc119.github.io/image/Building%20Input%20Functions%20with%20tf.estimator/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-Building-Input-Functions-with-tf-estimator" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            Building Input Functions with tf.estimator
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/18/Building-Input-Functions-with-tf-estimator/">
+            <time datetime="2017-12-18T03:09:38.000Z" itemprop="datePublished">2017-12-18</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>本教程介绍在 tf.estimator 中创建输入函数。你将会得到一个总览，关于如何构建一个 input_fn 来预处理并 feed 数据到你的模型。然后，你将应用一个 input_fn 到训练，评估和预测数据中，具体实例是用一个 NN 回归器预测房价中位数。</p>
+<a id="more"></a>
+<h2 id="用-input-fn-定制输入管线-Input-Pipelines"><a href="#用-input-fn-定制输入管线-Input-Pipelines" class="headerlink" title="用 input_fn 定制输入管线(Input Pipelines)"></a>用 input_fn 定制输入管线(Input Pipelines)</h2><p>input_fn 被用来传递特征与目标数据到 Estimator 的 train，evaluate，predict 方法中。使用者可以在 input_fn 中使用特征工程或者预处理技术。下面是一个例子：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">training_set = tf.contrib.learn.datasets.base.load_csv_with_header(</span><br><span class="line">    filename=IRIS_TRAINING, target_dtype=np.int, features_dtype=np.float32)</span><br><span class="line"></span><br><span class="line">train_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">    x=&#123;<span class="string">"x"</span>: np.array(training_set.data)&#125;,</span><br><span class="line">    y=np.array(training_set.target),</span><br><span class="line">    num_epochs=<span class="keyword">None</span>,</span><br><span class="line">    shuffle=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">classifier.train(input_fn=train_input_fn, steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="剖析-input-fn"><a href="#剖析-input-fn" class="headerlink" title="剖析 input_fn"></a>剖析 input_fn</h3><p>以下代码阐述了 input function 的一个基本的框架：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_input_fn</span><span class="params">()</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># Preprocess your data here...</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># ...then return 1) a mapping of feature columns to Tensors with</span></span><br><span class="line">    <span class="comment"># the corresponding feature data, and 2) a Tensor containing labels</span></span><br><span class="line">    <span class="keyword">return</span> feature_cols, labels</span><br></pre></td></tr></table></figure>
+<p>输入函数的主体包括具体的预处理输入数据的方法，例如剔除缺失数据或特征缩放(feature scaling)</p>
+<p>输入函数必须返回下列两个值，包含最后要 feed 给你模型的 feature 和 label data。</p>
+<p>feature_cols</p>
+<blockquote>
+<p>一个包括 key/value 的 dict 将特征列的 names 映射到 Tensor s</p>
+</blockquote>
+<p>labels</p>
+<blockquote>
+<p>一个 Tensor 包括你的 label 值</p>
+</blockquote>
+<h3 id="转换特征数据到-Tensors"><a href="#转换特征数据到-Tensors" class="headerlink" title="转换特征数据到 Tensors"></a>转换特征数据到 Tensors</h3><p>如果你的 feature/label 数据是 python array 或者存储在 pandas dataframes 或者 numpy arrays 中，你可以使用以下方法构建 input_fn:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment"># numpy input_fn.</span></span><br><span class="line">my_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">    x=&#123;<span class="string">'x'</span>: np.array(x_data)&#125;,</span><br><span class="line">    y=np.array(y_data),</span><br><span class="line">    ...)</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="comment"># pandas input_fn</span></span><br><span class="line">my_input_fn = tf.estimator.inputs.pandas_input_fn(</span><br><span class="line">    x=pd.DataFrame(&#123;<span class="string">'x'</span>: x_data&#125;),</span><br><span class="line">    y=pd.Series(y_data),</span><br><span class="line">    ...)</span><br></pre></td></tr></table></figure>
+<p>对于稀疏的分类数据，你可能会使用 SparseTensor，它被3个参数实例化：</p>
+<p>dense_shape</p>
+<blockquote>
+<p>shape of the tensor。用 list 来说明每一维的维数。例如：dense_shape=[3,6] specifies a two-dimensional 3x6 tensor，dense_shape=[2,3,4] specifies a three-dimensional 2x3x4 tensor, and dense_shape=[9] specifies a one-dimensional tensor with 9 elements.</p>
+</blockquote>
+<p>indices</p>
+<blockquote>
+<p>indices=[[1,3], [2,4]] specifies that the elements with indexes of [1,3] and [2,4] have nonzero values.</p>
+</blockquote>
+<p>values</p>
+<blockquote>
+<p>For example, given indices=[[1,3], [2,4]], the parameter values=[18, 3.6] specifies that element [1,3] of the tensor has a value of 18, and element [2,4] of the tensor has a value of 3.6.</p>
+</blockquote>
+<p>The following code defines a two-dimensional SparseTensor with 3 rows and 5 columns. The element with index [0,1] has a value of 6, and the element with index [2,4] has a value of 0.5 (all other values are 0):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sparse_tensor = tf.SparseTensor(indices=[[<span class="number">0</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">4</span>]],</span><br><span class="line">                                values=[<span class="number">6</span>, <span class="number">0.5</span>],</span><br><span class="line">                                dense_shape=[<span class="number">3</span>, <span class="number">5</span>])</span><br></pre></td></tr></table></figure>
+<p>这表示如下 tensor<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[[<span class="number">0</span>, <span class="number">6</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"> [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line"> [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0.5</span>]]</span><br></pre></td></tr></table></figure></p>
+<h3 id="传入-input-fn-数据到你的模型"><a href="#传入-input-fn-数据到你的模型" class="headerlink" title="传入 input_fn 数据到你的模型"></a>传入 input_fn 数据到你的模型</h3><p>为了传入数据到你的模型，你简单地传入你的输出函数到 train 中，例如<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.train(input_fn=my_input_fn, steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure></p>
+<p>注意到 input_fn 参数必须接受一个函数(i.e., input_fn=my_input_fn)，而不是函数的返回值(input_fn=my_input_fn())。这意味着以下代码会产生 TypeError:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.train(input_fn=my_input_fn(training_set), steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure></p>
+<p>然而，如果你想参数化你的输入函数，这里有另外的方法。你可以使用一个 wrapper function 不接受任何参数作为你的 input_fn，然后使用它来调用你希望加上参数的函数，例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_input_fn</span><span class="params">(data_set)</span>:</span></span><br><span class="line">    ...</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">my_input_fn_training_set</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">return</span> my_input_fn(training_set)</span><br><span class="line"></span><br><span class="line">classifier.train(input_fn=my_inpuy_fn_training_set, steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure></p>
+<p>或者，你可以使用 Python 的 <a href="https://docs.python.org/2/library/functools.html#functools.partial" target="_blank" rel="noopener">functools.partial</a> 函数来构建一个新的函数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">classifier.train(</span><br><span class="line">    input_fn=functools.partial(my_input_fn, data_set=training_set), steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+<p>第三种方法是 wrap 你的 input_fn 在一个 lambda 函数中，然后将它传给 input_fn 参数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.train(input_fn=<span class="keyword">lambda</span>: my_input_fn(training_set), steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+<p>上面你在设计一个输入管线时能够接受参数的一个重大的优势是可以传递同样的 input_fn 到 evaluate 和 predict 中，仅仅需要修改参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">classifier.evaluate(input_fn=<span class="keyword">lambda</span>: my_input_fn(test_set), steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+<p>这个方法增加了代码的可维护性。不需要定义大量的 input_fn。</p>
+<p>最后，你可以使用 tf.estimator.inputs 来从 numpy 或 pandas 数据集中创建 input_fn。另外的优势是你可以使用更多的参数，例如 num_epochs 和 shuffle</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_input_fn_from_pandas</span><span class="params">(data_set, num_epochs=None, shuffle=True)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.estimator.inputs.pandas_input_fn(</span><br><span class="line">      x=pdDataFrame(...),</span><br><span class="line">      y=pd.Series(...),</span><br><span class="line">      num_epochs=num_epochs,</span><br><span class="line">      shuffle=shuffle)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_input_fn_from_numpy</span><span class="params">(data_set, num_epochs=None, shuffle=True)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">      x=&#123;...&#125;,</span><br><span class="line">      y=np.array(...),</span><br><span class="line">      num_epochs=num_epochs,</span><br><span class="line">      shuffle=shuffle)</span><br></pre></td></tr></table></figure>
+<h3 id="一个关于-Boston-房价的-NN-model"><a href="#一个关于-Boston-房价的-NN-model" class="headerlink" title="一个关于 Boston 房价的 NN model"></a>一个关于 Boston 房价的 NN model</h3><p>在本教程的剩余部分，你会写出一个 input_fn 来预处理 Boston 房价数据的子集，并使用它来 feed 数据到一个 NN regressor 来预测房价中位数。</p>
+<p>数据包括以下几个特征：<br><img src="/image/Building Input Functions with tf.estimator/1.png" alt=""></p>
+<p>预测的房价是 MEDV。</p>
+<h2 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h2><p>下载下列数据集：<a href="http://download.tensorflow.org/data/boston_train.csv" target="_blank" rel="noopener">boston_train.csv</a>,<a href="http://download.tensorflow.org/data/boston_test.csv" target="_blank" rel="noopener">boston_test.csv</a>,<a href="http://download.tensorflow.org/data/boston_predict.csv" target="_blank" rel="noopener">boston_predict</a></p>
+<p>以下教程会一步步的展示如何建立一个 input_fn,feed 数据到 NN regressor，训练并评估模型，最后对房价预测。<a href="https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/input_fn/boston.py" target="_blank" rel="noopener">完整代码</a></p>
+<h3 id="导入房价数据"><a href="#导入房价数据" class="headerlink" title="导入房价数据"></a>导入房价数据</h3><p>首先 imports 并设置日志记录的详细信息来获得更详细的日志输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">tf.logging.set_verbosity(tf.logging.INFO)</span><br></pre></td></tr></table></figure>
+<pre><code>/root/anaconda3/envs/tensorflow/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: compiletime version 3.5 of module &apos;tensorflow.python.framework.fast_tensor_util&apos; does not match runtime version 3.6
+  return f(*args, **kwds)
+</code></pre><p>定义数据集的列名。为了区分特征与标签，也定义了 FEATURES 与 LABEL。然后读取三个 CSVs 文件到 pandas DataFrames：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">COLUMNS = [<span class="string">"crim"</span>, <span class="string">"zn"</span>, <span class="string">"indus"</span>, <span class="string">"nox"</span>, <span class="string">"rm"</span>, <span class="string">"age"</span>,</span><br><span class="line">           <span class="string">"dis"</span>, <span class="string">"tax"</span>, <span class="string">"ptratio"</span>, <span class="string">"medv"</span>]</span><br><span class="line">FEATURES = [<span class="string">"crim"</span>, <span class="string">"zn"</span>, <span class="string">"indus"</span>, <span class="string">"nox"</span>, <span class="string">"rm"</span>,</span><br><span class="line">            <span class="string">"age"</span>, <span class="string">"dis"</span>, <span class="string">"tax"</span>, <span class="string">"ptratio"</span>]</span><br><span class="line">LABEL = <span class="string">"medv"</span></span><br><span class="line"></span><br><span class="line">training_set = pd.read_csv(<span class="string">'boston_train.csv'</span>, skipinitialspace=<span class="keyword">True</span>,</span><br><span class="line">                          skiprows=<span class="number">1</span>, names=COLUMNS)</span><br><span class="line">test_set = pd.read_csv(<span class="string">'boston_test.csv'</span>, skipinitialspace=<span class="keyword">True</span>,</span><br><span class="line">                      skiprows=<span class="number">1</span>, names=COLUMNS)</span><br><span class="line">prediction_set = pd.read_csv(<span class="string">'boston_predict.csv'</span>, skipinitialspace=<span class="keyword">True</span>,</span><br><span class="line">                            skiprows=<span class="number">1</span>, names=COLUMNS)</span><br></pre></td></tr></table></figure>
+<h3 id="定义特征列与创建-Regressor"><a href="#定义特征列与创建-Regressor" class="headerlink" title="定义特征列与创建 Regressor"></a>定义特征列与创建 Regressor</h3><p>下一步，创建1个关于输入数据 FeatureColumn 的 list，它详细说明了用来训练的特征的集合。因为在房价数据中所有的特征都是连续实值，你可以创建它们的 FeatureColumns 通过 tf.contrib.layers.real_valued_column() 函数：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">feature_cols = [tf.feature_column.numeric_column(k) <span class="keyword">for</span> k <span class="keyword">in</span> FEATURES]</span><br></pre></td></tr></table></figure>
+<p>注意：要对特征列有深入了解，请看<a href="https://tensorflow.google.cn/tutorials/linear#feature_columns_and_transformations" target="_blank" rel="noopener">这里</a>。<a href="https://tensorflow.google.cn/tutorials/wide" target="_blank" rel="noopener">Linear Model Tutorial</a> 介绍了如何对分类数据定义 FeatureColumns。</p>
+<p>现在，实例化一个 DNNRegressor 作为一个 NN regression model。你用到两个参数：hidden_units，这是一个超参数定义了每一个隐藏层中节点的数目。（在这里，是两层隐藏层，每一层有10个节点）。另一个参数是 feature_columns，包括了刚才定义的 FeatureColumns。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">regressor = tf.estimator.DNNRegressor(feature_columns=feature_cols,</span><br><span class="line">                                     hidden_units=[<span class="number">10</span>, <span class="number">10</span>],</span><br><span class="line">                                     model_dir=<span class="string">'/tmp/boston_model'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>INFO:tensorflow:Using default config.
+INFO:tensorflow:Using config: {&apos;_model_dir&apos;: &apos;/tmp/boston_model&apos;, &apos;_tf_random_seed&apos;: None, &apos;_save_summary_steps&apos;: 100, &apos;_save_checkpoints_steps&apos;: None, &apos;_save_checkpoints_secs&apos;: 600, &apos;_session_config&apos;: None, &apos;_keep_checkpoint_max&apos;: 5, &apos;_keep_checkpoint_every_n_hours&apos;: 10000, &apos;_log_step_count_steps&apos;: 100, &apos;_service&apos;: None, &apos;_cluster_spec&apos;: &lt;tensorflow.python.training.server_lib.ClusterSpec object at 0x7f3beb1527f0&gt;, &apos;_task_type&apos;: &apos;worker&apos;, &apos;_task_id&apos;: 0, &apos;_master&apos;: &apos;&apos;, &apos;_is_chief&apos;: True, &apos;_num_ps_replicas&apos;: 0, &apos;_num_worker_replicas&apos;: 1}
+</code></pre><h3 id="建立-input-fn"><a href="#建立-input-fn" class="headerlink" title="建立 input_fn"></a>建立 input_fn</h3><p>为了传入输入数据到 regressor 中，引入一个 factory method 接受一个 pandas Dataframe 返回一个 input_fn：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_input_fn</span><span class="params">(data_set, num_epochs=None, shuffle=True)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.estimator.inputs.pandas_input_fn(</span><br><span class="line">    x=pd.DataFrame(&#123;k: data_set[k].values <span class="keyword">for</span> k <span class="keyword">in</span> FEATURES&#125;),</span><br><span class="line">    y=pd.Series(data_set[LABEL].values),</span><br><span class="line">    num_epochs=num_epochs,</span><br><span class="line">    shuffle=shuffle)</span><br></pre></td></tr></table></figure>
+<p>注意到输入数据作为 data_set 参数传入到 input_fn 中，这意味着这个函数可以处理任何 Dataframe，例如 training_set,test_set,prediction_set。</p>
+<p>两个另外的参数：</p>
+<p>num_epochs:</p>
+<blockquote>
+<p>控制在整个数据集中训练的轮数。训练时设为 None，所以 input_fn 保持返回数据直到要求的训练迭代次数。评估和预测阶段，设置为1，所以 input_fn 会在整个数据上轮一次直到 raise OutOfRangeError。That error will signal the Estimator to stop evaluate or predict.</p>
+</blockquote>
+<p>shuffle:</p>
+<blockquote>
+<p>是否打乱数据，评估与预测时，不需要打乱 False。训练时 True。</p>
+</blockquote>
+<h3 id="训练-Regressor"><a href="#训练-Regressor" class="headerlink" title="训练 Regressor"></a>训练 Regressor</h3><p>为了训练 NN regressor，运行 train 并带有参数 training_set:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">regressor.train(input_fn=get_input_fn(training_set), steps=<span class="number">5000</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>INFO:tensorflow:Create CheckpointSaverHook.
+INFO:tensorflow:Saving checkpoints for 1 into /tmp/boston_model/model.ckpt.
+INFO:tensorflow:loss = 47975.1, step = 1
+INFO:tensorflow:global_step/sec: 531.179
+INFO:tensorflow:loss = 11445.7, step = 101 (0.189 sec)
+INFO:tensorflow:global_step/sec: 698.58
+INFO:tensorflow:loss = 8535.93, step = 201 (0.143 sec)
+INFO:tensorflow:global_step/sec: 587.869
+INFO:tensorflow:loss = 5559.58, step = 301 (0.171 sec)
+INFO:tensorflow:global_step/sec: 694.811
+INFO:tensorflow:loss = 10463.6, step = 401 (0.144 sec)
+INFO:tensorflow:global_step/sec: 611.282
+INFO:tensorflow:loss = 5873.93, step = 501 (0.163 sec)
+INFO:tensorflow:global_step/sec: 592.174
+INFO:tensorflow:loss = 7244.08, step = 601 (0.169 sec)
+INFO:tensorflow:global_step/sec: 606.774
+INFO:tensorflow:loss = 9400.8, step = 701 (0.165 sec)
+INFO:tensorflow:global_step/sec: 580.034
+INFO:tensorflow:loss = 7481.78, step = 801 (0.172 sec)
+INFO:tensorflow:global_step/sec: 585.823
+INFO:tensorflow:loss = 4866.61, step = 901 (0.171 sec)
+INFO:tensorflow:global_step/sec: 605.228
+INFO:tensorflow:loss = 6060.24, step = 1001 (0.165 sec)
+INFO:tensorflow:global_step/sec: 590.249
+INFO:tensorflow:loss = 7182.22, step = 1101 (0.170 sec)
+INFO:tensorflow:global_step/sec: 583.159
+INFO:tensorflow:loss = 4686.24, step = 1201 (0.171 sec)
+INFO:tensorflow:global_step/sec: 517.634
+INFO:tensorflow:loss = 5932.13, step = 1301 (0.194 sec)
+INFO:tensorflow:global_step/sec: 575.329
+INFO:tensorflow:loss = 5699.82, step = 1401 (0.173 sec)
+INFO:tensorflow:global_step/sec: 592.402
+INFO:tensorflow:loss = 7183.55, step = 1501 (0.169 sec)
+INFO:tensorflow:global_step/sec: 595.558
+INFO:tensorflow:loss = 5079.74, step = 1601 (0.168 sec)
+INFO:tensorflow:global_step/sec: 590.992
+INFO:tensorflow:loss = 6382.38, step = 1701 (0.169 sec)
+INFO:tensorflow:global_step/sec: 607.674
+INFO:tensorflow:loss = 5313.4, step = 1801 (0.165 sec)
+INFO:tensorflow:global_step/sec: 587.091
+INFO:tensorflow:loss = 3800.63, step = 1901 (0.170 sec)
+INFO:tensorflow:global_step/sec: 589.809
+INFO:tensorflow:loss = 3423.12, step = 2001 (0.170 sec)
+INFO:tensorflow:global_step/sec: 580.676
+INFO:tensorflow:loss = 5139.4, step = 2101 (0.172 sec)
+INFO:tensorflow:global_step/sec: 605.294
+INFO:tensorflow:loss = 2771.85, step = 2201 (0.165 sec)
+INFO:tensorflow:global_step/sec: 592.575
+INFO:tensorflow:loss = 6363.85, step = 2301 (0.169 sec)
+INFO:tensorflow:global_step/sec: 579.445
+INFO:tensorflow:loss = 4457.15, step = 2401 (0.173 sec)
+INFO:tensorflow:global_step/sec: 606.599
+INFO:tensorflow:loss = 3726.37, step = 2501 (0.165 sec)
+INFO:tensorflow:global_step/sec: 596.433
+INFO:tensorflow:loss = 4128.56, step = 2601 (0.168 sec)
+INFO:tensorflow:global_step/sec: 599.769
+INFO:tensorflow:loss = 3768.08, step = 2701 (0.167 sec)
+INFO:tensorflow:global_step/sec: 612.086
+INFO:tensorflow:loss = 6986.38, step = 2801 (0.164 sec)
+INFO:tensorflow:global_step/sec: 592.518
+INFO:tensorflow:loss = 2785.67, step = 2901 (0.169 sec)
+INFO:tensorflow:global_step/sec: 593.526
+INFO:tensorflow:loss = 2719.91, step = 3001 (0.168 sec)
+INFO:tensorflow:global_step/sec: 672.223
+INFO:tensorflow:loss = 5216.25, step = 3101 (0.150 sec)
+INFO:tensorflow:global_step/sec: 564.751
+INFO:tensorflow:loss = 3732.69, step = 3201 (0.176 sec)
+INFO:tensorflow:global_step/sec: 571.024
+INFO:tensorflow:loss = 5989.4, step = 3301 (0.175 sec)
+INFO:tensorflow:global_step/sec: 605.097
+INFO:tensorflow:loss = 5582.24, step = 3401 (0.166 sec)
+INFO:tensorflow:global_step/sec: 498.785
+INFO:tensorflow:loss = 5746.72, step = 3501 (0.200 sec)
+INFO:tensorflow:global_step/sec: 559.438
+INFO:tensorflow:loss = 2472.61, step = 3601 (0.178 sec)
+INFO:tensorflow:global_step/sec: 718.192
+INFO:tensorflow:loss = 2150.47, step = 3701 (0.141 sec)
+INFO:tensorflow:global_step/sec: 709.384
+INFO:tensorflow:loss = 2227.35, step = 3801 (0.140 sec)
+INFO:tensorflow:global_step/sec: 580.385
+INFO:tensorflow:loss = 3599.27, step = 3901 (0.172 sec)
+INFO:tensorflow:global_step/sec: 605.189
+INFO:tensorflow:loss = 3449.01, step = 4001 (0.165 sec)
+INFO:tensorflow:global_step/sec: 499.852
+INFO:tensorflow:loss = 3600.9, step = 4101 (0.202 sec)
+INFO:tensorflow:global_step/sec: 553.669
+INFO:tensorflow:loss = 5410.45, step = 4201 (0.179 sec)
+INFO:tensorflow:global_step/sec: 584.358
+INFO:tensorflow:loss = 3753.37, step = 4301 (0.171 sec)
+INFO:tensorflow:global_step/sec: 569.141
+INFO:tensorflow:loss = 1878.03, step = 4401 (0.176 sec)
+INFO:tensorflow:global_step/sec: 593.617
+INFO:tensorflow:loss = 2991.31, step = 4501 (0.168 sec)
+INFO:tensorflow:global_step/sec: 586.204
+INFO:tensorflow:loss = 4263.31, step = 4601 (0.171 sec)
+INFO:tensorflow:global_step/sec: 691.632
+INFO:tensorflow:loss = 4760.43, step = 4701 (0.145 sec)
+INFO:tensorflow:global_step/sec: 581.878
+INFO:tensorflow:loss = 3642.14, step = 4801 (0.171 sec)
+INFO:tensorflow:global_step/sec: 598.99
+INFO:tensorflow:loss = 5013.65, step = 4901 (0.167 sec)
+INFO:tensorflow:Saving checkpoints for 5000 into /tmp/boston_model/model.ckpt.
+INFO:tensorflow:Loss for final step: 5582.02.
+
+
+
+
+
+&lt;tensorflow.python.estimator.canned.dnn.DNNRegressor at 0x7f3beb064ef0&gt;
+</code></pre><h3 id="评估模型"><a href="#评估模型" class="headerlink" title="评估模型"></a>评估模型</h3><p>下面测试模型在测试集上的表现。运行 evaluate，这次把 test_set 传入到 input_fn 中：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ev = regressor.evaluate(</span><br><span class="line">    input_fn=get_input_fn(test_set, num_epochs=<span class="number">1</span>, shuffle=<span class="keyword">False</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>INFO:tensorflow:Starting evaluation at 2017-12-18-02:53:47
+INFO:tensorflow:Restoring parameters from /tmp/boston_model/model.ckpt-5000
+INFO:tensorflow:Finished evaluation at 2017-12-18-02:53:47
+INFO:tensorflow:Saving dict for global step 5000: average_loss = 12.5115, global_step = 5000, loss = 1251.15
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">loss_score = ev[<span class="string">'loss'</span>]</span><br><span class="line">print(<span class="string">'Loss: &#123;0:f&#125;'</span>.format(loss_score))</span><br></pre></td></tr></table></figure>
+<pre><code>Loss: 1251.153320
+</code></pre><h3 id="作出预测"><a href="#作出预测" class="headerlink" title="作出预测"></a>作出预测</h3><p>最后使用模型来预测房价中位数，用 prediction_set，它包括了没有labels 的6个样本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">y = regressor.predict(</span><br><span class="line">input_fn=get_input_fn(prediction_set, num_epochs=<span class="number">1</span>, shuffle=<span class="keyword">False</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># .predict() returns an iterator of dicts; convert to a list and print</span></span><br><span class="line"><span class="comment"># predictions</span></span><br><span class="line">predictions = list(p[<span class="string">'predictions'</span>] <span class="keyword">for</span> p <span class="keyword">in</span> itertools.islice(y, <span class="number">6</span>))</span><br><span class="line">print(<span class="string">'Predictions: &#123;&#125;'</span>.format(str(predictions)))</span><br></pre></td></tr></table></figure>
+<pre><code>INFO:tensorflow:Restoring parameters from /tmp/boston_model/model.ckpt-5000
+Predictions: [array([ 33.13015747], dtype=float32), array([ 19.69280624], dtype=float32), array([ 23.51768494], dtype=float32), array([ 36.13526535], dtype=float32), array([ 15.75910473], dtype=float32), array([ 19.81415749], dtype=float32)]
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/18/Building-Input-Functions-with-tf-estimator/" data-id="cjq1zv2zg0000drihywmijerl" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/18/TensorBoard-Visualizing-Learning/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    TensorBoard Visualizing Learning
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/17/tf-estimator-Quickstart/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">tf.estimator Quickstart</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

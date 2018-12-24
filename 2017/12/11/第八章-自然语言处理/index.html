@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>第八章 自然语言处理 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="8.1概括数据">
+<meta name="keywords" content="python scraper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第八章 自然语言处理">
+<meta property="og:url" content="http://zc119.github.io/2017/12/11/第八章-自然语言处理/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="8.1概括数据">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-11T11:25:21.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第八章 自然语言处理">
+<meta name="twitter:description" content="8.1概括数据">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-第八章-自然语言处理" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            第八章 自然语言处理
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/11/第八章-自然语言处理/">
+            <time datetime="2017-12-11T11:15:07.000Z" itemprop="datePublished">2017-12-11</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="8-1概括数据"><a href="#8-1概括数据" class="headerlink" title="8.1概括数据"></a>8.1概括数据</h2><a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanInput</span><span class="params">(input)</span>:</span></span><br><span class="line">    input = re.sub(<span class="string">'\n+'</span>, <span class="string">' '</span>, input).lower()</span><br><span class="line">    input = re.sub(<span class="string">'\[[0-9]*\]'</span>, <span class="string">''</span>, input)</span><br><span class="line">    input = re.sub(<span class="string">' +'</span>, <span class="string">' '</span>, input)</span><br><span class="line">    input = bytes(input, <span class="string">'UTF-8'</span>)</span><br><span class="line">    input = input.decode(<span class="string">'ascii'</span>, <span class="string">'ignore'</span>)</span><br><span class="line">    cleanInput = []</span><br><span class="line">    input = input.split(<span class="string">' '</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> input:</span><br><span class="line">        item = item.strip(string.punctuation)</span><br><span class="line">        <span class="keyword">if</span> len(item) &gt; <span class="number">1</span> <span class="keyword">or</span> (item.lower() == <span class="string">'a'</span> <span class="keyword">or</span> item.lower() == <span class="string">'i'</span>):</span><br><span class="line">            cleanInput.append(item)</span><br><span class="line">    <span class="keyword">return</span> cleanInput</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ngrams</span><span class="params">(input, n)</span>:</span></span><br><span class="line">    input = cleanInput(input)</span><br><span class="line">    output = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(input)-n+<span class="number">1</span>):</span><br><span class="line">        ngramTemp = <span class="string">' '</span>.join(input[i:i+n])</span><br><span class="line">        <span class="keyword">if</span> ngramTemp <span class="keyword">not</span> <span class="keyword">in</span> output:</span><br><span class="line">            output[ngramTemp] = <span class="number">0</span></span><br><span class="line">        output[ngramTemp] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line">content = str(urlopen(<span class="string">'http://pythonscraping.com/files/inaugurationSpeech.txt'</span>).read(), <span class="string">'utf-8'</span>)</span><br><span class="line">ngrams = ngrams(content, <span class="number">2</span>)</span><br><span class="line">sortedNGrams = sorted(ngrams.items(), key = operator.itemgetter(<span class="number">1</span>), reverse=<span class="keyword">True</span>)</span><br><span class="line">print(sortedNGrams)</span><br></pre></td></tr></table></figure>
+<pre><code>[(&apos;of the&apos;, 213), (&apos;in the&apos;, 65), (&apos;to the&apos;, 61), (&apos;by the&apos;, 41), (&apos;the constitution&apos;, 34), (&apos;of our&apos;, 29), (&apos;to be&apos;, 26), (&apos;the people&apos;, 24), (&apos;from the&apos;, 24), (&apos;that the&apos;, 23), (&apos;and the&apos;, 23), (&apos;it is&apos;, 23), (&apos;of a&apos;, 22), (&apos;may be&apos;, 19), (&apos;of their&apos;, 19), (&apos;the 
+...... 
+</code></pre><ul>
+<li>过滤没意义的单词</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isCommon</span><span class="params">(ngram)</span>:</span></span><br><span class="line">    commonWords = [<span class="string">"the"</span>, <span class="string">"be"</span>, <span class="string">"and"</span>, <span class="string">"of"</span>, <span class="string">"a"</span>, <span class="string">"in"</span>, <span class="string">"to"</span>, <span class="string">"have"</span>, <span class="string">"it"</span>,</span><br><span class="line"><span class="string">"i"</span>, <span class="string">"that"</span>, <span class="string">"for"</span>, <span class="string">"you"</span>, <span class="string">"he"</span>, <span class="string">"with"</span>, <span class="string">"on"</span>, <span class="string">"do"</span>, <span class="string">"say"</span>, <span class="string">"this"</span>,</span><br><span class="line"><span class="string">"they"</span>, <span class="string">"is"</span>, <span class="string">"an"</span>, <span class="string">"at"</span>, <span class="string">"but"</span>,<span class="string">"we"</span>, <span class="string">"his"</span>, <span class="string">"from"</span>, <span class="string">"that"</span>, <span class="string">"not"</span>,</span><br><span class="line"><span class="string">"by"</span>, <span class="string">"she"</span>, <span class="string">"or"</span>, <span class="string">"as"</span>, <span class="string">"what"</span>, <span class="string">"go"</span>, <span class="string">"their"</span>,<span class="string">"can"</span>, <span class="string">"who"</span>, <span class="string">"get"</span>,</span><br><span class="line"><span class="string">"if"</span>, <span class="string">"would"</span>, <span class="string">"her"</span>, <span class="string">"all"</span>, <span class="string">"my"</span>, <span class="string">"make"</span>, <span class="string">"about"</span>, <span class="string">"know"</span>, <span class="string">"will"</span>,</span><br><span class="line"><span class="string">"as"</span>, <span class="string">"up"</span>, <span class="string">"one"</span>, <span class="string">"time"</span>, <span class="string">"has"</span>, <span class="string">"been"</span>, <span class="string">"there"</span>, <span class="string">"year"</span>, <span class="string">"so"</span>,</span><br><span class="line"><span class="string">"think"</span>, <span class="string">"when"</span>, <span class="string">"which"</span>, <span class="string">"them"</span>, <span class="string">"some"</span>, <span class="string">"me"</span>, <span class="string">"people"</span>, <span class="string">"take"</span>,</span><br><span class="line"><span class="string">"out"</span>, <span class="string">"into"</span>, <span class="string">"just"</span>, <span class="string">"see"</span>, <span class="string">"him"</span>, <span class="string">"your"</span>, <span class="string">"come"</span>, <span class="string">"could"</span>, <span class="string">"now"</span>,</span><br><span class="line"><span class="string">"than"</span>, <span class="string">"like"</span>, <span class="string">"other"</span>, <span class="string">"how"</span>, <span class="string">"then"</span>, <span class="string">"its"</span>, <span class="string">"our"</span>, <span class="string">"two"</span>, <span class="string">"more"</span>,</span><br><span class="line"><span class="string">"these"</span>, <span class="string">"want"</span>, <span class="string">"way"</span>, <span class="string">"look"</span>, <span class="string">"first"</span>, <span class="string">"also"</span>, <span class="string">"new"</span>, <span class="string">"because"</span>,</span><br><span class="line"><span class="string">"day"</span>, <span class="string">"more"</span>, <span class="string">"use"</span>, <span class="string">"no"</span>, <span class="string">"man"</span>, <span class="string">"find"</span>, <span class="string">"here"</span>, <span class="string">"thing"</span>, <span class="string">"give"</span>,</span><br><span class="line"><span class="string">"many"</span>, <span class="string">"well"</span>]</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> ngram:</span><br><span class="line">        <span class="keyword">if</span> word <span class="keyword">in</span> commonWords:</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> string</span><br><span class="line"><span class="keyword">import</span> operator</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">cleanInput</span><span class="params">(input)</span>:</span></span><br><span class="line">    input = re.sub(<span class="string">'\n+'</span>, <span class="string">' '</span>, input).lower()</span><br><span class="line">    input = re.sub(<span class="string">'\[[0-9]*\]'</span>, <span class="string">''</span>, input)</span><br><span class="line">    input = re.sub(<span class="string">' +'</span>, <span class="string">' '</span>, input)</span><br><span class="line">    input = bytes(input, <span class="string">'UTF-8'</span>)</span><br><span class="line">    input = input.decode(<span class="string">'ascii'</span>, <span class="string">'ignore'</span>)</span><br><span class="line">    cleanInput = []</span><br><span class="line">    input = input.split(<span class="string">' '</span>)</span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> input:</span><br><span class="line">        item = item.strip(string.punctuation)</span><br><span class="line">        <span class="keyword">if</span> len(item) &gt; <span class="number">1</span> <span class="keyword">or</span> (item.lower() == <span class="string">'a'</span> <span class="keyword">or</span> item.lower() == <span class="string">'i'</span>):</span><br><span class="line">            cleanInput.append(item)</span><br><span class="line">    <span class="keyword">return</span> cleanInput</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">ngrams</span><span class="params">(input, n)</span>:</span></span><br><span class="line">    input = cleanInput(input)</span><br><span class="line">    output = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(len(input)-n+<span class="number">1</span>):</span><br><span class="line">        ngramTemp = <span class="string">' '</span>.join(input[i:i+n])</span><br><span class="line">        <span class="keyword">if</span> ngramTemp <span class="keyword">not</span> <span class="keyword">in</span> output:</span><br><span class="line">            output[ngramTemp] = <span class="number">0</span></span><br><span class="line">        output[ngramTemp] += <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line">content = str(urlopen(<span class="string">'http://pythonscraping.com/files/inaugurationSpeech.txt'</span>).read(), <span class="string">'utf-8'</span>)</span><br><span class="line">ngrams = ngrams(content, <span class="number">2</span>)</span><br><span class="line">sortedNGrams = sorted(ngrams.items(), key = operator.itemgetter(<span class="number">1</span>), reverse=<span class="keyword">True</span>)</span><br><span class="line">print(sortedNGrams)</span><br></pre></td></tr></table></figure>
+<pre><code>[(&apos;the of&apos;, 269), (&apos;of the&apos;, 264), (&apos;to the&apos;, 96), (&apos;the the&apos;, 52), (&apos;by the&apos;, 49), (&apos;the to&apos;, 39), (&apos;to be&apos;, 29), (&apos;of our&apos;, 29), (&apos;from the&apos;, 27), (&apos;the people&apos;, 26), (&apos;of to&apos;, 21), (&apos;of power&apos;, 21), (&apos;the government&apos;, 21), (&apos;for the&apos;, 20), (&apos;of of&apos;, 20), (&apos;the power&apos;, 17), (&apos;power to&apos;, 17), (&apos;to to&apos;, 12), (&apos;but the&apos;, 12), (&apos;be by&apos;, 12), (&apos;upon the&apos;, 12), (&apos;to of&apos;, 12), (&apos;or the&apos;, 11), (&apos;the by&apos;, 10), (&apos;not to&apos;, 10), (&apos;people the&apos;, 10), (&apos;be of&apos;, 10), (&apos;of my&apos;, 9), (&apos;the for&apos;, 9), (&apos;the be&apos;, 9), (&apos;of for&apos;, 9), (&apos;of those&apos;, 9), (&apos;of or&apos;, 9), (&apos;be to&apos;, 9), (&apos;on the&apos;, 9), (&apos;the from&apos;, 9), (&apos;the not&apos;, 9), (&apos;the powers&apos;, 9), (&apos;of one&apos;, 9), (&apos;the other&apos;, 9), (&apos;the whole&apos;, 9), (&apos;to me&apos;, 8), (&apos;to them&apos;, 8), (&apos;one of&apos;, 8), (&apos;by of&apos;, 8), (&apos;would be&apos;, 8), (&apos;should be&apos;, 8), (&apos;them to&apos;, 7), (&apos;country the&apos;, 7), (&apos;of such&apos;, 7),
+......
+</code></pre><h2 id="8-2马尔可夫模型"><a href="#8-2马尔可夫模型" class="headerlink" title="8.2马尔可夫模型"></a>8.2马尔可夫模型</h2><ul>
+<li>通过演讲内容的结构生成任意长度的(下面示例中链长为 100)马尔可夫链组成的句子</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">wordListSum</span><span class="params">(wordList)</span>:</span></span><br><span class="line">    sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> word, value <span class="keyword">in</span> wordList.items():</span><br><span class="line">        sum += value</span><br><span class="line">    <span class="keyword">return</span> sum</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">retrieveRandomWord</span><span class="params">(wordList)</span>:</span></span><br><span class="line">    randIndex = randint(<span class="number">1</span>, wordListSum(wordList))</span><br><span class="line">    <span class="keyword">for</span> word, value <span class="keyword">in</span> wordList.items():</span><br><span class="line">        randIndex -= value</span><br><span class="line">        <span class="keyword">if</span> randIndex &lt;= <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> word</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">buildWordDict</span><span class="params">(text)</span>:</span></span><br><span class="line">    <span class="comment">#剔除换行符和引号</span></span><br><span class="line">    text = text.replace(<span class="string">'\n'</span>, <span class="string">' '</span>)</span><br><span class="line">    text = text.replace(<span class="string">'\"'</span>, <span class="string">''</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#保证每个标点符号都和前面的单词在一起</span></span><br><span class="line">    <span class="comment">#这样不会被剔除，保留在马尔可夫链中</span></span><br><span class="line">    punctuation = [<span class="string">','</span>, <span class="string">'.'</span>, <span class="string">';'</span>, <span class="string">':'</span>]</span><br><span class="line">    <span class="keyword">for</span> symbol <span class="keyword">in</span> punctuation:</span><br><span class="line">        text = text.replace(symbol, <span class="string">' '</span>+symbol+<span class="string">' '</span>)</span><br><span class="line">    </span><br><span class="line">    words = text.split(<span class="string">' '</span>)</span><br><span class="line">    <span class="comment">#过滤空单词</span></span><br><span class="line">    words = [word <span class="keyword">for</span> word <span class="keyword">in</span> words <span class="keyword">if</span> word != <span class="string">''</span>]</span><br><span class="line">    </span><br><span class="line">    wordDict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, len(words)):</span><br><span class="line">        <span class="keyword">if</span> words[i<span class="number">-1</span>] <span class="keyword">not</span> <span class="keyword">in</span> wordDict:</span><br><span class="line">            <span class="comment">#为单词新建一个词典</span></span><br><span class="line">            wordDict[words[i<span class="number">-1</span>]] = &#123;&#125;</span><br><span class="line">        <span class="keyword">if</span> words[i] <span class="keyword">not</span> <span class="keyword">in</span> wordDict[words[i<span class="number">-1</span>]]:</span><br><span class="line">            wordDict[words[i<span class="number">-1</span>]][words[i]] = <span class="number">0</span></span><br><span class="line">        wordDict[words[i<span class="number">-1</span>]][words[i]] = wordDict[words[i<span class="number">-1</span>]][words[i]]+<span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> wordDict</span><br><span class="line">text = str(urlopen(<span class="string">'http://pythonscraping.com/files/inaugurationSpeech.txt'</span>).read(), <span class="string">'utf-8'</span>)</span><br><span class="line">wordDict = buildWordDict(text)</span><br><span class="line"></span><br><span class="line"><span class="comment">#生成长度为100的马尔可夫链</span></span><br><span class="line">length = <span class="number">100</span></span><br><span class="line">chain = <span class="string">''</span></span><br><span class="line">currentWord = <span class="string">'I'</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, length):</span><br><span class="line">    chain += currentWord + <span class="string">' '</span></span><br><span class="line">    currentWord = retrieveRandomWord(wordDict[currentWord])</span><br><span class="line"></span><br><span class="line">print(chain)</span><br></pre></td></tr></table></figure>
+<pre><code>I believe to that officer at the sacredness and fall their best realized ; and consequently of the State governments in mine that they did not to make all necessary sacrifices and that the Executive party in a country . To me the authority to their usefulness ends . No matter in the result of want of the power which of Columbia can never to give firmness and surely nothing beyond . As was wanting no appearance of its theory , the love of the never-dying worm in Gaul or continue to the security of superintendent and on the magnitude 
+</code></pre><h2 id="维基百科六度分割：广度优先搜索"><a href="#维基百科六度分割：广度优先搜索" class="headerlink" title="维基百科六度分割：广度优先搜索"></a>维基百科六度分割：广度优先搜索</h2><h2 id="8-3自然语言工具包"><a href="#8-3自然语言工具包" class="headerlink" title="8.3自然语言工具包"></a>8.3自然语言工具包</h2><ul>
+<li>NLTK是一个python库， 用于识别和标记单词的词性</li>
+</ul>
+<h3 id="8-3-1安装"><a href="#8-3-1安装" class="headerlink" title="8.3.1安装"></a>8.3.1安装</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line">nltk.download()</span><br></pre></td></tr></table></figure>
+<pre><code>showing info https://raw.githubusercontent.com/nltk/nltk_data/gh-pages/index.xml
+
+
+
+
+
+True
+</code></pre><h3 id="8-3-2统计分析"><a href="#8-3-2统计分析" class="headerlink" title="8.3.2统计分析"></a>8.3.2统计分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> word_tokenize</span><br><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> Text</span><br><span class="line"></span><br><span class="line">tokens = word_tokenize(<span class="string">'Here is some not very interesting text'</span>)</span><br><span class="line">text = Text(tokens)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(text)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;Text: Here is some not very interesting text...&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk.book <span class="keyword">import</span> *</span><br></pre></td></tr></table></figure>
+<pre><code>*** Introductory Examples for the NLTK Book ***
+Loading text1, ..., text9 and sent1, ..., sent9
+Type the name of the text or sentence to view it.
+Type: &apos;texts()&apos; or &apos;sents()&apos; to list the materials.
+text1: Moby Dick by Herman Melville 1851
+text2: Sense and Sensibility by Jane Austen 1811
+text3: The Book of Genesis
+text4: Inaugural Address Corpus
+text5: Chat Corpus
+text6: Monty Python and the Holy Grail
+text7: Wall Street Journal
+text8: Personals Corpus
+text9: The Man Who Was Thursday by G . K . Chesterton 1908
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> FreqDist</span><br><span class="line">fdist = FreqDist(text6)</span><br><span class="line">fdist.most_common(<span class="number">10</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>[(&apos;:&apos;, 1197),
+ (&apos;.&apos;, 816),
+ (&apos;!&apos;, 801),
+ (&apos;,&apos;, 731),
+ (&quot;&apos;&quot;, 421),
+ (&apos;[&apos;, 319),
+ (&apos;]&apos;, 312),
+ (&apos;the&apos;, 299),
+ (&apos;I&apos;, 255),
+ (&apos;ARTHUR&apos;, 225)]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdist[<span class="string">'Grail'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>34
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> bigrams</span><br><span class="line">bigrams = bigrams(text6)</span><br><span class="line">bigramsDist = FreqDist(bigrams)</span><br><span class="line">bigramsDist[(<span class="string">'Sir'</span>, <span class="string">'Robin'</span>)]</span><br></pre></td></tr></table></figure>
+<pre><code>18
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> ngrams</span><br><span class="line">fourgrams = ngrams(text6, <span class="number">4</span>)</span><br><span class="line">fourgramsDist = FreqDist(fourgrams)</span><br><span class="line">fourgramsDist[(<span class="string">'father'</span>, <span class="string">'smelt'</span>, <span class="string">'of'</span>, <span class="string">'elderberries'</span>)]</span><br></pre></td></tr></table></figure>
+<pre><code>1
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk.book <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> ngrams</span><br><span class="line">fourgrams = ngrams(text6, <span class="number">4</span>)</span><br><span class="line"><span class="keyword">for</span> fourgram <span class="keyword">in</span> fourgrams:</span><br><span class="line">    <span class="keyword">if</span> fourgram[<span class="number">0</span>] == <span class="string">'coconut'</span>:</span><br><span class="line">        print(fourgram)</span><br></pre></td></tr></table></figure>
+<pre><code>(&apos;coconut&apos;, &apos;and&apos;, &apos;you&apos;, &quot;&apos;&quot;)
+(&apos;coconut&apos;, &quot;&apos;&quot;, &apos;s&apos;, &apos;tropical&apos;)
+(&apos;coconut&apos;, &apos;?&apos;, &apos;ARTHUR&apos;, &apos;:&apos;)
+(&apos;coconut&apos;, &apos;.&apos;, &apos;ARTHUR&apos;, &apos;:&apos;)
+(&apos;coconut&apos;, &apos;back&apos;, &apos;anyway&apos;, &apos;...&apos;)
+(&apos;coconut&apos;, &apos;on&apos;, &apos;a&apos;, &apos;line&apos;)
+</code></pre><h3 id="8-3-3用NLTK做词性分析"><a href="#8-3-3用NLTK做词性分析" class="headerlink" title="8.3.3用NLTK做词性分析"></a>8.3.3用NLTK做词性分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk.book <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> word_tokenize</span><br><span class="line">text = word_tokenize(<span class="string">'Strange women lying in ponds distributing swords is no basis for a system of government. Supreme executive power derives from a mandate from the masses, not from some farcical aquatic ceremony.'</span>)</span><br><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> pos_tag</span><br><span class="line">pos_tag(text)</span><br></pre></td></tr></table></figure>
+<pre><code>[(&apos;Strange&apos;, &apos;JJ&apos;),
+ (&apos;women&apos;, &apos;NNS&apos;),
+ (&apos;lying&apos;, &apos;VBG&apos;),
+ (&apos;in&apos;, &apos;IN&apos;),
+ (&apos;ponds&apos;, &apos;NNS&apos;),
+ (&apos;distributing&apos;, &apos;VBG&apos;),
+ (&apos;swords&apos;, &apos;NNS&apos;),
+ (&apos;is&apos;, &apos;VBZ&apos;),
+ (&apos;no&apos;, &apos;DT&apos;),
+ (&apos;basis&apos;, &apos;NN&apos;),
+ (&apos;for&apos;, &apos;IN&apos;),
+ (&apos;a&apos;, &apos;DT&apos;),
+ (&apos;system&apos;, &apos;NN&apos;),
+ (&apos;of&apos;, &apos;IN&apos;),
+ (&apos;government&apos;, &apos;NN&apos;),
+ (&apos;.&apos;, &apos;.&apos;),
+ (&apos;Supreme&apos;, &apos;NNP&apos;),
+ (&apos;executive&apos;, &apos;NN&apos;),
+ (&apos;power&apos;, &apos;NN&apos;),
+ (&apos;derives&apos;, &apos;VBZ&apos;),
+ (&apos;from&apos;, &apos;IN&apos;),
+ (&apos;a&apos;, &apos;DT&apos;),
+ (&apos;mandate&apos;, &apos;NN&apos;),
+ (&apos;from&apos;, &apos;IN&apos;),
+ (&apos;the&apos;, &apos;DT&apos;),
+ (&apos;masses&apos;, &apos;NNS&apos;),
+ (&apos;,&apos;, &apos;,&apos;),
+ (&apos;not&apos;, &apos;RB&apos;),
+ (&apos;from&apos;, &apos;IN&apos;),
+ (&apos;some&apos;, &apos;DT&apos;),
+ (&apos;farcical&apos;, &apos;JJ&apos;),
+ (&apos;aquatic&apos;, &apos;JJ&apos;),
+ (&apos;ceremony&apos;, &apos;NN&apos;),
+ (&apos;.&apos;, &apos;.&apos;)]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> nltk <span class="keyword">import</span> word_tokenize, sent_tokenize, pos_tag</span><br><span class="line">sentences = sent_tokenize(<span class="string">"Google is one of the best companies in the world. I constantly google myself to see what I'm up to."</span>)</span><br><span class="line">nouns = [<span class="string">'NN'</span>, <span class="string">'NNS'</span>, <span class="string">'NNP'</span>, <span class="string">'NNPS'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> sentence <span class="keyword">in</span> sentences:</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'google'</span> <span class="keyword">in</span> sentence.lower():</span><br><span class="line">        taggedWords = pos_tag(word_tokenize(sentence))</span><br><span class="line">        <span class="keyword">for</span> word <span class="keyword">in</span> taggedWords:</span><br><span class="line">            <span class="keyword">if</span> word[<span class="number">0</span>].lower() == <span class="string">'google'</span> <span class="keyword">and</span> word[<span class="number">1</span>] <span class="keyword">in</span> nouns:</span><br><span class="line">                print(sentence)</span><br></pre></td></tr></table></figure>
+<pre><code>Google is one of the best companies in the world.
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/11/第八章-自然语言处理/" data-id="cjq1zv30o0035drihnpb2syoo" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/11/第九章-穿越网页表单与登录窗口进行采集/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    第九章 穿越网页表单与登录窗口进行采集
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/11/第七章-数据清洗/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">第七章 数据清洗</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

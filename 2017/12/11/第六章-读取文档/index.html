@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>第六章 读取文档 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="6.1文档编码">
+<meta name="keywords" content="python scraper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第六章 读取文档">
+<meta property="og:url" content="http://zc119.github.io/2017/12/11/第六章-读取文档/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="6.1文档编码">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-11T11:09:19.427Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第六章 读取文档">
+<meta name="twitter:description" content="6.1文档编码">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-第六章-读取文档" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            第六章 读取文档
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/11/第六章-读取文档/">
+            <time datetime="2017-12-11T11:06:24.000Z" itemprop="datePublished">2017-12-11</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="6-1文档编码"><a href="#6-1文档编码" class="headerlink" title="6.1文档编码"></a>6.1文档编码</h2><a id="more"></a>
+<h2 id="6-2纯文本"><a href="#6-2纯文本" class="headerlink" title="6.2纯文本"></a>6.2纯文本</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line">textPage = urlopen(<span class="string">'http://www.pythonscraping.com/pages/warandpeace/chapter1.txt'</span>)</span><br><span class="line">print(textPage.read())</span><br></pre></td></tr></table></figure>
+<pre><code>b&apos;CHAPTER I\n\n&quot;Well, Prince, so Genoa and Lucca are now just family estates of theBuonapartes. But I warn you, if you don\&apos;t tell me that this means war,if you still try to defend the infamies and horrors perpetrated bythat Antichrist- I really believe he is Antichrist- I will havenothing more to do with you and you are no longer my friend, no longermy \&apos;faithful slave,\&apos; as you call yourself! But how do you do? I seeI have frightened you- sit down and tell me all the news.&quot;\n\nIt was in July, 1805, and the speaker was the well-known AnnaPavlovna Scherer, maid of honor and favorite of the Empress MaryaFedorovna. With these words she greeted Prince Vasili Kuragin, a manof high rank and importance, who was the first to arrive at herreception. Anna Pavlovna had had a cough for some days. She was, asshe said, suffering from la grippe; grippe 
+......
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line">textPage = urlopen(<span class="string">'http://www.pythonscraping.com/pages/warandpeace/chapter1-ru.txt'</span>)</span><br><span class="line">print(str(textPage.read()), <span class="string">'utf-8'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>b&quot;\xd0\xa7\xd0\x90\xd0\xa1\xd0\xa2\xd0\xac \xd0\x9f\xd0\x95\xd0\xa0\xd0\x92\xd0\x90\xd0\xaf\n\nI\n\n\xe2\x80\x94 Eh bien, mon prince. G\xc3\xaanes et Lucques ne sont plus que des apanages, des \xd0\xbf\xd0\xbe\xd0\xbc\xd0\xb5\xd1\x81\xd1\x82\xd1\x8c\xd1\x8f, de la famille Buonaparte. Non, je vous pr\xc3\xa9viens que si vous ne me dites pas que nous avons la guerre, si vous vous permettez encore de pallier toutes les infamies, toutes les atrocit\xc3\xa9s de cet Antichrist (ma parole, j&apos;y crois) \xe2\x80\x94 je ne vous connais plus, vous n&apos;\xc3\xaates plus mon ami, vous n&apos;\xc3\xaates plus \xd0\xbc\xd0\xbe\xd0\xb9 \xd0\xb2\xd0\xb5\xd1\x80\xd0\xbd\xd1\x8b\xd0\xb9
+......
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://en.wikipedia.org/wiki/Python_(programming_language)'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">content = bsObj.find(<span class="string">'div'</span>, &#123;<span class="string">'id'</span>:<span class="string">'mw-content-text'</span>&#125;).get_text()</span><br><span class="line">content = bytes(content, <span class="string">'UTF-8'</span>)</span><br><span class="line">content = content.decode(<span class="string">'UTF-8'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(content)</span><br></pre></td></tr></table></figure>
+<pre><code>Python
+
+
+
+
+Paradigm
+multi-paradigm: object-oriented, imperative, functional, procedural, reflective
+
+
+Designed by
+Guido van Rossum
+
+
+Developer
+Python Software Foundation
+
+
+First appeared
+20 February 1991; 26 years ago (1991-02-20)[1]
+......
+</code></pre><h2 id="6-3CSV"><a href="#6-3CSV" class="headerlink" title="6.3CSV"></a>6.3CSV</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line">data = urlopen(<span class="string">'http://pythonscraping.com/files/MontyPythonAlbums.csv'</span>).read().decode(<span class="string">'ascii'</span>, <span class="string">'ignore'</span>)</span><br><span class="line">dataFile = StringIO(data)</span><br><span class="line">csvReader = csv.reader(dataFile)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> csvReader:</span><br><span class="line">    print(row)</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;Name&apos;, &apos;Year&apos;]
+[&quot;Monty Python&apos;s Flying Circus&quot;, &apos;1970&apos;]
+[&apos;Another Monty Python Record&apos;, &apos;1971&apos;]
+[&quot;Monty Python&apos;s Previous Record&quot;, &apos;1972&apos;]
+[&apos;The Monty Python Matching Tie and Handkerchief&apos;, &apos;1973&apos;]
+[&apos;Monty Python Live at Drury Lane&apos;, &apos;1974&apos;]
+[&apos;An Album of the Soundtrack of the Trailer of the Film of Monty Python and the Holy Grail&apos;, &apos;1975&apos;]
+[&apos;Monty Python Live at City Center&apos;, &apos;1977&apos;]
+[&apos;The Monty Python Instant Record Collection&apos;, &apos;1977&apos;]
+[&quot;Monty Python&apos;s Life of Brian&quot;, &apos;1979&apos;]
+[&quot;Monty Python&apos;s Cotractual Obligation Album&quot;, &apos;1980&apos;]
+[&quot;Monty Python&apos;s The Meaning of Life&quot;, &apos;1983&apos;]
+[&apos;The Final Rip Off&apos;, &apos;1987&apos;]
+[&apos;Monty Python Sings&apos;, &apos;1989&apos;]
+[&apos;The Ultimate Monty Python Rip Off&apos;, &apos;1994&apos;]
+[&apos;Monty Python Sings Again&apos;, &apos;2014&apos;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="keyword">import</span> csv</span><br><span class="line">data = urlopen(<span class="string">'http://pythonscraping.com/files/MontyPythonAlbums.csv'</span>).read().decode(<span class="string">'ascii'</span>, <span class="string">'ignore'</span>)</span><br><span class="line">dataFile = StringIO(data)</span><br><span class="line">dictReader = csv.DictReader(dataFile)</span><br><span class="line"></span><br><span class="line">print(dictReader.fieldnames)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> row <span class="keyword">in</span> dictReader:</span><br><span class="line">    print(row)</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;Name&apos;, &apos;Year&apos;]
+OrderedDict([(&apos;Name&apos;, &quot;Monty Python&apos;s Flying Circus&quot;), (&apos;Year&apos;, &apos;1970&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;Another Monty Python Record&apos;), (&apos;Year&apos;, &apos;1971&apos;)])
+OrderedDict([(&apos;Name&apos;, &quot;Monty Python&apos;s Previous Record&quot;), (&apos;Year&apos;, &apos;1972&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;The Monty Python Matching Tie and Handkerchief&apos;), (&apos;Year&apos;, &apos;1973&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;Monty Python Live at Drury Lane&apos;), (&apos;Year&apos;, &apos;1974&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;An Album of the Soundtrack of the Trailer of the Film of Monty Python and the Holy Grail&apos;), (&apos;Year&apos;, &apos;1975&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;Monty Python Live at City Center&apos;), (&apos;Year&apos;, &apos;1977&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;The Monty Python Instant Record Collection&apos;), (&apos;Year&apos;, &apos;1977&apos;)])
+OrderedDict([(&apos;Name&apos;, &quot;Monty Python&apos;s Life of Brian&quot;), (&apos;Year&apos;, &apos;1979&apos;)])
+OrderedDict([(&apos;Name&apos;, &quot;Monty Python&apos;s Cotractual Obligation Album&quot;), (&apos;Year&apos;, &apos;1980&apos;)])
+OrderedDict([(&apos;Name&apos;, &quot;Monty Python&apos;s The Meaning of Life&quot;), (&apos;Year&apos;, &apos;1983&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;The Final Rip Off&apos;), (&apos;Year&apos;, &apos;1987&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;Monty Python Sings&apos;), (&apos;Year&apos;, &apos;1989&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;The Ultimate Monty Python Rip Off&apos;), (&apos;Year&apos;, &apos;1994&apos;)])
+OrderedDict([(&apos;Name&apos;, &apos;Monty Python Sings Again&apos;), (&apos;Year&apos;, &apos;2014&apos;)])
+</code></pre><h2 id="6-4PDF"><a href="#6-4PDF" class="headerlink" title="6.4PDF"></a>6.4PDF</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> pdfminer.pdfinterp <span class="keyword">import</span> PDFResourceManager, process_pdf</span><br><span class="line"><span class="keyword">from</span> pdfminer.converter <span class="keyword">import</span> TextConverter</span><br><span class="line"><span class="keyword">from</span> pdfminer.layout <span class="keyword">import</span> LAParams</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> StringIO</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> open</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">readPDF</span><span class="params">(pdfFile)</span>:</span></span><br><span class="line">    rsrcmgr = PDFResourceManager()</span><br><span class="line">    retstr = StringIO()</span><br><span class="line">    laparams = LAParams()</span><br><span class="line">    device = TextConverter(rsrcmgr, retstr, laparams=laparams)</span><br><span class="line">    </span><br><span class="line">    process_pdf(rsrcmgr, device, pdfFile)</span><br><span class="line">    device.close()</span><br><span class="line">    </span><br><span class="line">    content = retstr.getvalue()</span><br><span class="line">    retstr.close()</span><br><span class="line">    <span class="keyword">return</span> content</span><br><span class="line"></span><br><span class="line">pdfFile = urlopen(<span class="string">'http://pythonscraping.com/pages/warandpeace/chapter1.pdf'</span>)</span><br><span class="line">outputString = readPDF(pdfFile)</span><br><span class="line">print(outputString)</span><br><span class="line">pdfFile.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> zipfile <span class="keyword">import</span> ZipFile</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"></span><br><span class="line">wordFile = urlopen(<span class="string">'http://pythonscraping.com/pages/AWordDocument.docx'</span>).read()</span><br><span class="line">wordFile = BytesIO(wordFile)</span><br><span class="line">document = ZipFile(wordFile)</span><br><span class="line">xml_content = document.read(<span class="string">'word/document.xml'</span>)</span><br><span class="line">print(xml_content.decode(<span class="string">'utf-8'</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;yes&quot;?&gt;
+&lt;w:document xmlns:wpc=&quot;http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas&quot; xmlns:mc=&quot;http://schemas.openxmlformats.
+......
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> zipfile <span class="keyword">import</span> ZipFile</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> io <span class="keyword">import</span> BytesIO</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">wordFile = urlopen(<span class="string">'http://pythonscraping.com/pages/AWordDocument.docx'</span>).read()</span><br><span class="line">wordFile = BytesIO(wordFile)</span><br><span class="line">document = ZipFile(wordFile)</span><br><span class="line">xml_content = document.read(<span class="string">'word/document.xml'</span>)</span><br><span class="line"></span><br><span class="line">wordObj = BeautifulSoup(xml_content.decode(<span class="string">'utf-8'</span>), <span class="string">'lxml'</span>)</span><br><span class="line">textStrings = wordObj.findAll(<span class="string">'body'</span>)</span><br><span class="line"><span class="keyword">for</span> textElem <span class="keyword">in</span> textStrings:</span><br><span class="line">    print(textElem.text)</span><br></pre></td></tr></table></figure>
+<pre><code>A Word Document on a WebsiteThis is a Word document, full of content that you want very much. Unfortunately, it’s difficult to access because I’m putting it on my website as a .docx file, rather than just publishing it as HTML
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/11/第六章-读取文档/" data-id="cjq1zv30m0030drihtbdub3zw" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/11/第七章-数据清洗/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    第七章 数据清洗
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/11/第五章-存储数据/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">第五章 存储数据</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

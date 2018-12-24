@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorFlow Mechanics 101 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="源码 本教程是为了展示如何使用 TensorFlow 来训练和评估一个简单的前馈神经网络来进行手写数字的分类。我们的目标读者，是有兴趣使用TensorFlow的资深机器学习人士。">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow Mechanics 101">
+<meta property="og:url" content="http://zc119.github.io/2017/12/17/TensorFlow-Mechanics-101/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="源码 本教程是为了展示如何使用 TensorFlow 来训练和评估一个简单的前馈神经网络来进行手写数字的分类。我们的目标读者，是有兴趣使用TensorFlow的资深机器学习人士。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://bimgs.plmeizi.com/images/bing/2017/MGRBerlin_ZH-CN6734108494_1920x1080.jpg">
+<meta property="og:updated_time" content="2017-12-17T09:07:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow Mechanics 101">
+<meta name="twitter:description" content="源码 本教程是为了展示如何使用 TensorFlow 来训练和评估一个简单的前馈神经网络来进行手写数字的分类。我们的目标读者，是有兴趣使用TensorFlow的资深机器学习人士。">
+<meta name="twitter:image" content="http://bimgs.plmeizi.com/images/bing/2017/MGRBerlin_ZH-CN6734108494_1920x1080.jpg">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorFlow-Mechanics-101" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+            
+	
+		<img src="http://bimgs.plmeizi.com/images/bing/2017/MGRBerlin_ZH-CN6734108494_1920x1080.jpg" class="article-banner">
+	
+
+
+
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorFlow Mechanics 101
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/17/TensorFlow-Mechanics-101/">
+            <time datetime="2017-12-17T09:01:52.000Z" itemprop="datePublished">2017-12-17</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p><a href="https://github.com/tensorflow/tensorflow/tree/r1.4/tensorflow/examples/tutorials/mnist" target="_blank" rel="noopener">源码</a></p>
+<p>本教程是为了展示如何使用 TensorFlow 来训练和评估一个简单的前馈神经网络来进行手写数字的分类。我们的目标读者，是有兴趣使用TensorFlow的资深机器学习人士。</p>
+<a id="more"></a>
+<h2 id="教程文件"><a href="#教程文件" class="headerlink" title="教程文件"></a>教程文件</h2><p>本教程使用如下文件：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">File</th>
+<th style="text-align:left">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a href="https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/mnist/mnist.py" target="_blank" rel="noopener">mnist.py</a></td>
+<td style="text-align:left">建立一个全连接 MNIST 模型</td>
+</tr>
+<tr>
+<td style="text-align:left"><a href="https://www.github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/mnist/fully_connected_feed.py" target="_blank" rel="noopener">fully_connected_feed.py</a></td>
+<td style="text-align:left">利用下载的数据集训练构建好的MNIST模型的主要代码，以数据反馈字典（feed dictionary）的形式作为输入模型。</td>
+</tr>
+</tbody>
+</table>
+<p>只需要直接运行fully_connected_feed.py文件，就可以开始训练：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python fully_connected_feed.py</span><br></pre></td></tr></table></figure>
+<h2 id="准备数据"><a href="#准备数据" class="headerlink" title="准备数据"></a>准备数据</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p>在 run_training() 方法一开始，input_data.read_data_sets() 函数能确保正确的数据已经被下载到本地的训练文件夹中，然后将这些数据解压并返回一个含有DataSet实例的字典。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data_sets = input_data.read_data_sets(FLAGS.train_dir, FLAGS.fake_data)</span><br></pre></td></tr></table></figure>
+<p>注意：fake_data标记是用于单元测试的，读者可以不必理会。</p>
+<table>
+<thead>
+<tr>
+<th>数据集</th>
+<th>目的</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>data_sets.train</td>
+<td>55000个图像和标签（labels），作为主要训练集</td>
+</tr>
+<tr>
+<td>data_sets.validation</td>
+<td>5000个图像和标签，用于迭代验证训练准确度</td>
+</tr>
+<tr>
+<td>data_sets.test</td>
+<td>10000个图像和标签，用于最终测试训练准确度（trained accuracy)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="输入和-Placeholders"><a href="#输入和-Placeholders" class="headerlink" title="输入和 Placeholders"></a>输入和 Placeholders</h3><p>placeholder_inputs() 创建两个 tf.placeholder 操作，定义传入图表中的shape参数，shape参数中包括batch_size值，后续还会将实际的训练用例传入图表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">images_placeholder = tf.placeholder(tf.float32, shape=(batch_size,mnist.IMAGE_PIXELS))</span><br><span class="line">labels_placeholder = tf.placeholder(tf.int32, shape=(batch_size))</span><br></pre></td></tr></table></figure>
+<p>在训练循环（training loop）的后续步骤中，传入的整个图像和标签数据集会被切片，以符合每一个操作所设置的batch_size值，占位符操作将会被填补以符合这个batch_size值。然后使用feed_dict参数，将数据传入sess.run()函数。</p>
+<h2 id="建立图"><a href="#建立图" class="headerlink" title="建立图"></a>建立图</h2><p>在为数据创建 placeholders 后，就可以运行mnist.py文件，经过三阶段的模式函数操作：inference()， loss()，和training()。图表就构建完成了。</p>
+<ol>
+<li>inference() —— 尽可能地构建好图表，满足促使神经网络向前反馈并做出预测的要求。</li>
+<li>loss() —— 往inference图表中添加生成损失（loss）所需要的操作（ops）。</li>
+<li>training() —— 往loss图表中添加计算并应用梯度（gradients）所需的操作。</li>
+</ol>
+<h3 id="Inference-推断"><a href="#Inference-推断" class="headerlink" title="Inference 推断"></a>Inference 推断</h3><p>Inference() 函数尽可能建立图，返回一个预测输出的张量 tensor。</p>
+<p>它接受图像占位符为输入，在此基础上借助ReLu(Rectified Linear Units)激活函数，构建一对全连接层（layers），以及一个有着十个节点（node）、指明了输出logtis模型的线性层。</p>
+<p>每一层都创建于一个唯一的tf.name_scope之下，创建于该作用域之下的所有元素都将带有其前缀。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'hidden1'</span>):</span><br><span class="line">    weights = tf.Variable(tf.truncated_normal([IMAGE_PIXELS, </span><br><span class="line">                                               hidden1_units],</span><br><span class="line">                                              stddev=<span class="number">1.0</span> / math.sqrt(float(IMAGE_PIXELS))),</span><br><span class="line">                          name=<span class="string">'weights'</span>)</span><br><span class="line">    biases = tf.Variable(tf.zeros([hidden1_units]), name=<span class="string">'biases'</span>)</span><br></pre></td></tr></table></figure>
+<p>在定义的作用域中，每一层所使用的weights和biases都在tf.Variable实例中生成，并且包含了各自要求的shape。</p>
+<p>例如，当这些层是在hidden1作用域下生成时，赋予权重变量的独特名称将会是”hidden1/weights”。</p>
+<p>每个变量在构建时，都会获得初始化操作（initializer ops）。</p>
+<p>在这个最常见的情况下，weidhts 初始化为 tf.truncated_normal 并给定维度为2维张量。其中第一个维度代表该层中权重变量所连接（connect from）的单元数量，第二个维度代表该层中权重变量所连接到的（connect to）单元数量。对于名叫hidden1的第一层，相应的维度则是[IMAGE_PIXELS, hidden1_units]，因为权重变量将图像输入连接到了hidden1层。tf.truncated_normal初始函数将根据所得到的均值和标准差，生成一个随机分布（截断正态分布）。</p>
+<p>biases 初始化为 tf.zeros 来确保它们所有的值都是0。shape 是它们所连接（connect from）的单元数量。</p>
+<p>图表的三个主要操作，分别是两个tf.nn.relu操作，它们中嵌入了隐藏层所需的tf.matmul；以及logits模型所需的另外一个tf.matmul。三者依次生成，各自的tf.Variable实例则与输入占位符或下一层的输出tensor所连接。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hidden1 = tf.nn.relu(tf.matmul(images, weights) + biases)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hidden2 = tf.nn.relu(tf.matmul(hidden1, weights) + biases)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logits = tf.matmul(hidden2, weights) + biases</span><br></pre></td></tr></table></figure>
+<p>最后，包含输出的 logit 张量将会被返回。</p>
+<h3 id="Loss-损失"><a href="#Loss-损失" class="headerlink" title="Loss 损失"></a>Loss 损失</h3><p>loss()函数通过添加所需的损失操作，进一步构建图表。</p>
+<p>首先，labels_placeholer中的值，将被转换为64位 integers，然后添加一个 <a href="https://www.tensorflow.org/api_docs/python/tf/nn/sparse_softmax_cross_entropy_with_logits" target="_blank" rel="noopener">tf.nn.sparse_softmax_cross_entropy_with_logits</a> 操作从 labels_placeholder 自动产生 1-hot labels 并用这些 1-hot labels 输出从 inference() 函数得到的 logits 处理后的交叉熵。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">labels = tf.to_int64(labels)</span><br><span class="line">cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(</span><br><span class="line">    labels=labels, logits=logits, name=<span class="string">'xentropy'</span>)</span><br></pre></td></tr></table></figure>
+<p>然后使用 tf.reduce_mean 根据 batch dimension 来平均交叉熵的值作为 total loss。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss = tf.reduce_mean(cross_entropy, name=<span class="string">'xentropy_mean'</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：交叉熵是信息理论中的概念，可以让我们描述如果基于已有事实，相信神经网络所做的推测最坏会导致什么结果。更多详情，请查阅博文<a href="http://colah.github.io/posts/2015-09-Visual-Information/" target="_blank" rel="noopener">《可视化信息理论》</a></p>
+</blockquote>
+<h3 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h3><p>training() 函数通过梯度下降法加入需要的操作来 minimize loss。</p>
+<p>首先，该函数从loss()函数中获取损失tensor，将其交给<a href="https://www.tensorflow.org/api_docs/python/tf/summary/scalar" target="_blank" rel="noopener">tf.summary.scalar</a>，后者在与<a href="https://www.tensorflow.org/api_docs/python/tf/summary/FileWriter" target="_blank" rel="noopener">tf.summary.FileWriter</a>（见下文）配合使用时，可以向事件文件（events file）中生成汇总值（summary values）。在本篇教程中，每次写入汇总值时，它都会释放损失tensor的当前值（snapshot value）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.summary.scalar(<span class="string">'loss'</span>, loss)</span><br></pre></td></tr></table></figure>
+<p>Next，们实例化一个<a href="https://www.tensorflow.org/api_docs/python/tf/train/GradientDescentOptimizer" target="_blank" rel="noopener">tf.train.GradientDescentOptimizer</a>，负责按照所要求的学习效率（learning rate）应用梯度下降法（gradients）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer = tf.train.GradientDescentOptimizer(learining_rate)</span><br></pre></td></tr></table></figure>
+<p>之后，我们生成一个变量用于保存全局训练步骤（global training step）的数值，<a href="https://www.tensorflow.org/api_docs/python/tf/train/Optimizer#minimize" target="_blank" rel="noopener">tf.train.Optimizer.minimize</a> 函数更新系统中的训练权重（trainable weights）、增加全局步骤的操作。根据惯例，这个操作被称为 train_op，是TensorFlow会话（session）产生一个完整训练步骤所必须运行的操作（见下文）。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">global_step = tf.Variable(<span class="number">0</span>, name=<span class="string">'global_step'</span>, trainable=<span class="keyword">False</span>)</span><br><span class="line">train_op = optimizer.minimize(loss, global_step=global_step)</span><br></pre></td></tr></table></figure>
+<h2 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h2><p>一旦图表构建完毕，就通过fully_connected_feed.py文件中的用户代码进行循环地迭代式训练和评估。</p>
+<h3 id="The-Graph"><a href="#The-Graph" class="headerlink" title="The Graph"></a>The Graph</h3><p>在run_training()这个函数的一开始，是一个Python语言中的with命令，这个命令表明所有已经构建的操作都要与默认的tf.Graph全局实例关联起来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Graph().as_default():</span><br></pre></td></tr></table></figure>
+<p>tf.Graph实例是一系列可以作为整体执行的操作。TensorFlow的大部分场景只需要依赖默认图表一个实例即可。</p>
+<p>利用多个图表的更加复杂的使用场景也是可能的，但是超出了本教程的范围。</p>
+<h3 id="The-Session"><a href="#The-Session" class="headerlink" title="The Session"></a>The Session</h3><p>完成全部的构建准备、生成全部所需的操作之后，我们就可以创建一个tf.Session，用于运行图表。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br></pre></td></tr></table></figure>
+<p>另外，也可以利用with代码块生成Session，限制作用域：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">with</span> tf.Session() <span class="keyword">as</span> sess:</span><br></pre></td></tr></table></figure>
+<p>Session函数中没有传入参数，表明该代码将会依附于（如果还没有创建会话，则会创建新的会话）默认的本地会话。</p>
+<p>生成会话之后，所有tf.Variable实例都会立即通过调用各自初始化操作中的<a href="https://www.tensorflow.org/api_docs/python/tf/Session#run" target="_blank" rel="noopener">tf.Session.run()</a>函数进行初始化。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">init = tf.global_variables_initializer()</span><br><span class="line">sess.run(init)</span><br></pre></td></tr></table></figure>
+<p>tf.Session.run()方法将会运行图表中与作为参数传入的操作相对应的完整子集。在初次调用时，init操作只包含了变量初始化程序<a href="https://www.tensorflow.org/api_docs/python/tf/group" target="_blank" rel="noopener">tf.group</a>。图表的其他部分不会在这里，而是在下面的训练循环运行。</p>
+<h3 id="Train-Loop"><a href="#Train-Loop" class="headerlink" title="Train Loop"></a>Train Loop</h3><p>初始化完成后，开始训练。</p>
+<p>练的每一步都是通过用户代码控制，而能实现有效训练的最简单循环就是：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(FLAGS.max_steps):</span><br><span class="line">    sess.run(train_op)</span><br></pre></td></tr></table></figure>
+<p>但是，本教程中的例子要更为复杂一点，原因是我们必须把输入的数据根据每一步的情况进行切分，以匹配之前生成的占位符。</p>
+<h3 id="Feed-the-Graph"><a href="#Feed-the-Graph" class="headerlink" title="Feed the Graph"></a>Feed the Graph</h3><p>执行每一步时，我们的代码会生成一个反馈字典（feed dictionary），其中包含对应步骤中训练所要使用的例子，这些例子的键就是其所代表的占位符操作。</p>
+<p>fill_feed_dict() 函数会查询给定的DataSet，索要下一批次batch_size的图像和标签，与占位符相匹配的Tensor则会包含下一批次的图像和标签。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">images_feed, labels_feed = data_set.next_batch(FLAGS.batch_size, </span><br><span class="line">                                               FLAGS.fake_data)</span><br></pre></td></tr></table></figure>
+<p>然后，以占位符为键，创建一个Python字典对象，键值则是其代表的反馈tensor。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">feed_dict = &#123;</span><br><span class="line">    images_placeholder: images_feed, </span><br><span class="line">    labels_placeholder: labels_feed,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个字典随后作为feed_dict参数，传入sess.run()函数中，为这一步的训练提供输入样例。</p>
+<h3 id="检查-Status"><a href="#检查-Status" class="headerlink" title="检查 Status"></a>检查 Status</h3><p>在运行sess.run函数时，要在代码中明确其需要获取的两个值：[train_op, loss]。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(FLAGS.max_steps):</span><br><span class="line">    feed_dict = fill_feed_dict(data_sets.train,</span><br><span class="line">                               images_placeholder,</span><br><span class="line">                               labels_placeholder)</span><br><span class="line">    _, loss_value = sess.run([train_op, loss],</span><br><span class="line">                             feed_dict=feed_dict)</span><br></pre></td></tr></table></figure>
+<p>因为要获取这两个值，sess.run()会返回一个有两个元素的元组。其中每一个Tensor对象，对应了返回的元组中的numpy数组，而这些数组中包含了当前这步训练中对应Tensor的值。由于train_op并不会产生输出，其在返回的元祖中的对应元素就是None，所以会被抛弃。但是，如果模型在训练中出现发散，loss Tensor的值可能会变成NaN，所以我们要获取它的值，并记录下来。</p>
+<p>假设训练没有 MaNs，训练循环会每隔100个训练步骤，就打印一行简单的状态文本，告知用户当前的训练状态。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> step % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">    print(<span class="string">'Step %d: loss = %.2f (%.3f sec)'</span> % (step, loss_value, duration)</span><br></pre></td></tr></table></figure>
+<h3 id="Status-可视化"><a href="#Status-可视化" class="headerlink" title="Status 可视化"></a>Status 可视化</h3><p>为了释放 <a href="https://tensorflow.google.cn/get_started/summaries_and_tensorboard" target="_blank" rel="noopener">TensorBoard</a> 所使用的事件文件（events file），所有的即时数据（在这里只有一个）都要在图表构建阶段合并至一个 Tensor 中。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">summary = tf.summary.merge_all()</span><br></pre></td></tr></table></figure>
+<p>在 session 创建后，一个 tf.summary.FileWriter 将会被初始化来写入 events files，它包括了 graph 本身与 summaries 的值。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">summary_writer = tf.summary.FileWriter(FLAGS.train_dir, sess.graph)</span><br></pre></td></tr></table></figure>
+<p>最后，每次运行 summary 时，都会往事件文件中写入最新的即时数据，函数的输出会传入事件文件读写器（writer）的add_summary()函数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">summary_str = sess.run(summary, feed_dict=feed_dict)</span><br><span class="line">summary_writer.add_summary(summary_str, step)</span><br></pre></td></tr></table></figure>
+<p>当事件文件写入时，应用 training folder 打开一个TensorBoard，查看即时数据的情况。<br><img src="/image/TensorFlow Mechanics 101/1.png" alt=""></p>
+<p>注意：了解更多如何构建并运行TensorBoard的信息，请查看相关教程Tensorboard：<a href="https://tensorflow.google.cn/get_started/summaries_and_tensorboard" target="_blank" rel="noopener">训练过程可视化</a>。</p>
+<h3 id="保存检查点-checkpoint"><a href="#保存检查点-checkpoint" class="headerlink" title="保存检查点 checkpoint"></a>保存检查点 checkpoint</h3><p>为了得到可以用来后续恢复模型以进一步训练或评估的检查点文件（checkpoint file），我们实例化一个tf.train.Saver。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">saver = tf.train.Saver()</span><br></pre></td></tr></table></figure>
+<p>在训练循环中，tf.train.Saver.save 方法会定期被调用来将当前所有可训练变量的值写入检查点文件到训练目录。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">saver.save(sess, FLAGS.train_dir, global_step=step)</span><br></pre></td></tr></table></figure>
+<p>这样，我们以后就可以使用 tf.train.Saver.restore()方法，重载模型的参数，继续训练。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">saver.restore(sess, FLAGS.train_dir)</span><br></pre></td></tr></table></figure>
+<h2 id="评估模型"><a href="#评估模型" class="headerlink" title="评估模型"></a>评估模型</h2><p>每一千步循环后，代码会在训练集与测试集上尝试评估这个模型。do_eval() 函数会被调用三次，分别使用训练数据集、验证数据集合测试数据集。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'Training Data Eval:'</span>)</span><br><span class="line">do_eval(sess,</span><br><span class="line">        eval_correct,</span><br><span class="line">        images_placeholder,</span><br><span class="line">        labels_placeholder,</span><br><span class="line">        data_sets.train)</span><br><span class="line">print(<span class="string">'Validation Data Eval:'</span>)</span><br><span class="line">do_eval(sess,</span><br><span class="line">        eval_correct,</span><br><span class="line">        images_placeholder,</span><br><span class="line">        labels_placeholder,</span><br><span class="line">        data_sets.validation)</span><br><span class="line">print(<span class="string">'Test Data Eval:'</span>)</span><br><span class="line">do_eval(sess,</span><br><span class="line">        eval_correct,</span><br><span class="line">        images_placeholder,</span><br><span class="line">        labels_placeholder,</span><br><span class="line">        data_sets.test)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意，更复杂的使用场景通常是，先隔绝data_sets.test测试数据集，只有在大量的超参数优化调整（hyperparameter tuning）之后才进行检查。但是，由于MNIST问题比较简单，我们在这里一次性评估所有的数据。</p>
+</blockquote>
+<h3 id="建立-Eval-Graph-评估图"><a href="#建立-Eval-Graph-评估图" class="headerlink" title="建立 Eval Graph 评估图"></a>建立 Eval Graph 评估图</h3><p>在进入训练循环之前，我们应该先调用mnist.py文件中的evaluation函数，传入的logits和标签参数要与loss函数的一致。这样做是为了先构建Eval操作。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval_correct = mnist.evaluation(logits, labels_placeholder)</span><br></pre></td></tr></table></figure>
+<p>evaluation() 函数会生成 <a href="https://tensorflow.google.cn/api_docs/python/tf/nn/in_top_k" target="_blank" rel="noopener">tf.nn.in_top_k</a> 操作，如果在K个最有可能的预测中可以发现真的标签，那么这个操作就会将模型输出标记为正确。在本文中，我们把K的值设置为1，也就是只有在预测是真的标签时，才判定它是正确的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval_correct = tf.nn.in_top_k(logits, labels, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="评估输出"><a href="#评估输出" class="headerlink" title="评估输出"></a>评估输出</h3><p>之后，我们可以创建一个循环，往其中添加feed_dict，并在调用sess.run()函数时传入eval_correct操作，目的就是用给定的数据集评估模型。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(steps_per_epoch):</span><br><span class="line">    feed_dict = fill_feed_dict(data_set, images_placeholder, labels_placeholder)</span><br><span class="line">    true_count += sess.run(eval_correct, feed_dict=feed_dict)</span><br></pre></td></tr></table></figure>
+<p>true_count变量会累加所有in_top_k操作判定为正确的预测之和。接下来，只需要将正确测试的总数，除以例子总数，就可以得出准确率了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">precision = true_count / num_examples</span><br><span class="line">print(<span class="string">' Num examples: %d Num correct: %d Precision @ 1: %0.04f'</span> % (num_examples, true_count, precision))</span><br></pre></td></tr></table></figure>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/17/TensorFlow-Mechanics-101/" data-id="cjq1zv2zy000qdrihcnz7wld4" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/17/tf-estimator-Quickstart/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    tf.estimator Quickstart
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/13/Deep-MNIST-for-Experts/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Deep MNIST for Experts</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>第三章 开始采集 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="3.1遍历单个域名">
+<meta name="keywords" content="python scraper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三章 开始采集">
+<meta property="og:url" content="http://zc119.github.io/2017/12/11/第三章-开始采集/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="3.1遍历单个域名">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-11T10:54:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第三章 开始采集">
+<meta name="twitter:description" content="3.1遍历单个域名">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-第三章-开始采集" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            第三章 开始采集
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/11/第三章-开始采集/">
+            <time datetime="2017-12-11T10:51:05.000Z" itemprop="datePublished">2017-12-11</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="3-1遍历单个域名"><a href="#3-1遍历单个域名" class="headerlink" title="3.1遍历单个域名"></a>3.1遍历单个域名</h2><a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'https://en.wikipedia.org/wiki/Eric_Idle'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"><span class="keyword">for</span> link <span class="keyword">in</span> bsObj.findAll(<span class="string">'a'</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'href'</span> <span class="keyword">in</span> link.attrs:</span><br><span class="line">        print(link.attrs[<span class="string">'href'</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>#mw-head
+#p-search
+/wiki/Wikipedia:Biographies_of_living_persons
+/wiki/Wikipedia:Citing_sources
+/wiki/Wikipedia:Verifiability
+/wiki/Wikipedia:Identifying_reliable_sources
+/wiki/Wikipedia:Libel
+/wiki/Help:Maintenance_template_removal
+/wiki/File:Eric_Idle_with_Guitar.jpg
+/wiki/County_Durham
+/wiki/England
+/wiki/United_Kingdom
+/wiki/Vermont
+/wiki/Pembroke_College,_Cambridge
+/wiki/Monty_Python
+/wiki/The_Rutles
+/wiki/Spamalot
+/wiki/Lyn_Ashley
+http://ericidle.com/
+/wiki/Monty_Python
+/wiki/The_Rutles
+/wiki/Spamalot
+#Early_life_and_education
+#Career
+#Pre-Python_career_.281965.E2.80.931969.29
+#Monty_Python_.281969.E2.80.931983.2C_2014.29
+#Post-Python_career_.281973.E2.80.93present.29
+#Personal_life
+#Other_credits
+#Writing
+#Bibliography
+#Songwriting
+#Tributes
+#Filmography
+#Film
+#Television
+#Video_games
+#Stage
+#References
+#External_links
+/w/index.php?title=Eric_Idle&amp;action=edit&amp;section=1
+/wiki/South_Shields
+/wiki/County_Durham
+#cite_note-1
+/wiki/Health_visitor
+#cite_note-Tel170207-2
+......
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">random.seed(datetime.datetime.now())</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLinks</span><span class="params">(articleUrl)</span>:</span></span><br><span class="line">    html = urlopen(<span class="string">'http://en.wikipedia.org'</span>+articleUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="keyword">return</span> bsObj.find(<span class="string">'div'</span>,&#123;<span class="string">'id'</span>:<span class="string">'bodyContent'</span>&#125;).findAll(<span class="string">'a'</span>,href=re.compile(<span class="string">'^(/wiki/)((?!:).)*$'</span>))</span><br><span class="line">links = getLinks(<span class="string">'/wiki/Kevin_Bacon'</span>)</span><br><span class="line"><span class="keyword">while</span> len(links) &gt; <span class="number">0</span>:</span><br><span class="line">    newArticle = links[random.randint(<span class="number">0</span>, len(links) - <span class="number">1</span>)].attrs[<span class="string">'href'</span>]</span><br><span class="line">    print(newArticle)</span><br><span class="line">    links = getLinks(newArticle)</span><br></pre></td></tr></table></figure>
+<pre><code>/wiki/Mads_Mikkelsen
+/wiki/2013_in_film
+/wiki/Patricia_Blair
+/wiki/Darby_Hinton
+/wiki/Internet_Movie_Data_Base
+/wiki/Letterboxd
+/wiki/Beta_tester
+/wiki/Computer_worm
+/wiki/Integrated_Authority_File
+/wiki/Library
+/wiki/Origen
+/wiki/Docetism
+/wiki/International_Standard_Book_Number
+
+
+
+---------------------------------------------------------------------------
+
+KeyboardInterrupt                         Traceback (most recent call last)
+</code></pre><h2 id="3-2采集整个网站"><a href="#3-2采集整个网站" class="headerlink" title="3.2采集整个网站"></a>3.2采集整个网站</h2><ul>
+<li>链接去重</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">pages = set()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLinks</span><span class="params">(pageUrl)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> pages</span><br><span class="line">    html = urlopen(<span class="string">'http://en.wikipedia.org'</span>+pageUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> bsObj.findAll(<span class="string">'a'</span>, href = re.compile(<span class="string">'^(/wiki/)'</span>)):</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'href'</span> <span class="keyword">in</span> link.attrs:</span><br><span class="line">            <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">not</span> <span class="keyword">in</span> pages:</span><br><span class="line">                newPage = link.attrs[<span class="string">'href'</span>]</span><br><span class="line">                print(newPage)</span><br><span class="line">                pages.add(newPage)</span><br><span class="line">                getLinks(newPage)</span><br><span class="line">getLinks(<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>/wiki/Wikipedia
+/wiki/Wikipedia:Protection_policy#semi
+/wiki/Wikipedia:Requests_for_page_protection
+/wiki/Wikipedia:Requests_for_permissions
+
+
+
+---------------------------------------------------------------------------
+
+KeyboardInterrupt                         Traceback (most recent call last)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">pages = set()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLinks</span><span class="params">(pageUrl)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> pages</span><br><span class="line">    html = urlopen(<span class="string">'http://en.wikipedia.org'</span>+pageUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        print(bsObj.h1.get_text())</span><br><span class="line">        print(bsObj.find(id=<span class="string">'mw-content_text'</span>).findAll(<span class="string">'p'</span>)[<span class="number">0</span>])</span><br><span class="line">        print(bsObj.find(id=<span class="string">'ca_edit'</span>).find(<span class="string">'span'</span>).find(<span class="string">'a'</span>).attrs[<span class="string">'href'</span>])</span><br><span class="line">    <span class="keyword">except</span> AttributeError:</span><br><span class="line">        print(<span class="string">'页面缺少一些属性'</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> bsObj.findAll(<span class="string">'a'</span>, href = re.compile(<span class="string">'^(/wiki/)'</span>)):</span><br><span class="line">        <span class="keyword">if</span> <span class="string">'href'</span> <span class="keyword">in</span> link.attrs:</span><br><span class="line">            <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">not</span> <span class="keyword">in</span> pages:</span><br><span class="line">                newPage = link.attrs[<span class="string">'href'</span>]</span><br><span class="line">                print(<span class="string">'----------------\n'</span>+newPage)</span><br><span class="line">                pages.add(newPage)</span><br><span class="line">                getLinks(newPage)</span><br><span class="line">getLinks(<span class="string">''</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>Main Page
+页面缺少一些属性
+----------------
+/wiki/Wikipedia
+Wikipedia
+页面缺少一些属性
+----------------
+/wiki/Wikipedia:Protection_policy#semi
+Wikipedia:Protection policy
+页面缺少一些属性
+----------------
+/wiki/Wikipedia:Requests_for_page_protection
+Wikipedia:Requests for page protection
+页面缺少一些属性
+</code></pre><h2 id="3-3通过互联网采集"><a href="#3-3通过互联网采集" class="headerlink" title="3.3通过互联网采集"></a>3.3通过互联网采集</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">pages = set()</span><br><span class="line">random.seed(datetime.datetime.now())</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取页面所有内链的列表</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getInternalLinks</span><span class="params">(bsObj, includeUrl)</span>:</span></span><br><span class="line">    internalLinks = []</span><br><span class="line">    <span class="comment">#找出所有以‘/’开头的链接</span></span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> bsObj.findAll(<span class="string">'a'</span>, href=re.compile(<span class="string">'^(/|.*"+includeUrl+")'</span>)):</span><br><span class="line">        <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">not</span> <span class="keyword">in</span> internalLinks:</span><br><span class="line">                internalLinks.append(link.attrs[<span class="string">'href'</span>])</span><br><span class="line">    <span class="keyword">return</span> internalLinks</span><br><span class="line"></span><br><span class="line"><span class="comment">#获取页面所有外链的列表</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getExternalLinks</span><span class="params">(bsObj, excludeUrl)</span>:</span></span><br><span class="line">    externalLinks = []</span><br><span class="line">    <span class="comment">#找出所有以'http'或'www'开头且不包含当前URL的链接</span></span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> bsObj.findAll(<span class="string">'a'</span>,href=re.compile(<span class="string">'^(http|www)((?!"+excludeUrl+").)*$'</span>)):</span><br><span class="line">        <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">not</span> <span class="keyword">in</span> externalLinks:</span><br><span class="line">                externalLinks.append(link.attrs[<span class="string">'href'</span>])</span><br><span class="line">    <span class="keyword">return</span> externalLinks</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">splitAddress</span><span class="params">(address)</span>:</span></span><br><span class="line">    addressParts = address.replace(<span class="string">'http://'</span>,<span class="string">''</span>).split(<span class="string">'/'</span>)</span><br><span class="line">    <span class="keyword">return</span> addressParts</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getRandomExternalLink</span><span class="params">(startingPage)</span>:</span></span><br><span class="line">    html = urlopen(startingPage)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    externalLinks = getExternalLinks(bsObj, splitAddress(startingPage)[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">if</span> len(externalLinks) == <span class="number">0</span>:</span><br><span class="line">        internalLinks = getInternalLinks(startingPage)</span><br><span class="line">        <span class="keyword">return</span> getExternalLink(bsObj, internalLinks[random.randint(<span class="number">0</span>, len(internalLinks) - <span class="number">1</span>)])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> externalLinks[random.randint(<span class="number">0</span>, len(externalLinks)<span class="number">-1</span>)]</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">followExternalOnly</span><span class="params">(startingSite)</span>:</span></span><br><span class="line">    externalLink = getRandomExternalLink(<span class="string">'http://oreilly.com'</span>)</span><br><span class="line">    print(<span class="string">'随机外链是:'</span>+externalLink)</span><br><span class="line">    followExternalOnly(externalLink)</span><br><span class="line">    </span><br><span class="line">followExternalOnly(<span class="string">'http://oreilly.com'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>随机外链是:https://www.safaribooksonline.com/your-experience/?utm_medium=content&amp;utm_source=oreilly.com&amp;utm_campaign=lgen&amp;utm_content=20170201+homepage+safari+platform
+随机外链是:http://www.oreilly.com/privacy.html
+随机外链是:http://www.oreilly.com/about/
+随机外链是:https://www.safaribooksonline.com/?utm_medium=content&amp;utm_source=oreilly.com&amp;utm_campaign=lgen&amp;utm_content=20170601+nav
+随机外链是:http://www.oreilly.com/about/editorial_independence.html
+随机外链是:http://twitter.com/oreillymedia
+随机外链是:https://www.safaribooksonline.com/?utm_medium=content&amp;utm_source=oreilly.com&amp;utm_campaign=lgen&amp;utm_content=20170505+homepage+get+started+now
+
+
+
+---------------------------------------------------------------------------
+
+KeyboardInterrupt                         Traceback (most recent call last)
+</code></pre><ul>
+<li>采集网站所有的外链</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#收集网站上发现的所有外链列表</span></span><br><span class="line">allExtLinks = set()</span><br><span class="line">allIntLinks = set()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getAllExternalLinks</span><span class="params">(siteUrl)</span>:</span></span><br><span class="line">    html = urlopen(siteUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html)</span><br><span class="line">    internalLinks = getInternalLinks(bsObj, splitAddress(siteUrl)[<span class="number">0</span>])</span><br><span class="line">    externalLinks = getExternalLinks(bsObj, splitAddress(siteUrl)[<span class="number">0</span>])</span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> externalLinks:</span><br><span class="line">        <span class="keyword">if</span> link <span class="keyword">not</span> <span class="keyword">in</span> allExtLinks:</span><br><span class="line">            allExtLinks.add(link)</span><br><span class="line">            print(link)</span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> internalLinks:</span><br><span class="line">        <span class="keyword">if</span> link <span class="keyword">not</span> <span class="keyword">in</span> allIntLinks:</span><br><span class="line">            print(<span class="string">'即将获取链接的URL是：'</span>+link)</span><br><span class="line">            allIntLinks.add(link)</span><br><span class="line">            getAllExternalLinks(link)</span><br><span class="line">    getAllExternalLinks(<span class="string">'http://oreilly.com'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="3-4用Scrapy采集"><a href="#3-4用Scrapy采集" class="headerlink" title="3.4用Scrapy采集"></a>3.4用Scrapy采集</h2>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/11/第三章-开始采集/" data-id="cjq1zv30h002mdrih0nbiocmn" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/11/第四章-使用API/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    第四章 使用API
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/11/第二章-复杂HTML解析/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">第二章 复杂HTML解析</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

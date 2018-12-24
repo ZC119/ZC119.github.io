@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>scikit-learn 学习（三）可视化股市结构 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="本例使用一些无监督学习技术从历史报价的变化来提取股市结构。我们使用的数量是报价的每日变化：相关的报价往往会在一天中出现波动。   学习一个图结构我们使用稀疏逆协方差估计来寻找哪些报价与其他条件相关。特别地，稀疏逆协方差给出了一个图，它是一个关联的表。对给一个符号，它所连接的符号也能解释它的波动。   聚类我们使用聚类来聚集相似的报价。这里，scikit-learn 中有各种可用的聚类技术，我们使用">
+<meta name="keywords" content="scikit-learn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scikit-learn 学习（三）可视化股市结构">
+<meta property="og:url" content="http://zc119.github.io/2018/01/07/scikit-learn-学习（三）可视化股市结构/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="本例使用一些无监督学习技术从历史报价的变化来提取股市结构。我们使用的数量是报价的每日变化：相关的报价往往会在一天中出现波动。   学习一个图结构我们使用稀疏逆协方差估计来寻找哪些报价与其他条件相关。特别地，稀疏逆协方差给出了一个图，它是一个关联的表。对给一个符号，它所连接的符号也能解释它的波动。   聚类我们使用聚类来聚集相似的报价。这里，scikit-learn 中有各种可用的聚类技术，我们使用">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/4/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/4/output_1_4.png">
+<meta property="og:updated_time" content="2018-01-07T02:54:12.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scikit-learn 学习（三）可视化股市结构">
+<meta name="twitter:description" content="本例使用一些无监督学习技术从历史报价的变化来提取股市结构。我们使用的数量是报价的每日变化：相关的报价往往会在一天中出现波动。   学习一个图结构我们使用稀疏逆协方差估计来寻找哪些报价与其他条件相关。特别地，稀疏逆协方差给出了一个图，它是一个关联的表。对给一个符号，它所连接的符号也能解释它的波动。   聚类我们使用聚类来聚集相似的报价。这里，scikit-learn 中有各种可用的聚类技术，我们使用">
+<meta name="twitter:image" content="http://zc119.github.io/image/scikit-learn/4/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-scikit-learn-学习（三）可视化股市结构" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            scikit-learn 学习（三）可视化股市结构
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/07/scikit-learn-学习（三）可视化股市结构/">
+            <time datetime="2018-01-07T02:52:07.000Z" itemprop="datePublished">2018-01-07</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>本例使用一些无监督学习技术从历史报价的变化来提取股市结构。<br>我们使用的数量是报价的每日变化：相关的报价往往会在一天中出现波动。  </p>
+<h2 id="学习一个图结构"><a href="#学习一个图结构" class="headerlink" title="学习一个图结构"></a>学习一个图结构</h2><p>我们使用稀疏逆协方差估计来寻找哪些报价与其他条件相关。特别地，稀疏逆协方差给出了一个图，它是一个关联的表。对给一个符号，它所连接的符号也能解释它的波动。  </p>
+<h2 id="聚类"><a href="#聚类" class="headerlink" title="聚类"></a>聚类</h2><p>我们使用聚类来聚集相似的报价。这里，scikit-learn 中有各种可用的聚类技术，我们使用<a href="http://scikit-learn.org/stable/modules/clustering.html#affinity-propagation" target="_blank" rel="noopener">Affinity Propagation</a>（吸引子传播），因为它不强制要求相同大小的类，并且可以自动从数据中选择类的数量。  </p>
+<p><img src="/image/scikit-learn/4/1.png" alt=""></p>
+<p>请注意，这给了我们一个不同于图表的指示，因为图表反映了变量之间的条件关系，而聚类则反映了边际性质：聚集在一起的变量可以被认为在整个股票市场上具有类似的影响。  </p>
+<h2 id="嵌入到2D空间"><a href="#嵌入到2D空间" class="headerlink" title="嵌入到2D空间"></a>嵌入到2D空间</h2><p>为了可视化，我们需要在2D画布上放置不同的符号。 为此，我们使用<a href="http://scikit-learn.org/stable/modules/manifold.html#manifold" target="_blank" rel="noopener">流形学习</a>技术来进行二维嵌入。</p>
+<h2 id="可视化"><a href="#可视化" class="headerlink" title="可视化"></a>可视化</h2><p>3个模型的输出结合在一个2D图中，其中节点表示股票和边：  </p>
+<ul>
+<li>簇标签用于定义节点的颜色</li>
+<li>稀疏协方差模型用于显示边的强度</li>
+<li>二维嵌入用于定位平面中的节点</li>
+</ul>
+<p>这个例子有相当多的与可视化相关的代码，因为可视化对于显示图形至关重要。 其中一个挑战是定位标签，尽量减少重叠。 为此，我们使用基于每个轴最近邻的方向的启发式方法。</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="comment"># Author: Gael Varoquaux gael.varoquaux@normalesup.org</span></span><br><span class="line"><span class="comment"># License: BSD 3 clause</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> matplotlib.collections <span class="keyword">import</span> LineCollection</span><br><span class="line"><span class="keyword">from</span> six.moves.urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> six.moves.urllib.parse <span class="keyword">import</span> urlencode</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> cluster, covariance, manifold</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">print(__doc__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">download</span><span class="params">(symbol, start_date, end_date)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> os.path.exists(symbol + <span class="string">'.csv'</span>):</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">'q'</span>: symbol,</span><br><span class="line">        <span class="string">'startdate'</span>: start_date.strftime(<span class="string">'%Y-%m-%d'</span>),</span><br><span class="line">        <span class="string">'enddate'</span>: end_date.strftime(<span class="string">'%Y-%m-%d'</span>),</span><br><span class="line">        <span class="string">'output'</span>: <span class="string">'csv'</span>,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 代理</span></span><br><span class="line">    proxies = &#123;</span><br><span class="line">        <span class="string">'https'</span>: <span class="string">'https://127.0.0.1:8118'</span>,</span><br><span class="line">        <span class="string">'http'</span>: <span class="string">'http://127.0.0.1:8118'</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    url = <span class="string">'https://finance.google.com/finance/historical?'</span> + urlencode(params)</span><br><span class="line">    response = requests.get(url, proxies=proxies)</span><br><span class="line">    <span class="keyword">with</span> open(symbol + <span class="string">'.csv'</span>, <span class="string">"wb"</span>) <span class="keyword">as</span> code:</span><br><span class="line">        code.write(response.content)</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">retry</span><span class="params">(f, n_attempts=<span class="number">3</span>)</span>:</span></span><br><span class="line">    <span class="string">"Wrapper function to retry function calls in case of exceptions"</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">wrapper</span><span class="params">(*args, **kwargs)</span>:</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(n_attempts):</span><br><span class="line">            <span class="keyword">try</span>:</span><br><span class="line">                <span class="keyword">return</span> f(*args, **kwargs)</span><br><span class="line">            <span class="keyword">except</span> Exception:</span><br><span class="line">                <span class="keyword">if</span> i == n_attempts - <span class="number">1</span>:</span><br><span class="line">                    <span class="keyword">raise</span></span><br><span class="line">    <span class="keyword">return</span> wrapper</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quotes_historical_google</span><span class="params">(symbol, start_date, end_date)</span>:</span></span><br><span class="line">    <span class="string">"""Get the historical data from Google finance.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Parameters</span></span><br><span class="line"><span class="string">    ----------</span></span><br><span class="line"><span class="string">    symbol : str</span></span><br><span class="line"><span class="string">        Ticker symbol to query for, for example ``"DELL"``.</span></span><br><span class="line"><span class="string">    start_date : datetime.datetime</span></span><br><span class="line"><span class="string">        Start date.</span></span><br><span class="line"><span class="string">    end_date : datetime.datetime</span></span><br><span class="line"><span class="string">        End date.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns</span></span><br><span class="line"><span class="string">    -------</span></span><br><span class="line"><span class="string">    X : array</span></span><br><span class="line"><span class="string">        The columns are ``date`` -- date, ``open``, ``high``,</span></span><br><span class="line"><span class="string">        ``low``, ``close`` and ``volume`` of type float.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    params = &#123;</span><br><span class="line">        <span class="string">'q'</span>: symbol,</span><br><span class="line">        <span class="string">'startdate'</span>: start_date.strftime(<span class="string">'%Y-%m-%d'</span>),</span><br><span class="line">        <span class="string">'enddate'</span>: end_date.strftime(<span class="string">'%Y-%m-%d'</span>),</span><br><span class="line">        <span class="string">'output'</span>: <span class="string">'csv'</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    url = <span class="string">'file:///home/chiz/scikit-learn/'</span> + symbol + <span class="string">'.csv'</span></span><br><span class="line">    response = urlopen(url)</span><br><span class="line">    dtype = &#123;</span><br><span class="line">        <span class="string">'names'</span>: [<span class="string">'date'</span>, <span class="string">'open'</span>, <span class="string">'high'</span>, <span class="string">'low'</span>, <span class="string">'close'</span>, <span class="string">'volume'</span>],</span><br><span class="line">        <span class="string">'formats'</span>: [<span class="string">'object'</span>, <span class="string">'f4'</span>, <span class="string">'f4'</span>, <span class="string">'f4'</span>, <span class="string">'f4'</span>, <span class="string">'f4'</span>]</span><br><span class="line">    &#125;</span><br><span class="line">    converters = &#123;</span><br><span class="line">        <span class="number">0</span>: <span class="keyword">lambda</span> s: datetime.strptime(s.decode(), <span class="string">'%d-%b-%y'</span>).date()&#125;</span><br><span class="line">    data = np.genfromtxt(response, delimiter=<span class="string">','</span>, skip_header=<span class="number">1</span>,</span><br><span class="line">                         dtype=dtype, converters=converters,</span><br><span class="line">                         missing_values=<span class="string">'-'</span>, filling_values=<span class="number">-1</span>)</span><br><span class="line">    min_date = min(data[<span class="string">'date'</span>], default=datetime.min.date())</span><br><span class="line">    max_date = max(data[<span class="string">'date'</span>], default=datetime.max.date())</span><br><span class="line">    start_end_diff = (end_date - start_date).days</span><br><span class="line">    min_max_diff = (max_date - min_date).days</span><br><span class="line">    data_is_fine = (</span><br><span class="line">        start_date &lt;= min_date &lt;= end_date <span class="keyword">and</span></span><br><span class="line">        start_date &lt;= max_date &lt;= end_date <span class="keyword">and</span></span><br><span class="line">        start_end_diff - <span class="number">7</span> &lt;= min_max_diff &lt;= start_end_diff)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data_is_fine:</span><br><span class="line">        message = (</span><br><span class="line">            <span class="string">'Data looks wrong for symbol &#123;&#125;, url &#123;&#125;\n'</span></span><br><span class="line">            <span class="string">'  - start_date: &#123;&#125;, end_date: &#123;&#125;\n'</span></span><br><span class="line">            <span class="string">'  - min_date:   &#123;&#125;, max_date: &#123;&#125;\n'</span></span><br><span class="line">            <span class="string">'  - start_end_diff: &#123;&#125;, min_max_diff: &#123;&#125;'</span>.format(</span><br><span class="line">                symbol, url,</span><br><span class="line">                start_date, end_date,</span><br><span class="line">                min_date, max_date,</span><br><span class="line">                start_end_diff, min_max_diff))</span><br><span class="line">        <span class="keyword">raise</span> RuntimeError(message)</span><br><span class="line">    <span class="keyword">return</span> data</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Retrieve the data from Internet</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Choose a time period reasonably calm (not too long ago so that we get</span></span><br><span class="line"><span class="comment"># high-tech firms, and before the 2008 crash)</span></span><br><span class="line">start_date = datetime(<span class="number">2003</span>, <span class="number">1</span>, <span class="number">1</span>).date()</span><br><span class="line">end_date = datetime(<span class="number">2008</span>, <span class="number">1</span>, <span class="number">1</span>).date()</span><br><span class="line"></span><br><span class="line">symbol_dict = &#123;</span><br><span class="line">    <span class="string">'NYSE:TOT'</span>: <span class="string">'Total'</span>,</span><br><span class="line">    <span class="string">'NYSE:XOM'</span>: <span class="string">'Exxon'</span>,</span><br><span class="line">    <span class="string">'NYSE:CVX'</span>: <span class="string">'Chevron'</span>,</span><br><span class="line">    <span class="string">'NYSE:COP'</span>: <span class="string">'ConocoPhillips'</span>,</span><br><span class="line">    <span class="string">'NYSE:VLO'</span>: <span class="string">'Valero Energy'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:MSFT'</span>: <span class="string">'Microsoft'</span>,</span><br><span class="line">    <span class="string">'NYSE:IBM'</span>: <span class="string">'IBM'</span>,</span><br><span class="line">    <span class="string">'NYSE:TWX'</span>: <span class="string">'Time Warner'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:CMCSA'</span>: <span class="string">'Comcast'</span>,</span><br><span class="line">    <span class="string">'NYSE:CVC'</span>: <span class="string">'Cablevision'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:YHOO'</span>: <span class="string">'Yahoo'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:DELL'</span>: <span class="string">'Dell'</span>,</span><br><span class="line">    <span class="string">'NYSE:HPQ'</span>: <span class="string">'HP'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:AMZN'</span>: <span class="string">'Amazon'</span>,</span><br><span class="line">    <span class="string">'NYSE:TM'</span>: <span class="string">'Toyota'</span>,</span><br><span class="line">    <span class="string">'NYSE:CAJ'</span>: <span class="string">'Canon'</span>,</span><br><span class="line">    <span class="string">'NYSE:SNE'</span>: <span class="string">'Sony'</span>,</span><br><span class="line">    <span class="string">'NYSE:F'</span>: <span class="string">'Ford'</span>,</span><br><span class="line">    <span class="string">'NYSE:HMC'</span>: <span class="string">'Honda'</span>,</span><br><span class="line">    <span class="string">'NYSE:NAV'</span>: <span class="string">'Navistar'</span>,</span><br><span class="line">    <span class="string">'NYSE:NOC'</span>: <span class="string">'Northrop Grumman'</span>,</span><br><span class="line">    <span class="string">'NYSE:BA'</span>: <span class="string">'Boeing'</span>,</span><br><span class="line">    <span class="string">'NYSE:KO'</span>: <span class="string">'Coca Cola'</span>,</span><br><span class="line">    <span class="string">'NYSE:MMM'</span>: <span class="string">'3M'</span>,</span><br><span class="line">    <span class="string">'NYSE:MCD'</span>: <span class="string">'McDonald\'s'</span>,</span><br><span class="line">    <span class="string">'NYSE:PEP'</span>: <span class="string">'Pepsi'</span>,</span><br><span class="line">    <span class="string">'NYSE:K'</span>: <span class="string">'Kellogg'</span>,</span><br><span class="line">    <span class="string">'NYSE:UN'</span>: <span class="string">'Unilever'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:MAR'</span>: <span class="string">'Marriott'</span>,</span><br><span class="line">    <span class="string">'NYSE:PG'</span>: <span class="string">'Procter Gamble'</span>,</span><br><span class="line">    <span class="string">'NYSE:CL'</span>: <span class="string">'Colgate-Palmolive'</span>,</span><br><span class="line">    <span class="string">'NYSE:GE'</span>: <span class="string">'General Electrics'</span>,</span><br><span class="line">    <span class="string">'NYSE:WFC'</span>: <span class="string">'Wells Fargo'</span>,</span><br><span class="line">    <span class="string">'NYSE:JPM'</span>: <span class="string">'JPMorgan Chase'</span>,</span><br><span class="line">    <span class="string">'NYSE:AIG'</span>: <span class="string">'AIG'</span>,</span><br><span class="line">    <span class="string">'NYSE:AXP'</span>: <span class="string">'American express'</span>,</span><br><span class="line">    <span class="string">'NYSE:BAC'</span>: <span class="string">'Bank of America'</span>,</span><br><span class="line">    <span class="string">'NYSE:GS'</span>: <span class="string">'Goldman Sachs'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:AAPL'</span>: <span class="string">'Apple'</span>,</span><br><span class="line">    <span class="string">'NYSE:SAP'</span>: <span class="string">'SAP'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:CSCO'</span>: <span class="string">'Cisco'</span>,</span><br><span class="line">    <span class="string">'NASDAQ:TXN'</span>: <span class="string">'Texas Instruments'</span>,</span><br><span class="line">    <span class="string">'NYSE:XRX'</span>: <span class="string">'Xerox'</span>,</span><br><span class="line">    <span class="string">'NYSE:WMT'</span>: <span class="string">'Wal-Mart'</span>,</span><br><span class="line">    <span class="string">'NYSE:HD'</span>: <span class="string">'Home Depot'</span>,</span><br><span class="line">    <span class="string">'NYSE:GSK'</span>: <span class="string">'GlaxoSmithKline'</span>,</span><br><span class="line">    <span class="string">'NYSE:PFE'</span>: <span class="string">'Pfizer'</span>,</span><br><span class="line">    <span class="string">'NYSE:SNY'</span>: <span class="string">'Sanofi-Aventis'</span>,</span><br><span class="line">    <span class="string">'NYSE:NVS'</span>: <span class="string">'Novartis'</span>,</span><br><span class="line">    <span class="string">'NYSE:KMB'</span>: <span class="string">'Kimberly-Clark'</span>,</span><br><span class="line">    <span class="string">'NYSE:R'</span>: <span class="string">'Ryder'</span>,</span><br><span class="line">    <span class="string">'NYSE:GD'</span>: <span class="string">'General Dynamics'</span>,</span><br><span class="line">    <span class="string">'NYSE:RTN'</span>: <span class="string">'Raytheon'</span>,</span><br><span class="line">    <span class="string">'NYSE:CVS'</span>: <span class="string">'CVS'</span>,</span><br><span class="line">    <span class="string">'NYSE:CAT'</span>: <span class="string">'Caterpillar'</span>,</span><br><span class="line">    <span class="string">'NYSE:DD'</span>: <span class="string">'DuPont de Nemours'</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">symbols, names = np.array(sorted(symbol_dict.items())).T</span><br><span class="line"></span><br><span class="line"><span class="comment"># retry is used because quotes_historical_google can temporarily fail</span></span><br><span class="line"><span class="comment"># for various reasons (e.g. empty result from Google API).</span></span><br><span class="line">quotes = []</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> symbol <span class="keyword">in</span> symbols:</span><br><span class="line">    print(<span class="string">'Fetching quote history for %r'</span> % symbol, file=sys.stderr)</span><br><span class="line">    download(symbol, start_date, end_date)    </span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> symbol <span class="keyword">in</span> symbols:</span><br><span class="line">    quotes.append(retry(quotes_historical_google)(</span><br><span class="line">        symbol, start_date, end_date))</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">close_prices = np.vstack([q[<span class="string">'close'</span>] <span class="keyword">for</span> q <span class="keyword">in</span> quotes])</span><br><span class="line">open_prices = np.vstack([q[<span class="string">'open'</span>] <span class="keyword">for</span> q <span class="keyword">in</span> quotes])</span><br><span class="line"></span><br><span class="line"><span class="comment"># The daily variations of the quotes are what carry most information</span></span><br><span class="line">variation = close_prices - open_prices</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Learn a graphical structure from the correlations</span></span><br><span class="line">edge_model = covariance.GraphLassoCV()</span><br><span class="line"></span><br><span class="line"><span class="comment"># standardize the time series: using correlations rather than covariance</span></span><br><span class="line"><span class="comment"># is more efficient for structure recovery</span></span><br><span class="line">X = variation.copy().T</span><br><span class="line">X /= X.std(axis=<span class="number">0</span>)</span><br><span class="line">edge_model.fit(X)</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Cluster using affinity propagation</span></span><br><span class="line"></span><br><span class="line">_, labels = cluster.affinity_propagation(edge_model.covariance_)</span><br><span class="line">n_labels = labels.max()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(n_labels + <span class="number">1</span>):</span><br><span class="line">    print(<span class="string">'Cluster %i: %s'</span> % ((i + <span class="number">1</span>), <span class="string">', '</span>.join(names[labels == i])))</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Find a low-dimension embedding for visualization: find the best position of</span></span><br><span class="line"><span class="comment"># the nodes (the stocks) on a 2D plane</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># We use a dense eigen_solver to achieve reproducibility (arpack is</span></span><br><span class="line"><span class="comment"># initiated with random vectors that we don't control). In addition, we</span></span><br><span class="line"><span class="comment"># use a large number of neighbors to capture the large-scale structure.</span></span><br><span class="line">node_position_model = manifold.LocallyLinearEmbedding(</span><br><span class="line">    n_components=<span class="number">2</span>, eigen_solver=<span class="string">'dense'</span>, n_neighbors=<span class="number">6</span>)</span><br><span class="line"></span><br><span class="line">embedding = node_position_model.fit_transform(X.T).T</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Visualization</span></span><br><span class="line">plt.figure(<span class="number">1</span>, facecolor=<span class="string">'w'</span>, figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">plt.clf()</span><br><span class="line">ax = plt.axes([<span class="number">0.</span>, <span class="number">0.</span>, <span class="number">1.</span>, <span class="number">1.</span>])</span><br><span class="line">plt.axis(<span class="string">'off'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Display a graph of the partial correlations</span></span><br><span class="line">partial_correlations = edge_model.precision_.copy()</span><br><span class="line">d = <span class="number">1</span> / np.sqrt(np.diag(partial_correlations))</span><br><span class="line">partial_correlations *= d</span><br><span class="line">partial_correlations *= d[:, np.newaxis]</span><br><span class="line">non_zero = (np.abs(np.triu(partial_correlations, k=<span class="number">1</span>)) &gt; <span class="number">0.02</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Plot the nodes using the coordinates of our embedding</span></span><br><span class="line">plt.scatter(embedding[<span class="number">0</span>], embedding[<span class="number">1</span>], s=<span class="number">100</span> * d ** <span class="number">2</span>, c=labels,</span><br><span class="line">            cmap=plt.cm.spectral)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Plot the edges</span></span><br><span class="line">start_idx, end_idx = np.where(non_zero)</span><br><span class="line"><span class="comment"># a sequence of (*line0*, *line1*, *line2*), where::</span></span><br><span class="line"><span class="comment">#            linen = (x0, y0), (x1, y1), ... (xm, ym)</span></span><br><span class="line">segments = [[embedding[:, start], embedding[:, stop]]</span><br><span class="line">            <span class="keyword">for</span> start, stop <span class="keyword">in</span> zip(start_idx, end_idx)]</span><br><span class="line">values = np.abs(partial_correlations[non_zero])</span><br><span class="line">lc = LineCollection(segments,</span><br><span class="line">                    zorder=<span class="number">0</span>, cmap=plt.cm.hot_r,</span><br><span class="line">                    norm=plt.Normalize(<span class="number">0</span>, <span class="number">.7</span> * values.max()))</span><br><span class="line">lc.set_array(values)</span><br><span class="line">lc.set_linewidths(<span class="number">15</span> * values)</span><br><span class="line">ax.add_collection(lc)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add a label to each node. The challenge here is that we want to</span></span><br><span class="line"><span class="comment"># position the labels to avoid overlap with other labels</span></span><br><span class="line"><span class="keyword">for</span> index, (name, label, (x, y)) <span class="keyword">in</span> enumerate(</span><br><span class="line">        zip(names, labels, embedding.T)):</span><br><span class="line"></span><br><span class="line">    dx = x - embedding[<span class="number">0</span>]</span><br><span class="line">    dx[index] = <span class="number">1</span></span><br><span class="line">    dy = y - embedding[<span class="number">1</span>]</span><br><span class="line">    dy[index] = <span class="number">1</span></span><br><span class="line">    this_dx = dx[np.argmin(np.abs(dy))]</span><br><span class="line">    this_dy = dy[np.argmin(np.abs(dx))]</span><br><span class="line">    <span class="keyword">if</span> this_dx &gt; <span class="number">0</span>:</span><br><span class="line">        horizontalalignment = <span class="string">'left'</span></span><br><span class="line">        x = x + <span class="number">.002</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        horizontalalignment = <span class="string">'right'</span></span><br><span class="line">        x = x - <span class="number">.002</span></span><br><span class="line">    <span class="keyword">if</span> this_dy &gt; <span class="number">0</span>:</span><br><span class="line">        verticalalignment = <span class="string">'bottom'</span></span><br><span class="line">        y = y + <span class="number">.002</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        verticalalignment = <span class="string">'top'</span></span><br><span class="line">        y = y - <span class="number">.002</span></span><br><span class="line">    plt.text(x, y, name, size=<span class="number">10</span>,</span><br><span class="line">             horizontalalignment=horizontalalignment,</span><br><span class="line">             verticalalignment=verticalalignment,</span><br><span class="line">             bbox=dict(facecolor=<span class="string">'w'</span>,</span><br><span class="line">                       edgecolor=plt.cm.spectral(label / float(n_labels)),</span><br><span class="line">                       alpha=<span class="number">.6</span>))</span><br><span class="line"></span><br><span class="line">plt.xlim(embedding[<span class="number">0</span>].min() - <span class="number">.15</span> * embedding[<span class="number">0</span>].ptp(),</span><br><span class="line">         embedding[<span class="number">0</span>].max() + <span class="number">.10</span> * embedding[<span class="number">0</span>].ptp(),)</span><br><span class="line">plt.ylim(embedding[<span class="number">1</span>].min() - <span class="number">.03</span> * embedding[<span class="number">1</span>].ptp(),</span><br><span class="line">         embedding[<span class="number">1</span>].max() + <span class="number">.03</span> * embedding[<span class="number">1</span>].ptp())</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre><code>Automatically created module for IPython interactive environment
+
+
+Fetching quote history for &apos;NASDAQ:AAPL&apos;
+Fetching quote history for &apos;NASDAQ:AMZN&apos;
+Fetching quote history for &apos;NASDAQ:CMCSA&apos;
+Fetching quote history for &apos;NASDAQ:CSCO&apos;
+Fetching quote history for &apos;NASDAQ:DELL&apos;
+Fetching quote history for &apos;NASDAQ:MAR&apos;
+Fetching quote history for &apos;NASDAQ:MSFT&apos;
+Fetching quote history for &apos;NASDAQ:TXN&apos;
+Fetching quote history for &apos;NASDAQ:YHOO&apos;
+Fetching quote history for &apos;NYSE:AIG&apos;
+Fetching quote history for &apos;NYSE:AXP&apos;
+Fetching quote history for &apos;NYSE:BA&apos;
+Fetching quote history for &apos;NYSE:BAC&apos;
+Fetching quote history for &apos;NYSE:CAJ&apos;
+Fetching quote history for &apos;NYSE:CAT&apos;
+Fetching quote history for &apos;NYSE:CL&apos;
+Fetching quote history for &apos;NYSE:COP&apos;
+Fetching quote history for &apos;NYSE:CVC&apos;
+Fetching quote history for &apos;NYSE:CVS&apos;
+Fetching quote history for &apos;NYSE:CVX&apos;
+Fetching quote history for &apos;NYSE:DD&apos;
+Fetching quote history for &apos;NYSE:F&apos;
+Fetching quote history for &apos;NYSE:GD&apos;
+Fetching quote history for &apos;NYSE:GE&apos;
+Fetching quote history for &apos;NYSE:GS&apos;
+Fetching quote history for &apos;NYSE:GSK&apos;
+Fetching quote history for &apos;NYSE:HD&apos;
+Fetching quote history for &apos;NYSE:HMC&apos;
+Fetching quote history for &apos;NYSE:HPQ&apos;
+Fetching quote history for &apos;NYSE:IBM&apos;
+Fetching quote history for &apos;NYSE:JPM&apos;
+Fetching quote history for &apos;NYSE:K&apos;
+Fetching quote history for &apos;NYSE:KMB&apos;
+Fetching quote history for &apos;NYSE:KO&apos;
+Fetching quote history for &apos;NYSE:MCD&apos;
+Fetching quote history for &apos;NYSE:MMM&apos;
+Fetching quote history for &apos;NYSE:NAV&apos;
+Fetching quote history for &apos;NYSE:NOC&apos;
+Fetching quote history for &apos;NYSE:NVS&apos;
+Fetching quote history for &apos;NYSE:PEP&apos;
+Fetching quote history for &apos;NYSE:PFE&apos;
+Fetching quote history for &apos;NYSE:PG&apos;
+Fetching quote history for &apos;NYSE:R&apos;
+Fetching quote history for &apos;NYSE:RTN&apos;
+Fetching quote history for &apos;NYSE:SAP&apos;
+Fetching quote history for &apos;NYSE:SNE&apos;
+Fetching quote history for &apos;NYSE:SNY&apos;
+Fetching quote history for &apos;NYSE:TM&apos;
+Fetching quote history for &apos;NYSE:TOT&apos;
+Fetching quote history for &apos;NYSE:TWX&apos;
+Fetching quote history for &apos;NYSE:UN&apos;
+Fetching quote history for &apos;NYSE:VLO&apos;
+Fetching quote history for &apos;NYSE:WFC&apos;
+Fetching quote history for &apos;NYSE:WMT&apos;
+Fetching quote history for &apos;NYSE:XOM&apos;
+Fetching quote history for &apos;NYSE:XRX&apos;
+
+
+
+Cluster 1: Apple, Amazon, Yahoo
+Cluster 2: Cisco, Dell, Microsoft, Texas Instruments, HP, IBM, SAP
+Cluster 3: American express
+Cluster 4: Boeing
+Cluster 5: Cablevision
+Cluster 6: ConocoPhillips, Chevron, Total, Valero Energy, Exxon
+Cluster 7: Comcast, Marriott, AIG, Bank of America, CVS, DuPont de Nemours, Ford, General Electrics, Goldman Sachs, Home Depot, JPMorgan Chase, McDonald&apos;s, 3M, Pfizer, Ryder, Wells Fargo, Wal-Mart
+Cluster 8: Navistar
+Cluster 9: General Dynamics, Northrop Grumman, Raytheon
+Cluster 10: GlaxoSmithKline, Novartis, Sanofi-Aventis
+Cluster 11: Kellogg, Coca Cola, Pepsi
+Cluster 12: Colgate-Palmolive, Kimberly-Clark, Procter Gamble
+Cluster 13: Canon, Caterpillar, Honda, Sony, Toyota, Unilever, Xerox
+Cluster 14: Time Warner
+</code></pre><p><img src="/image/scikit-learn/4/output_1_4.png" alt="png"></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/07/scikit-learn-学习（三）可视化股市结构/" data-id="cjq1zv30b0021drihfemj5o2o" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/07/scikit-learn-学习（四）处理文本数据/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    scikit-learn 学习（四）处理文本数据
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/06/scikit-learn-学习（二）科学数据处理中的统计学习教程-下/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">scikit-learn 学习（二）科学数据处理中的统计学习教程 (下)</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

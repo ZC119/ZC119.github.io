@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorBoard Graph Visualization | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="TensorFlow 计算图是强大但复杂的。图可视化能帮助你理解并调试。这里是一个工作上可视化的例子：">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorBoard Graph Visualization">
+<meta property="og:url" content="http://zc119.github.io/2017/12/20/TensorBoard-Graph-Visualization/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="TensorFlow 计算图是强大但复杂的。图可视化能帮助你理解并调试。这里是一个工作上可视化的例子：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/graph_vis_animation.gif">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/pool1_collapsed.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/pool1_expanded.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/conv_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/save.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/series.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/series_expanded.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/3.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/4.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/5.png">
+<meta property="og:updated_time" content="2017-12-20T12:03:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorBoard Graph Visualization">
+<meta name="twitter:description" content="TensorFlow 计算图是强大但复杂的。图可视化能帮助你理解并调试。这里是一个工作上可视化的例子：">
+<meta name="twitter:image" content="http://zc119.github.io/image/TensorBoard%20Graph%20Visualization/graph_vis_animation.gif">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorBoard-Graph-Visualization" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorBoard Graph Visualization
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/20/TensorBoard-Graph-Visualization/">
+            <time datetime="2017-12-20T12:01:50.000Z" itemprop="datePublished">2017-12-20</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>TensorFlow 计算图是强大但复杂的。图可视化能帮助你理解并调试。这里是一个工作上可视化的例子：</p>
+<a id="more"></a>
+<p><img src="/image/TensorBoard Graph Visualization/graph_vis_animation.gif" alt=""></p>
+<h2 id="命名空间-name-scoping-和节点-nodes"><a href="#命名空间-name-scoping-和节点-nodes" class="headerlink" title="命名空间(name scoping)和节点(nodes)"></a>命名空间(name scoping)和节点(nodes)</h2><p>典型的 TensorFlow 图可以有数千个节点，多到难以一次全部看见，甚至不能用标准的图工具来显示。为了简化，variable 的 names 可以被 scoped 并使用这个信息去定义节点的层次(hierarchy)来可视化。默认只有最顶端的层次会被显示。下面用 <a href="https://tensorflow.google.cn/api_docs/python/tf/name_scope" target="_blank" rel="noopener">tf.name_scope</a> 在 name scope hidden 下定义了3个操作：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> tf.name_scope(<span class="string">'hidden'</span>) <span class="keyword">as</span> scope:</span><br><span class="line">    a = tf.constant(<span class="number">5</span>, name=<span class="string">'alpha'</span>)</span><br><span class="line">    W = tf.Variable(tf.random_uniform([<span class="number">1</span>, <span class="number">2</span>], <span class="number">-1.0</span>, <span class="number">1.0</span>), name=<span class="string">'weights'</span>)</span><br><span class="line">    b = tf.Variable(tf.zeros([<span class="number">1</span>]), name=<span class="string">'biases'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>/root/anaconda3/envs/tensorflow/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: compiletime version 3.5 of module &apos;tensorflow.python.framework.fast_tensor_util&apos; does not match runtime version 3.6
+  return f(*args, **kwds)
+</code></pre><p>这将产生下列3个 ops 的 names：</p>
+<ul>
+<li>hidden/alpha</li>
+<li>hidden/weights</li>
+<li>hidden/biases</li>
+</ul>
+<p>默认时，可视化工具将会将3个操作整合到一个节点，标签为 hidden。额外的详细信息不会丢失，你可以双击或者单击右上角的 + 号来展开节点，然后你将看到3个子节点，分别为 alpha,weights,biases。</p>
+<p>下面是一个更复杂的节点的初始状态和展开状态的具体例子：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/image/TensorBoard Graph Visualization/pool1_collapsed.png" alt=""></td>
+<td><img src="/image/TensorBoard Graph Visualization/pool1_expanded.png" alt=""></td>
+</tr>
+<tr>
+<td>顶级名称域的初始视图pool_1，点击右上方橙色的+按钮或双击节点来展开。</td>
+<td>展开的pool_1名称域视图，点击右上方橙色的-按钮或双击节点来收起此名称域。</td>
+</tr>
+</tbody>
+</table>
+<p>通过命名空间整合节点是制作易读的图的关键。如果你建立一个模型，命名空间帮助你控制结果可视化。The better your name scopes, the better your visualization。</p>
+<p>上面的图像例子说明了可视化的另一方面， TensorFlow 图表有两种连接关系：数据依赖和控制依赖。数据依赖显示两个操作之间的tensor流程，用实心箭头指示，而控制依赖用点线表示。在已展开的视图(上面的右图)中，除了用点线连接的CheckNumerics和control_dependency之外，所有连接都是数据依赖的。</p>
+<p>还有一种手段用来简化布局。大多数 TensorFlow 图表有一部分节点，这部分节点和其他节点之间有很多连接。比如，许多节点在初始化阶段可能会有一个控制依赖，而绘制所有init节点的边缘和其依赖可能会创造出一个混乱的视图。</p>
+<p>为了减少混乱，可视化把所有 high-degree 节点分离到右边的一个从属区域， 而不会绘制线条来表示他们的边。线条也不用来表示连接了，我们绘制了小节点图标来指示这些连接关系。分离出从属节点通常不会把关键信息删除掉，因为这些节点和内构功能是相关的。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/image/TensorBoard Graph Visualization/conv_1.png" alt=""></td>
+<td><img src="/image/TensorBoard Graph Visualization/save.png" alt=""></td>
+</tr>
+<tr>
+<td>节点conv_1被连接到save，注意其右边save节点图标。</td>
+<td>save has a high degree, 并会作为从属节点出现，与conv_1的连接作为一个节点图标显示在其左边。为了继续减少杂乱，既然save有很多连接，我们则只显示前5个，而把其余的缩略为… 12 more。</td>
+</tr>
+</tbody>
+</table>
+<p>最后一个结构上的简化法叫做序列折叠（series collapsing）。 序列基序（Sequential motifs）是拥有相同结构并且其名称结尾的数字不同的节点，它们被折叠进一个单独的节点块（stack）中。对长序列网络来说，序列折叠极大地简化了视图，对于已层叠的节点，双击会展开序列。</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="/image/TensorBoard Graph Visualization/series.png" alt=""></td>
+<td><img src="/image/TensorBoard Graph Visualization/series_expanded.png" alt=""></td>
+</tr>
+<tr>
+<td>一个节点序列的折叠视图。</td>
+<td>视图的一小块, 双击后展开。</td>
+</tr>
+</tbody>
+</table>
+<p>最后，针对易读性的最后一点要说到的是，可视化为常节点和摘要节点使用了特别的图标，总结起来有下面这些节点符号：</p>
+<p><img src="/image/TensorBoard Graph Visualization/1.png" alt=""></p>
+<h2 id="交互"><a href="#交互" class="headerlink" title="交互"></a>交互</h2><p>通过平移和缩放来导航图表，点击和拖动用于平移，滚动手势用于缩放。双击一个节点或点击其+按钮来展开代表一组操作的名称域。右下角有一个小地图可以在缩放和平移时方便的改变当前视角。</p>
+<p>要关闭一个打开的节点，再次双击它或点击它的-按钮，你也可以只点击一次来选中一个节点，节点的颜色会加深，并且会看到节点的详情，其连接到的节点会在可视化右上角的详情卡片显现。</p>
+<p><img src="/image/TensorBoard Graph Visualization/2.png" alt=""></p>
+<p>TensorBoaed 提供一些方法来改变 graph 的可视布局。这不会改变计算但是会使网络结构更清晰。通过右键节点或者点击节点信息卡的底部按钮，你可以对布局作出以下改变：</p>
+<ul>
+<li>节点可以在主图与附属区域之间被移动</li>
+<li>一列节点可以被分开，也可以被重新组合</li>
+</ul>
+<p>选择对于 high-degree 节点的理解也很有帮助，选择任意节点，则与它的其余连接相应的节点也会选中，这使得在进行例如查看哪一个节点是否已保存等操作时非常容易。</p>
+<p>点击详情卡片中的一个节点名称时会选中该节点，必要的话，视角会自动平移以使该节点可见。</p>
+<p>最后，使用图例上方的颜色菜单，你可以给你的图表选择两个颜色方案。默认的结构视图下，当两个 high-level 节点颜色一样时，其会以相同的彩虹色彩出现，而结构唯一的节点颜色是灰色。还有一个视图则展示了不同的操作运行于什么设备之上。名称域被恰当的根据其中的操作节点的设备片件来着色。</p>
+<p>下图是一张真实图表的图解：</p>
+<p><img src="/image/TensorBoard Graph Visualization/3.png" alt=""></p>
+<h2 id="张量-shape-信息"><a href="#张量-shape-信息" class="headerlink" title="张量 shape 信息"></a>张量 shape 信息</h2><p>当序列化的 GraphDef 包含张量 shapes，图可视化工具给边加上张量维数的标签，边的粗细反映出张量的 size。为了在 GraphDef 中包括张量的信息，传递实际的图(见 sess.graph)到 FileWriter 中当序列化图时。下图展示了带有张量 shape 的 CIFAR-10 模型。</p>
+<p><img src="/image/TensorBoard Graph Visualization/4.png" alt=""></p>
+<h2 id="运行时间统计"><a href="#运行时间统计" class="headerlink" title="运行时间统计"></a>运行时间统计</h2><p>收集运行元数据经常是有用的，例如总内存使用，总计算时间，和节点张量shapes。下面的代码是train 和 test 修正的 simple MNIST tutorial 一部分。<a href="https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py" target="_blank" rel="noopener">源码</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Train the model, and also write summaries.</span></span><br><span class="line"><span class="comment"># Every 10th step, measure test-set accuracy, and write test summaries</span></span><br><span class="line"><span class="comment"># All other steps, run train_step on training data, &amp; add training summaries</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">feed_dict</span><span class="params">(train)</span>:</span></span><br><span class="line">  <span class="string">"""Make a TensorFlow feed_dict: maps data onto Tensor placeholders."""</span></span><br><span class="line">  <span class="keyword">if</span> train <span class="keyword">or</span> FLAGS.fake_data:</span><br><span class="line">    xs, ys = mnist.train.next_batch(<span class="number">100</span>, fake_data=FLAGS.fake_data)</span><br><span class="line">    k = FLAGS.dropout</span><br><span class="line">  <span class="keyword">else</span>:</span><br><span class="line">    xs, ys = mnist.test.images, mnist.test.labels</span><br><span class="line">    k = <span class="number">1.0</span></span><br><span class="line">  <span class="keyword">return</span> &#123;x: xs, y_: ys, keep_prob: k&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(FLAGS.max_steps):</span><br><span class="line">  <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:  <span class="comment"># Record summaries and test-set accuracy</span></span><br><span class="line">    summary, acc = sess.run([merged, accuracy], feed_dict=feed_dict(<span class="keyword">False</span>))</span><br><span class="line">    test_writer.add_summary(summary, i)</span><br><span class="line">    print(<span class="string">'Accuracy at step %s: %s'</span> % (i, acc))</span><br><span class="line">  <span class="keyword">else</span>:  <span class="comment"># Record train set summaries, and train</span></span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">100</span> == <span class="number">99</span>:  <span class="comment"># Record execution stats</span></span><br><span class="line">      run_options = tf.RunOptions(trace_level=tf.RunOptions.FULL_TRACE)</span><br><span class="line">      run_metadata = tf.RunMetadata()</span><br><span class="line">      summary, _ = sess.run([merged, train_step],</span><br><span class="line">                            feed_dict=feed_dict(<span class="keyword">True</span>),</span><br><span class="line">                            options=run_options,</span><br><span class="line">                            run_metadata=run_metadata)</span><br><span class="line">      train_writer.add_run_metadata(run_metadata, <span class="string">'step%d'</span> % i)</span><br><span class="line">      train_writer.add_summary(summary, i)</span><br><span class="line">      print(<span class="string">'Adding run metadata for'</span>, i)</span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># Record a summary</span></span><br><span class="line">      summary, _ = sess.run([merged, train_step], feed_dict=feed_dict(<span class="keyword">True</span>))</span><br><span class="line">      train_writer.add_summary(summary, i)</span><br></pre></td></tr></table></figure>
+<p>每运行100步，在99步时记录运行时间统计。</p>
+<p>当你运行 tensorboard 并到 Graph 页时，你将看到选项 Session runs，带有运行元数据的一些时间步。选择一个，你将会看到在这步中的网络快照，并剔除没用的节点。在左边的控制台，你将用总内存或总计算时间给节点加上颜色。另外，点击节点将会展示精确的总内存，计算时间和张量输出 sizes。</p>
+<p><img src="/image/TensorBoard Graph Visualization/5.png" alt=""></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/20/TensorBoard-Graph-Visualization/" data-id="cjq1zv2zu000fdrihn3f9znbz" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/21/TensorBoard-Histogram-Dashboard/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    TensorBoard Histogram Dashboard
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/18/TensorBoard-Visualizing-Learning/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorBoard Visualizing Learning</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

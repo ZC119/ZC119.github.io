@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorBoard Visualizing Learning | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="TensorBoard 涉及到的运算，通常是在训练庞大的深度神经网络中出现的复杂而又难以理解的运算。">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorBoard Visualizing Learning">
+<meta property="og:url" content="http://zc119.github.io/2017/12/18/TensorBoard-Visualizing-Learning/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="TensorBoard 涉及到的运算，通常是在训练庞大的深度神经网络中出现的复杂而又难以理解的运算。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20%20Visualizing%20Learning/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20%20Visualizing%20Learning/2.png">
+<meta property="og:updated_time" content="2017-12-18T12:49:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorBoard Visualizing Learning">
+<meta name="twitter:description" content="TensorBoard 涉及到的运算，通常是在训练庞大的深度神经网络中出现的复杂而又难以理解的运算。">
+<meta name="twitter:image" content="http://zc119.github.io/image/TensorBoard%20%20Visualizing%20Learning/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorBoard-Visualizing-Learning" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorBoard Visualizing Learning
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/18/TensorBoard-Visualizing-Learning/">
+            <time datetime="2017-12-18T12:45:05.000Z" itemprop="datePublished">2017-12-18</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>TensorBoard 涉及到的运算，通常是在训练庞大的深度神经网络中出现的复杂而又难以理解的运算。</p>
+<a id="more"></a>
+<p>为了更方便 TensorFlow 程序的理解、调试与优化，我们发布了一套叫做 TensorBoard 的可视化工具。你可以用 TensorBoard 来展现你的 TensorFlow 图像，绘制图像生成的定量指标图以及附加数据。</p>
+<p>当 TensorBoard 设置完成后，它应该是这样子的：</p>
+<p><img src="/image/TensorBoard  Visualizing Learning/1.png" alt=""></p>
+<p><a href="https://www.youtube.com/watch?v=eBbEDRsCmv4" target="_blank" rel="noopener">youtube视频</a></p>
+<p>这个教程为了帮助你开始简单的 TensorBoard 使用。这里也有其他的资源。<a href="https://github.com/tensorflow/tensorboard" target="_blank" rel="noopener">TensorBoard’s GitHub</a> 有大量关于 TensorBoard 用法的信息。</p>
+<h2 id="数据序列化"><a href="#数据序列化" class="headerlink" title="数据序列化"></a>数据序列化</h2><p>TensorBoard 通过读取 TensorFlow 的事件文件来运行。TensorFlow 的事件文件包括了你会在 TensorFlow 运行中涉及到的主要数据。下面是 TensorBoard 中汇总数据（Summary data）的大体生命周期。</p>
+<p>首先，创建你想汇总数据的 TensorFlow 图，然后再选择你想在哪个节点进行汇总(summary)操作<a href="https://tensorflow.google.cn/api_guides/python/summary" target="_blank" rel="noopener">summary operations</a>。</p>
+<p>例如，假设你在训练一个 CNN 用来 MNIST 数字识别。你可能希望记录学习速度(learning rate)的如何变化，以及目标函数如何变化。通过向节点附加 <a href="https://tensorflow.google.cn/api_docs/python/tf/summary/scalar" target="_blank" rel="noopener">tf.summary.scalar</a> 操作来分别输出学习速度和期望误差。然后你可以给每个 scalary_summary 分配一个有意义的 tag，比如 ‘learning rate’ 和 ‘loss function’。</p>
+<p>或者你还希望显示一个特殊层中激活的<strong>分布</strong>，或者梯度,权重的分布。可以通过分别附加 <a href="https://tensorflow.google.cn/api_docs/python/tf/summary/histogram" target="_blank" rel="noopener">tf.summary.histogram</a> 运算来收集权重变量和梯度输出。</p>
+<p>所有可用的 summary 操作详细信息，可以查看<a href="https://tensorflow.google.cn/api_guides/python/summary" target="_blank" rel="noopener">summary_operation</a>文档。</p>
+<p>在TensorFlow中，所有的操作只有当你执行，或者另一个操作依赖于它的输出时才会运行。我们刚才创建的这些节点（summary nodes）都围绕着你的图像：没有任何操作依赖于它们的结果。因此，为了生成汇总信息，我们需要运行所有这些节点。这样的手动工作是很乏味的，因此可以使用 <a href="https://tensorflow.google.cn/api_docs/python/tf/summary/merge_all" target="_blank" rel="noopener">tf.summary.merge_all</a> 来将他们合并为一个操作。</p>
+<p>然后你可以执行合并命令，它会依据特点步骤将所有数据生成一个序列化的Summary protobuf对象。最后，为了将汇总数据写入磁盘，需要将汇总的protobuf对象传递给<a href="https://tensorflow.google.cn/api_docs/python/tf/summary/FileWriter" target="_blank" rel="noopener">tf.summary.FileWriter</a>。</p>
+<p>FileWriter 接受一个 logdir (日志目录)。这个 logdir 非常重要，这是所有的事件被写入的目录。FileWriter 也可选地接受一个 Graph。如果它接受一个 Graph，之后 TensorBoard 将会可视化你的 graph 和 tensor shape information。它会帮助你更好地理解 what fkiws through the graph：see <a href="https://tensorflow.google.cn/get_started/graph_viz#tensor_shape_information" target="_blank" rel="noopener">Tensor shape information</a></p>
+<p>现在已经修改了你的图，也有了 FileWriter，现在就可以运行你的神经网络了！如果你愿意的话，你可以每一步执行一次合并汇总，这样你会得到一大堆训练数据。这很有可能超过了你想要的数据量。你也可以每 n 步执行一次合并汇总，或者如下面代码里示范的这样。</p>
+<p>下面代码是 simple MNIST tutorial 的修改版。添加了一些 summary ops 每10步运行一次。如果想要运行，可以输入<br><code>tensorboard --logdir=/tmp/tensorflow/mnist</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"></span><br><span class="line">FLAGS = <span class="keyword">None</span></span><br></pre></td></tr></table></figure>
+<pre><code>/root/anaconda3/envs/tensorflow/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: compiletime version 3.5 of module &apos;tensorflow.python.framework.fast_tensor_util&apos; does not match runtime version 3.6
+  return f(*args, **kwds)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">()</span>:</span></span><br><span class="line">  <span class="comment"># Import data</span></span><br><span class="line">  mnist = input_data.read_data_sets(FLAGS.data_dir+<span class="string">'/'</span>,</span><br><span class="line">                                    one_hot=<span class="keyword">True</span>,</span><br><span class="line">                                    fake_data=FLAGS.fake_data)</span><br><span class="line"></span><br><span class="line">  sess = tf.InteractiveSession()</span><br><span class="line">  <span class="comment"># Create a multilayer model.</span></span><br><span class="line"></span><br><span class="line">  <span class="comment"># Input placeholders</span></span><br><span class="line">  <span class="keyword">with</span> tf.name_scope(<span class="string">'input'</span>):</span><br><span class="line">    x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">784</span>], name=<span class="string">'x-input'</span>)</span><br><span class="line">    y_ = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>], name=<span class="string">'y-input'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">with</span> tf.name_scope(<span class="string">'input_reshape'</span>):</span><br><span class="line">    image_shaped_input = tf.reshape(x, [<span class="number">-1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>])</span><br><span class="line">    tf.summary.image(<span class="string">'input'</span>, image_shaped_input, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># We can't initialize these variables to 0 - the network will get stuck.</span></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">weight_variable</span><span class="params">(shape)</span>:</span></span><br><span class="line">    <span class="string">"""Create a weight variable with appropriate initialization."""</span></span><br><span class="line">    initial = tf.truncated_normal(shape, stddev=<span class="number">0.1</span>)</span><br><span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">bias_variable</span><span class="params">(shape)</span>:</span></span><br><span class="line">    <span class="string">"""Create a bias variable with appropriate initialization."""</span></span><br><span class="line">    initial = tf.constant(<span class="number">0.1</span>, shape=shape)</span><br><span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">variable_summaries</span><span class="params">(var)</span>:</span></span><br><span class="line">    <span class="string">"""Attach a lot of summaries to a Tensor (for TensorBoard visualization)."""</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">'summaries'</span>):</span><br><span class="line">      mean = tf.reduce_mean(var)</span><br><span class="line">      tf.summary.scalar(<span class="string">'mean'</span>, mean)</span><br><span class="line">      <span class="keyword">with</span> tf.name_scope(<span class="string">'stddev'</span>):</span><br><span class="line">        stddev = tf.sqrt(tf.reduce_mean(tf.square(var - mean)))</span><br><span class="line">      tf.summary.scalar(<span class="string">'stddev'</span>, stddev)</span><br><span class="line">      tf.summary.scalar(<span class="string">'max'</span>, tf.reduce_max(var))</span><br><span class="line">      tf.summary.scalar(<span class="string">'min'</span>, tf.reduce_min(var))</span><br><span class="line">      tf.summary.histogram(<span class="string">'histogram'</span>, var)</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">nn_layer</span><span class="params">(input_tensor, input_dim, output_dim, layer_name, act=tf.nn.relu)</span>:</span></span><br><span class="line">    <span class="string">"""Reusable code for making a simple neural net layer.</span></span><br><span class="line"><span class="string">    It does a matrix multiply, bias add, and then uses ReLU to nonlinearize.</span></span><br><span class="line"><span class="string">    It also sets up name scoping so that the resultant graph is easy to read,</span></span><br><span class="line"><span class="string">    and adds a number of summary ops.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="comment"># Adding a name scope ensures logical grouping of the layers in the graph.</span></span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(layer_name):</span><br><span class="line">      <span class="comment"># This Variable will hold the state of the weights for the layer</span></span><br><span class="line">      <span class="keyword">with</span> tf.name_scope(<span class="string">'weights'</span>):</span><br><span class="line">        weights = weight_variable([input_dim, output_dim])</span><br><span class="line">        variable_summaries(weights)</span><br><span class="line">      <span class="keyword">with</span> tf.name_scope(<span class="string">'biases'</span>):</span><br><span class="line">        biases = bias_variable([output_dim])</span><br><span class="line">        variable_summaries(biases)</span><br><span class="line">      <span class="keyword">with</span> tf.name_scope(<span class="string">'Wx_plus_b'</span>):</span><br><span class="line">        preactivate = tf.matmul(input_tensor, weights) + biases</span><br><span class="line">        tf.summary.histogram(<span class="string">'pre_activations'</span>, preactivate)</span><br><span class="line">      activations = act(preactivate, name=<span class="string">'activation'</span>)</span><br><span class="line">      tf.summary.histogram(<span class="string">'activations'</span>, activations)</span><br><span class="line">      <span class="keyword">return</span> activations</span><br><span class="line"></span><br><span class="line">  hidden1 = nn_layer(x, <span class="number">784</span>, <span class="number">500</span>, <span class="string">'layer1'</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">with</span> tf.name_scope(<span class="string">'dropout'</span>):</span><br><span class="line">    keep_prob = tf.placeholder(tf.float32)</span><br><span class="line">    tf.summary.scalar(<span class="string">'dropout_keep_probability'</span>, keep_prob)</span><br><span class="line">    dropped = tf.nn.dropout(hidden1, keep_prob)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Do not apply softmax activation yet, see below.</span></span><br><span class="line">  y = nn_layer(dropped, <span class="number">500</span>, <span class="number">10</span>, <span class="string">'layer2'</span>, act=tf.identity)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">with</span> tf.name_scope(<span class="string">'cross_entropy'</span>):</span><br><span class="line">    <span class="comment"># The raw formulation of cross-entropy,</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(tf.softmax(y)),</span></span><br><span class="line">    <span class="comment">#                               reduction_indices=[1]))</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># can be numerically unstable.</span></span><br><span class="line">    <span class="comment">#</span></span><br><span class="line">    <span class="comment"># So here we use tf.nn.softmax_cross_entropy_with_logits on the</span></span><br><span class="line">    <span class="comment"># raw outputs of the nn_layer above, and then average across</span></span><br><span class="line">    <span class="comment"># the batch.</span></span><br><span class="line">    diff = tf.nn.softmax_cross_entropy_with_logits(labels=y_, logits=y)</span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">'total'</span>):</span><br><span class="line">      cross_entropy = tf.reduce_mean(diff)</span><br><span class="line">  tf.summary.scalar(<span class="string">'cross_entropy'</span>, cross_entropy)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">with</span> tf.name_scope(<span class="string">'train'</span>):</span><br><span class="line">    train_step = tf.train.AdamOptimizer(FLAGS.learning_rate).minimize(</span><br><span class="line">        cross_entropy)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">with</span> tf.name_scope(<span class="string">'accuracy'</span>):</span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">'correct_prediction'</span>):</span><br><span class="line">      correct_prediction = tf.equal(tf.argmax(y, <span class="number">1</span>), tf.argmax(y_, <span class="number">1</span>))</span><br><span class="line">    <span class="keyword">with</span> tf.name_scope(<span class="string">'accuracy'</span>):</span><br><span class="line">      accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br><span class="line">  tf.summary.scalar(<span class="string">'accuracy'</span>, accuracy)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Merge all the summaries and write them out to</span></span><br><span class="line">  <span class="comment"># /tmp/tensorflow/mnist/logs/mnist_with_summaries (by default)</span></span><br><span class="line">  merged = tf.summary.merge_all()</span><br><span class="line">  train_writer = tf.summary.FileWriter(FLAGS.log_dir + <span class="string">'/train'</span>, sess.graph)</span><br><span class="line">  test_writer = tf.summary.FileWriter(FLAGS.log_dir + <span class="string">'/test'</span>)</span><br><span class="line">  tf.global_variables_initializer().run()</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Train the model, and also write summaries.</span></span><br><span class="line">  <span class="comment"># Every 10th step, measure test-set accuracy, and write test summaries</span></span><br><span class="line">  <span class="comment"># All other steps, run train_step on training data, &amp; add training summaries</span></span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">def</span> <span class="title">feed_dict</span><span class="params">(train)</span>:</span></span><br><span class="line">    <span class="string">"""Make a TensorFlow feed_dict: maps data onto Tensor placeholders."""</span></span><br><span class="line">    <span class="keyword">if</span> train <span class="keyword">or</span> FLAGS.fake_data:</span><br><span class="line">      xs, ys = mnist.train.next_batch(<span class="number">100</span>, fake_data=FLAGS.fake_data)</span><br><span class="line">      k = FLAGS.dropout</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">      xs, ys = mnist.test.images, mnist.test.labels</span><br><span class="line">      k = <span class="number">1.0</span></span><br><span class="line">    <span class="keyword">return</span> &#123;x: xs, y_: ys, keep_prob: k&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> i <span class="keyword">in</span> range(FLAGS.max_steps):</span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">10</span> == <span class="number">0</span>:  <span class="comment"># Record summaries and test-set accuracy</span></span><br><span class="line">      summary, acc = sess.run([merged, accuracy], feed_dict=feed_dict(<span class="keyword">False</span>))</span><br><span class="line">      test_writer.add_summary(summary, i)</span><br><span class="line">      print(<span class="string">'Accuracy at step %s: %s'</span> % (i, acc))</span><br><span class="line">    <span class="keyword">else</span>:  <span class="comment"># Record a summary</span></span><br><span class="line">      summary, _ = sess.run([merged, train_step], feed_dict=feed_dict(<span class="keyword">True</span>))</span><br><span class="line">      train_writer.add_summary(summary, i)</span><br><span class="line">  train_writer.close()</span><br><span class="line">  test_writer.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">(_)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> tf.gfile.Exists(FLAGS.log_dir):</span><br><span class="line">        tf.gfile.DeleteRecursively(FLAGS.log_dir)</span><br><span class="line">    tf.gfile.MakeDirs(FLAGS.log_dir)</span><br><span class="line">    train()</span><br></pre></td></tr></table></figure>
+<p>由于网络原因，我手动将 mnist 数据集下载到了 ./tmp/tensorflow/mnist/input_data 中，并对 data_dir log_dir 地址做了修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">  parser = argparse.ArgumentParser()</span><br><span class="line">  parser.add_argument(<span class="string">'--fake_data'</span>, nargs=<span class="string">'?'</span>, const=<span class="keyword">True</span>, type=bool,</span><br><span class="line">                      default=<span class="keyword">False</span>,</span><br><span class="line">                      help=<span class="string">'If true, uses fake data for unit testing.'</span>)</span><br><span class="line">  parser.add_argument(<span class="string">'--max_steps'</span>, type=int, default=<span class="number">1000</span>,</span><br><span class="line">                      help=<span class="string">'Number of steps to run trainer.'</span>)</span><br><span class="line">  parser.add_argument(<span class="string">'--learning_rate'</span>, type=float, default=<span class="number">0.001</span>,</span><br><span class="line">                      help=<span class="string">'Initial learning rate'</span>)</span><br><span class="line">  parser.add_argument(<span class="string">'--dropout'</span>, type=float, default=<span class="number">0.9</span>,</span><br><span class="line">                      help=<span class="string">'Keep probability for training dropout.'</span>)</span><br><span class="line">  parser.add_argument(</span><br><span class="line">      <span class="string">'--data_dir'</span>,</span><br><span class="line">      type=str,</span><br><span class="line">      default=os.path.join(os.getenv(<span class="string">'TEST_TMPDIR'</span>, <span class="string">'./tmp'</span>),</span><br><span class="line">                           <span class="string">'tensorflow/mnist/input_data'</span>),</span><br><span class="line">      help=<span class="string">'Directory for storing input data'</span>)</span><br><span class="line">  parser.add_argument(</span><br><span class="line">      <span class="string">'--log_dir'</span>,</span><br><span class="line">      type=str,</span><br><span class="line">      default=os.path.join(os.getenv(<span class="string">'TEST_TMPDIR'</span>, <span class="string">'./tmp'</span>),</span><br><span class="line">                           <span class="string">'tensorflow/mnist/logs/mnist_with_summaries'</span>),</span><br><span class="line">      help=<span class="string">'Summaries log directory'</span>)</span><br><span class="line">  FLAGS, unparsed = parser.parse_known_args()</span><br><span class="line">  tf.app.run(main=main, argv=[sys.argv[<span class="number">0</span>]] + unparsed)</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/tensorflow/tensorflow/blob/r1.4/tensorflow/examples/tutorials/mnist/mnist_with_summaries.py" target="_blank" rel="noopener">完整代码</a></p>
+<h2 id="运行-TensorBoard"><a href="#运行-TensorBoard" class="headerlink" title="运行 TensorBoard"></a>运行 TensorBoard</h2><p>为了运行 TensorBoard，使用如下命令。或者<br><code>python -m tensorboard.main</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tensorboard --logdir=./tmp/tensorflow/mnist</span><br></pre></td></tr></table></figure>
+<p>logdir 指向 FileWriter 序列化它的数据的目录。如果 logdir 目录包括子目录，子目录下有各自的序列化数据，则 TensorBoard 将会可视化所有的结果。一旦 TensorBoard 运行，用浏览器打开 localhost:6006 即可查看。</p>
+<p>TensorBoard 在右上角有各自的标签。每一个标签表示一个可以被可视化的数据。</p>
+<p><img src="/image/TensorBoard  Visualizing Learning/2.png" alt=""></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/18/TensorBoard-Visualizing-Learning/" data-id="cjq1zv2zz000ydrihrxc2mo4f" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/20/TensorBoard-Graph-Visualization/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    TensorBoard Graph Visualization
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/18/Building-Input-Functions-with-tf-estimator/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">Building Input Functions with tf.estimator</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

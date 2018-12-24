@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>scikit-learn 学习（二）科学数据处理中的统计学习教程 (下) | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="无监督学习: 寻找数据的表示1. 聚类K-means最简单的聚类算法 1234567from sklearn import cluster, datasetsiris = datasets.load_iris()X_iris = iris.datay_iris = iris.targetk_means = cluster.KMeans(n_clusters=3)k_means.fit(X_iris">
+<meta name="keywords" content="scikit-learn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scikit-learn 学习（二）科学数据处理中的统计学习教程 (下)">
+<meta property="og:url" content="http://zc119.github.io/2018/01/06/scikit-learn-学习（二）科学数据处理中的统计学习教程-下/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="无监督学习: 寻找数据的表示1. 聚类K-means最简单的聚类算法 1234567from sklearn import cluster, datasetsiris = datasets.load_iris()X_iris = iris.datay_iris = iris.targetk_means = cluster.KMeans(n_clusters=3)k_means.fit(X_iris">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/output_7_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/output_12_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/3.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/4.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/5.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/6.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/output_33_0.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/output_36_2.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/3/output_36_3.png">
+<meta property="og:updated_time" content="2018-01-06T06:41:32.698Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scikit-learn 学习（二）科学数据处理中的统计学习教程 (下)">
+<meta name="twitter:description" content="无监督学习: 寻找数据的表示1. 聚类K-means最简单的聚类算法 1234567from sklearn import cluster, datasetsiris = datasets.load_iris()X_iris = iris.datay_iris = iris.targetk_means = cluster.KMeans(n_clusters=3)k_means.fit(X_iris">
+<meta name="twitter:image" content="http://zc119.github.io/image/scikit-learn/3/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-scikit-learn-学习（二）科学数据处理中的统计学习教程-下" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            scikit-learn 学习（二）科学数据处理中的统计学习教程 (下)
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/06/scikit-learn-学习（二）科学数据处理中的统计学习教程-下/">
+            <time datetime="2018-01-06T06:40:10.000Z" itemprop="datePublished">2018-01-06</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h1 id="无监督学习-寻找数据的表示"><a href="#无监督学习-寻找数据的表示" class="headerlink" title="无监督学习: 寻找数据的表示"></a>无监督学习: 寻找数据的表示</h1><h2 id="1-聚类"><a href="#1-聚类" class="headerlink" title="1. 聚类"></a>1. 聚类</h2><h3 id="K-means"><a href="#K-means" class="headerlink" title="K-means"></a>K-means</h3><p>最简单的聚类算法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> cluster, datasets</span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">X_iris = iris.data</span><br><span class="line">y_iris = iris.target</span><br><span class="line"></span><br><span class="line">k_means = cluster.KMeans(n_clusters=<span class="number">3</span>)</span><br><span class="line">k_means.fit(X_iris)</span><br></pre></td></tr></table></figure>
+<pre><code>KMeans(algorithm=&apos;auto&apos;, copy_x=True, init=&apos;k-means++&apos;, max_iter=300,
+    n_clusters=3, n_init=10, n_jobs=1, precompute_distances=&apos;auto&apos;,
+    random_state=None, tol=0.0001, verbose=0)
+</code></pre><a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(k_means.labels_[::<span class="number">10</span>]) <span class="comment"># 步长为10</span></span><br></pre></td></tr></table></figure>
+<pre><code>[1 1 1 1 1 0 0 0 0 0 2 2 2 2 2]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(y_iris[::<span class="number">10</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>[0 0 0 0 0 1 1 1 1 1 2 2 2 2 2]
+</code></pre><p><strong>Warning</strong>:对真实性不保证,选择分类数困难,算法对初值敏感,可能陷入局部极小值.<br><img src="/image/scikit-learn/3/1.png" alt=""></p>
+<h3 id="应用实例-vector-quantization-矢量量化"><a href="#应用实例-vector-quantization-矢量量化" class="headerlink" title="应用实例:vector quantization(矢量量化)"></a>应用实例:vector quantization(矢量量化)</h3><p>通常的聚类特别是 KMeans,可以被视为一种选择小的模型来压缩信息的方法.这个问题有时也被称为矢量量化.例如,这可以被用来对一张图片进行色调分离</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> scipy <span class="keyword">as</span> sp</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    face = sp.face(gray=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">except</span> AttributeError:</span><br><span class="line">    <span class="keyword">from</span> scipy <span class="keyword">import</span> misc</span><br><span class="line">    face = misc.face(gray=<span class="keyword">True</span>)</span><br><span class="line">X = face.reshape((<span class="number">-1</span>, <span class="number">1</span>)) <span class="comment"># We need an (n_sample, n_feature) array</span></span><br><span class="line">k_means = cluster.KMeans(n_clusters=<span class="number">5</span>, n_init=<span class="number">1</span>)</span><br><span class="line">k_means.fit(X)</span><br></pre></td></tr></table></figure>
+<pre><code>KMeans(algorithm=&apos;auto&apos;, copy_x=True, init=&apos;k-means++&apos;, max_iter=300,
+    n_clusters=5, n_init=1, n_jobs=1, precompute_distances=&apos;auto&apos;,
+    random_state=None, tol=0.0001, verbose=0)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">values = k_means.cluster_centers_.squeeze() <span class="comment"># 从数组的形状中删除单维条目，即把shape中为1的维度去掉</span></span><br><span class="line">labels = k_means.labels_</span><br><span class="line">face_compressed = np.choose(labels, values) <span class="comment"># 每个像素用5个类的中心像素代替,达到压缩的效果</span></span><br><span class="line">face_compressed.shape = face.shape</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(face)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f38fd5ac4e0&gt;
+</code></pre><p><img src="/image/scikit-learn/3/output_7_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">values</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 148.25700663,   71.49771602,  191.63450508,  109.71975211,
+         26.11714144])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">labels</span><br></pre></td></tr></table></figure>
+<pre><code>array([3, 0, 0, ..., 0, 0, 0], dtype=int32)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">k_means.cluster_centers_</span><br></pre></td></tr></table></figure>
+<pre><code>array([[ 148.25700663],
+       [  71.49771602],
+       [ 191.63450508],
+       [ 109.71975211],
+       [  26.11714144]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">k_means.cluster_centers_.squeeze()</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 148.25700663,   71.49771602,  191.63450508,  109.71975211,
+         26.11714144])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">plt.imshow(face_compressed)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.image.AxesImage at 0x7f38fee9cf98&gt;
+</code></pre><p><img src="/image/scikit-learn/3/output_12_1.png" alt="png"></p>
+<p><img src="/image/scikit-learn/3/2.png" alt=""></p>
+<h3 id="凝聚的层次聚类-Ward"><a href="#凝聚的层次聚类-Ward" class="headerlink" title="凝聚的层次聚类: Ward"></a>凝聚的层次聚类: Ward</h3><p>层次聚类 （分层聚类算法）是一种旨在构建聚类层次结构的分析方法，一般来说，实现该算法的大多数方法有以下两种：</p>
+<ul>
+<li><p>Agglomerative（聚合） 自底向上的方法: 初始阶段，每一个样本将自己作为单独的一个簇，聚类的簇以最小化距离的标准进行迭代聚合。当感兴趣的簇只有少量的样本时，该方法是很合适的。如果需要聚类的簇数量很大，该方法比K_means算法的计算效率也更高。</p>
+</li>
+<li><p>Divisive（分裂） 自顶向下的方法: 初始阶段，所有的样本是一个簇，当一个簇下移时，它被迭代的进行分裂。当估计聚类簇数量较大的数据时，该算法不仅效率低(由于样本始于一个簇，需要被递归的进行分裂)，而且从统计学的角度来讲也是不合适的</p>
+</li>
+</ul>
+<h4 id="连接约束聚类"><a href="#连接约束聚类" class="headerlink" title="连接约束聚类"></a>连接约束聚类</h4><p>对于聚合聚类，通过连接图可以指定哪些样本可以被聚合在一个簇。在 scikit 中，图由邻接矩阵来表示，通常该矩阵是一个稀疏矩阵。这种表示方法是非常有用的，例如在聚类图像时检索连接区域(有时也被称为连接要素):</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.image <span class="keyword">import</span> grid_to_graph</span><br><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> AgglomerativeClustering</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate data</span></span><br><span class="line"><span class="keyword">try</span>:  <span class="comment"># SciPy &gt;= 0.16 have face in misc</span></span><br><span class="line">    <span class="keyword">from</span> scipy.misc <span class="keyword">import</span> face</span><br><span class="line">    face = face(gray=<span class="keyword">True</span>)</span><br><span class="line"><span class="keyword">except</span> ImportError:</span><br><span class="line">    face = sp.face(gray=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sp.misc.imresize(face, <span class="number">0.10</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>array([[119, 104,  97, ..., 116, 137, 115],
+       [117, 123, 123, ..., 113, 108,  92],
+       [146, 136, 141, ...,  88,  80,  84],
+       ..., 
+       [123, 140, 145, ..., 137, 137, 140],
+       [128, 144, 141, ..., 140, 136, 136],
+       [126, 144, 134, ..., 137, 139, 142]], dtype=uint8)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">face.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(76, 102)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Resize it to 10% of the original size to speed up the processing</span></span><br><span class="line">face = sp.misc.imresize(face, <span class="number">0.10</span>) / <span class="number">255</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X = np.reshape(face, (<span class="number">-1</span>, <span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Define the structure A of the data. Pixels connected to their neighbors.</span></span><br><span class="line">connectivity = grid_to_graph(*face.shape)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">connectivity</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;7752x7752 sparse matrix of type &apos;&lt;class &apos;numpy.int64&apos;&gt;&apos;
+    with 38404 stored elements in COOrdinate format&gt;
+</code></pre><p><img src="/image/scikit-learn/3/3.png" alt=""></p>
+<h4 id="特征聚合"><a href="#特征聚合" class="headerlink" title="特征聚合"></a>特征聚合</h4><p>我们已经知道，稀疏性可以缓解维度灾难带来的问题，i.e 即与特征的数量相比，样本数量太少。 另一个解决该问题的方式是合并相似的特征：feature agglomeration（特征聚合）。该方法可以通过对特征聚类来实现。换句话说，就是对样本数据转置后进行聚类。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">digits = datasets.load_digits()</span><br><span class="line">images = digits.images</span><br><span class="line">X = np.reshape(images, (len(images), <span class="number">-1</span>))</span><br><span class="line">connectivity = grid_to_graph(*images[<span class="number">0</span>].shape)</span><br><span class="line"></span><br><span class="line">agglo = cluster.FeatureAgglomeration(connectivity=connectivity,</span><br><span class="line">                                    n_clusters=<span class="number">32</span>)</span><br><span class="line">agglo.fit(X)</span><br></pre></td></tr></table></figure>
+<pre><code>FeatureAgglomeration(affinity=&apos;euclidean&apos;, compute_full_tree=&apos;auto&apos;,
+           connectivity=&lt;64x64 sparse matrix of type &apos;&lt;class &apos;numpy.int64&apos;&gt;&apos;
+    with 288 stored elements in COOrdinate format&gt;,
+           linkage=&apos;ward&apos;, memory=None, n_clusters=32,
+           pooling_func=&lt;function mean at 0x7f393104d6a8&gt;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">X_reduced = agglo.transform(X)</span><br><span class="line"></span><br><span class="line">X_approx = agglo.inverse_transform(X_reduced)</span><br><span class="line">images_approx = np.reshape(X_approx, images.shape)</span><br></pre></td></tr></table></figure>
+<p><img src="/image/scikit-learn/3/4.png" alt=""></p>
+<h2 id="2-分解-从信号到成分"><a href="#2-分解-从信号到成分" class="headerlink" title="2. 分解:从信号到成分"></a>2. 分解:从信号到成分</h2><p>Components and loadings（成分和载荷）<br>如果 X 是多维数据，那么我们试图解决的问题是在不同的观察基础上对数据进行重写。我们希望学习得到载荷 L 和成分 C 使得 X = L C 。提取成分 C 有多种不同的方法。</p>
+<h3 id="主成份分析-PCA"><a href="#主成份分析-PCA" class="headerlink" title="主成份分析 PCA"></a>主成份分析 PCA</h3><p>主成分分析（PCA） 将能够解释数据信息最大方差的的连续成分提取出来</p>
+<p><img src="/image/scikit-learn/3/5.png" alt=""></p>
+<p>上图中样本点的分布在一个方向上是非常平坦的：即三个单变量特征中的任何一个都可以由另外两个特征来表示。主成分分析法(PCA)可以找到使得数据分布不 flat 的矢量方向(可以反映数据主要信息的特征)。</p>
+<p>当用主成分分析(PCA)来 transform（转换） 数据时，可以通过在子空间上投影来降低数据的维数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Create a signal with only 2 useful dimensions</span></span><br><span class="line">x1 = np.random.normal(size=<span class="number">100</span>)</span><br><span class="line">x2 = np.random.normal(size=<span class="number">100</span>)</span><br><span class="line">x3 = x1 + x2</span><br><span class="line">X = np.c_[x1, x2, x3]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> decomposition</span><br><span class="line">pca = decomposition.PCA()</span><br><span class="line">pca.fit(X)</span><br></pre></td></tr></table></figure>
+<pre><code>PCA(copy=True, iterated_power=&apos;auto&apos;, n_components=None, random_state=None,
+  svd_solver=&apos;auto&apos;, tol=0.0, whiten=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(pca.explained_variance_) <span class="comment"># explained_variance_，它代表降维后的各主成分的方差值。方差值越大，则说明越是重要的主成分</span></span><br></pre></td></tr></table></figure>
+<pre><code>[  2.96426463e+00   9.46875918e-01   7.59936955e-32]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># As we can see, only the 2 first components are useful</span></span><br><span class="line">pca.n_components = <span class="number">2</span> <span class="comment"># 指定希望PCA降维后的特征维度数目</span></span><br><span class="line">X_reduced = pca.fit_transform(X)</span><br><span class="line">X_reduced.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(100, 2)
+</code></pre><h3 id="独立成分分析-ICA"><a href="#独立成分分析-ICA" class="headerlink" title="独立成分分析:ICA"></a>独立成分分析:ICA</h3><p>独立成分分析（ICA） 可以提取数据信息中的独立成分，这些成分载荷的分布包含了最多的独立信息。该方法能够恢复 non-Gaussian（非高斯） 独立信号:</p>
+<p><img src="/image/scikit-learn/3/6.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Generate sample data</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy <span class="keyword">import</span> signal</span><br><span class="line">time = np.linspace(<span class="number">0</span>, <span class="number">10</span>, <span class="number">2000</span>)</span><br><span class="line">s1 = np.sin(<span class="number">2</span> * time) <span class="comment"># Signal 1 : sinusoidal signal</span></span><br><span class="line">s2 = np.sign(np.sin(<span class="number">3</span> * time)) <span class="comment"># Signal 2 : square signal</span></span><br><span class="line">s3 = signal.sawtooth(<span class="number">2</span> * np.pi * time)  <span class="comment"># Signal 3: saw tooth signal</span></span><br><span class="line">S = np.c_[s1, s2, s3]</span><br><span class="line">S += <span class="number">0.2</span> * np.random.normal(size=S.shape)  <span class="comment"># Add noise</span></span><br><span class="line">S /= S.std(axis=<span class="number">0</span>)  <span class="comment"># Standardize data</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Mix data</span></span><br><span class="line">A = np.array([[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">0.5</span>, <span class="number">2</span>, <span class="number">1</span>], [<span class="number">1.5</span>, <span class="number">1</span>, <span class="number">2</span>]])  <span class="comment"># Mixing matrix</span></span><br><span class="line">X = np.dot(S, A.T)  <span class="comment"># Generate observations</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Compute ICA</span></span><br><span class="line">ica = decomposition.FastICA()</span><br><span class="line">S_ = ica.fit_transform(X)  <span class="comment"># Get the estimated sources</span></span><br><span class="line">A_ = ica.mixing_.T</span><br><span class="line">np.allclose(X,  np.dot(S_, A_) + ica.mean_)</span><br></pre></td></tr></table></figure>
+<pre><code>True
+</code></pre><h1 id="放在一起"><a href="#放在一起" class="headerlink" title="放在一起"></a>放在一起</h1><h2 id="流水线"><a href="#流水线" class="headerlink" title="流水线"></a>流水线</h2><p>我们已经看到一些 estimators 能转换数据一些 estimators 能预测数据,我们也能创建 combined estimators</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model, decomposition, datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">logictic = linear_model.LogisticRegression()</span><br><span class="line"></span><br><span class="line">pca = decomposition.PCA()</span><br><span class="line">pipe = Pipeline(steps=[(<span class="string">'pca'</span>, pca), (<span class="string">'logistic'</span>, logictic)])</span><br><span class="line"></span><br><span class="line">digits = datasets.load_digits()</span><br><span class="line">X_digits = digits.data</span><br><span class="line">y_digits = digits.target</span><br><span class="line"></span><br><span class="line"><span class="comment"># Plot the PCA spectrum</span></span><br><span class="line">pca.fit(X_digits)</span><br><span class="line"></span><br><span class="line">plt.figure(<span class="number">1</span>, figsize=(<span class="number">4</span>, <span class="number">3</span>))</span><br><span class="line">plt.clf()</span><br><span class="line"><span class="comment"># axes([x,y,xs,ys])</span></span><br><span class="line"><span class="comment"># 其中x代表在X轴的位置，y代表在Y轴的位置，xs代表在X轴上向右延展的</span></span><br><span class="line"><span class="comment"># 范围大小，yx代表在Y轴中向上延展的范围大小。</span></span><br><span class="line">plt.axes([<span class="number">.2</span>, <span class="number">.2</span>, <span class="number">.7</span>, <span class="number">.7</span>]) </span><br><span class="line">plt.plot(pca.explained_variance_, linewidth=<span class="number">2</span>)</span><br><span class="line">plt.axis(<span class="string">'tight'</span>)</span><br><span class="line">plt.xlabel(<span class="string">'n_components'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'explained_variance_'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Prediction</span></span><br><span class="line">n_components = [<span class="number">20</span>, <span class="number">40</span>, <span class="number">64</span>]</span><br><span class="line">Cs = np.logspace(<span class="number">-4</span>, <span class="number">4</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Parameters of pipelines can be set using ‘__’ separated parameter names:</span></span><br><span class="line">estimator = GridSearchCV(pipe, dict(pca__n_components=n_components, logistic__C=Cs))</span><br><span class="line">estimator.fit(X_digits, y_digits)</span><br><span class="line"></span><br><span class="line">plt.axvline(estimator.best_estimator_.named_steps[<span class="string">'pca'</span>].n_components,</span><br><span class="line">            linestyle=<span class="string">':'</span>, label=<span class="string">'n_components chosen'</span>)</span><br><span class="line"></span><br><span class="line">plt.legend(prop=dict(size=<span class="number">12</span>))</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p><img src="/image/scikit-learn/3/output_33_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">len(pca.explained_variance_)</span><br></pre></td></tr></table></figure>
+<pre><code>64
+</code></pre><h2 id="用特征面进行人脸识别"><a href="#用特征面进行人脸识别" class="headerlink" title="用特征面进行人脸识别"></a>用特征面进行人脸识别</h2><p>该实例用到的数据集来自 <a href="http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz" target="_blank" rel="noopener">LFW</a> (Labeled Faces in the Wild)。数据已经进行了初步预处理</p>
+<p>对于数据测试结果有下面4种情况：<br>TP: 预测为正， 实现为正<br>FP: 预测为正， 实现为负<br>FN: 预测为负，实现为正<br>TN: 预测为负， 实现为负  </p>
+<p>准确率： TP/ (TP+FP)<br>召回率： TP/ (TP + FN)<br>F1-score: 2*TP/(2*TP + FP + FN) </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"""</span></span><br><span class="line"><span class="string">===================================================</span></span><br><span class="line"><span class="string">Faces recognition example using eigenfaces and SVMs</span></span><br><span class="line"><span class="string">===================================================</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">The dataset used in this example is a preprocessed excerpt of the</span></span><br><span class="line"><span class="string">"Labeled Faces in the Wild", aka LFW_:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">  http://vis-www.cs.umass.edu/lfw/lfw-funneled.tgz (233MB)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">.. _LFW: http://vis-www.cs.umass.edu/lfw/</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Expected results for the top 5 most represented people in the dataset:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">================== ============ ======= ========== =======</span></span><br><span class="line"><span class="string">                   precision    recall  f1-score   support</span></span><br><span class="line"><span class="string">================== ============ ======= ========== =======</span></span><br><span class="line"><span class="string">     Ariel Sharon       0.67      0.92      0.77        13</span></span><br><span class="line"><span class="string">     Colin Powell       0.75      0.78      0.76        60</span></span><br><span class="line"><span class="string">  Donald Rumsfeld       0.78      0.67      0.72        27</span></span><br><span class="line"><span class="string">    George W Bush       0.86      0.86      0.86       146</span></span><br><span class="line"><span class="string">Gerhard Schroeder       0.76      0.76      0.76        25</span></span><br><span class="line"><span class="string">      Hugo Chavez       0.67      0.67      0.67        15</span></span><br><span class="line"><span class="string">       Tony Blair       0.81      0.69      0.75        36</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">      avg / total       0.80      0.80      0.80       322</span></span><br><span class="line"><span class="string">================== ============ ======= ========== =======</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">"""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> time <span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> logging</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> fetch_lfw_people</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> classification_report <span class="comment">#显示主要的分类指标，返回每个类标签的精确、召回率及F1值</span></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> confusion_matrix <span class="comment"># </span></span><br><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"></span><br><span class="line"><span class="comment"># Display progress logs on stdout</span></span><br><span class="line">logging.basicConfig(level=logging.INFO, format=<span class="string">'%(asctime)s %(message)s'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Download the data, if not already on disk and load it as numpy arrays</span></span><br><span class="line"></span><br><span class="line">lfw_people = fetch_lfw_people(min_faces_per_person=<span class="number">70</span>, resize=<span class="number">0.4</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># introspect the images arrays to find the shapes (for plotting)</span></span><br><span class="line">n_samples, h, w = lfw_people.images.shape</span><br><span class="line"></span><br><span class="line"><span class="comment"># for machine learning we use the 2 data directly (as relative pixel</span></span><br><span class="line"><span class="comment"># positions info is ignored by this model)</span></span><br><span class="line">X = lfw_people.data</span><br><span class="line">n_features = X.shape[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># the label to predict is the id of the person</span></span><br><span class="line">y = lfw_people.target</span><br><span class="line">target_names = lfw_people.target_names</span><br><span class="line">n_classes = target_names.shape[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">print(<span class="string">"Total dataset size:"</span>)</span><br><span class="line">print(<span class="string">"n_samples: %d"</span> % n_samples)</span><br><span class="line">print(<span class="string">"n_features: %d"</span> % n_features)</span><br><span class="line">print(<span class="string">"n_classes: %d"</span> % n_classes)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Split into a training set and a test set using a stratified k fold</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># split into a training and testing set</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(</span><br><span class="line">    X, y, test_size=<span class="number">0.25</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Compute a PCA (eigenfaces) on the face dataset (treated as unlabeled</span></span><br><span class="line"><span class="comment"># dataset): unsupervised feature extraction / dimensionality reduction</span></span><br><span class="line">n_components = <span class="number">150</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Extracting the top %d eigenfaces from %d faces"</span></span><br><span class="line">      % (n_components, X_train.shape[<span class="number">0</span>]))</span><br><span class="line">t0 = time()</span><br><span class="line">pca = PCA(n_components=n_components, svd_solver=<span class="string">'randomized'</span>,</span><br><span class="line">          whiten=<span class="keyword">True</span>).fit(X_train)</span><br><span class="line">print(<span class="string">"done in %0.3fs"</span> % (time() - t0))</span><br><span class="line"></span><br><span class="line">eigenfaces = pca.components_.reshape((n_components, h, w))</span><br><span class="line"></span><br><span class="line">print(<span class="string">"Projecting the input data on the eigenfaces orthonormal basis"</span>)</span><br><span class="line">t0 = time()</span><br><span class="line">X_train_pca = pca.transform(X_train)</span><br><span class="line">X_test_pca = pca.transform(X_test)</span><br><span class="line">print(<span class="string">"done in %0.3fs"</span> % (time() - t0))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Train a SVM classification model</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Fitting the classifier to the training set"</span>)</span><br><span class="line">t0 = time()</span><br><span class="line">param_grid = &#123;<span class="string">'C'</span>: [<span class="number">1e3</span>, <span class="number">5e3</span>, <span class="number">1e4</span>, <span class="number">5e4</span>, <span class="number">1e5</span>],</span><br><span class="line">              <span class="string">'gamma'</span>: [<span class="number">0.0001</span>, <span class="number">0.0005</span>, <span class="number">0.001</span>, <span class="number">0.005</span>, <span class="number">0.01</span>, <span class="number">0.1</span>], &#125;</span><br><span class="line">clf = GridSearchCV(SVC(kernel=<span class="string">'rbf'</span>, class_weight=<span class="string">'balanced'</span>), param_grid)</span><br><span class="line">clf = clf.fit(X_train_pca, y_train)</span><br><span class="line">print(<span class="string">"done in %0.3fs"</span> % (time() - t0))</span><br><span class="line">print(<span class="string">"Best estimator found by grid search:"</span>)</span><br><span class="line">print(clf.best_estimator_)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Quantitative evaluation of the model quality on the test set</span></span><br><span class="line"></span><br><span class="line">print(<span class="string">"Predicting people's names on the test set"</span>)</span><br><span class="line">t0 = time()</span><br><span class="line">y_pred = clf.predict(X_test_pca)</span><br><span class="line">print(<span class="string">"done in %0.3fs"</span> % (time() - t0))</span><br><span class="line"></span><br><span class="line">print(classification_report(y_test, y_pred, target_names=target_names))</span><br><span class="line">print(confusion_matrix(y_test, y_pred, labels=range(n_classes)))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Qualitative evaluation of the predictions using matplotlib</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_gallery</span><span class="params">(images, titles, h, w, n_row=<span class="number">3</span>, n_col=<span class="number">4</span>)</span>:</span></span><br><span class="line">    <span class="string">"""Helper function to plot a gallery of portraits"""</span></span><br><span class="line">    plt.figure(figsize=(<span class="number">1.8</span> * n_col, <span class="number">2.4</span> * n_row))</span><br><span class="line">    plt.subplots_adjust(bottom=<span class="number">0</span>, left=<span class="number">.01</span>, right=<span class="number">.99</span>, top=<span class="number">.90</span>, hspace=<span class="number">.35</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(n_row * n_col):</span><br><span class="line">        plt.subplot(n_row, n_col, i + <span class="number">1</span>)</span><br><span class="line">        <span class="comment"># 这里画了前12张肖像</span></span><br><span class="line">        plt.imshow(images[i].reshape((h, w)), cmap=plt.cm.gray)</span><br><span class="line">        plt.title(titles[i], size=<span class="number">12</span>)</span><br><span class="line">        plt.xticks(())</span><br><span class="line">        plt.yticks(())</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># plot the result of the prediction on a portion of the test set</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">title</span><span class="params">(y_pred, y_test, target_names, i)</span>:</span></span><br><span class="line">    pred_name = target_names[y_pred[i]].rsplit(<span class="string">' '</span>, <span class="number">1</span>)[<span class="number">-1</span>]</span><br><span class="line">    true_name = target_names[y_test[i]].rsplit(<span class="string">' '</span>, <span class="number">1</span>)[<span class="number">-1</span>]</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'predicted: %s\ntrue:      %s'</span> % (pred_name, true_name)</span><br><span class="line"></span><br><span class="line">prediction_titles = [title(y_pred, y_test, target_names, i)</span><br><span class="line">                     <span class="keyword">for</span> i <span class="keyword">in</span> range(y_pred.shape[<span class="number">0</span>])]</span><br><span class="line"></span><br><span class="line">plot_gallery(X_test, prediction_titles, h, w)</span><br><span class="line"></span><br><span class="line"><span class="comment"># plot the gallery of the most significative eigenfaces</span></span><br><span class="line"></span><br><span class="line">eigenface_titles = [<span class="string">"eigenface %d"</span> % i <span class="keyword">for</span> i <span class="keyword">in</span> range(eigenfaces.shape[<span class="number">0</span>])]</span><br><span class="line">plot_gallery(eigenfaces, eigenface_titles, h, w)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre><code>Downloading LFW metadata: https://ndownloader.figshare.com/files/5976012
+2018-01-06 14:28:33,104 Downloading LFW metadata: https://ndownloader.figshare.com/files/5976012
+Downloading LFW metadata: https://ndownloader.figshare.com/files/5976009
+2018-01-06 14:28:37,747 Downloading LFW metadata: https://ndownloader.figshare.com/files/5976009
+Downloading LFW metadata: https://ndownloader.figshare.com/files/5976006
+2018-01-06 14:28:40,713 Downloading LFW metadata: https://ndownloader.figshare.com/files/5976006
+
+
+Total dataset size:
+n_samples: 1288
+n_features: 1850
+n_classes: 7
+Extracting the top 150 eigenfaces from 966 faces
+done in 0.528s
+Projecting the input data on the eigenfaces orthonormal basis
+done in 0.008s
+Fitting the classifier to the training set
+done in 20.580s
+Best estimator found by grid search:
+SVC(C=1000.0, cache_size=200, class_weight=&apos;balanced&apos;, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=0.005, kernel=&apos;rbf&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+Predicting people&apos;s names on the test set
+done in 0.051s
+                   precision    recall  f1-score   support
+
+     Ariel Sharon       0.78      0.54      0.64        13
+     Colin Powell       0.80      0.87      0.83        60
+  Donald Rumsfeld       0.90      0.67      0.77        27
+    George W Bush       0.84      0.98      0.91       146
+Gerhard Schroeder       0.91      0.80      0.85        25
+      Hugo Chavez       1.00      0.53      0.70        15
+       Tony Blair       0.96      0.75      0.84        36
+
+      avg / total       0.86      0.85      0.85       322
+
+[[  7   1   0   5   0   0   0]
+ [  2  52   1   5   0   0   0]
+ [  0   3  18   6   0   0   0]
+ [  0   3   0 143   0   0   0]
+ [  0   1   0   3  20   0   1]
+ [  0   4   0   2   1   8   0]
+ [  0   1   1   6   1   0  27]]
+</code></pre><p><img src="/image/scikit-learn/3/output_36_2.png" alt="png"></p>
+<p><img src="/image/scikit-learn/3/output_36_3.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_names</span><br></pre></td></tr></table></figure>
+<pre><code>array([&apos;Ariel Sharon&apos;, &apos;Colin Powell&apos;, &apos;Donald Rumsfeld&apos;, &apos;George W Bush&apos;,
+       &apos;Gerhard Schroeder&apos;, &apos;Hugo Chavez&apos;, &apos;Tony Blair&apos;],
+      dtype=&apos;&lt;U17&apos;)
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/06/scikit-learn-学习（二）科学数据处理中的统计学习教程-下/" data-id="cjq1zv30c0023drihqf4w0ytc" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/07/scikit-learn-学习（三）可视化股市结构/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    scikit-learn 学习（三）可视化股市结构
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/05/scikit-learn-学习-二-科学数据处理中的统计学习教程-上/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">scikit-learn 学习(二) 科学数据处理中的统计学习教程(上)</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

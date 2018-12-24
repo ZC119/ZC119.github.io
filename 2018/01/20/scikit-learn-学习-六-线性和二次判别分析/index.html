@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>scikit-learn 学习 (六) 线性和二次判别分析 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="线性判别分析 (discriminant_analysis.LinearDiscriminantAnalysis) 和二次判别分析 (discriminant_analysis.QuadraticDiscriminantAnalysis) 是两种经典分类器, 分别有线性和二次的决策平面. 这些分类器是吸引人的是他们有闭形式解并容易计算, 多分类并且在实际中应用好, 不需要调整超参数.  上图展示了">
+<meta name="keywords" content="scikit-learn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scikit-learn 学习 (六) 线性和二次判别分析">
+<meta property="og:url" content="http://zc119.github.io/2018/01/20/scikit-learn-学习-六-线性和二次判别分析/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="线性判别分析 (discriminant_analysis.LinearDiscriminantAnalysis) 和二次判别分析 (discriminant_analysis.QuadraticDiscriminantAnalysis) 是两种经典分类器, 分别有线性和二次的决策平面. 这些分类器是吸引人的是他们有闭形式解并容易计算, 多分类并且在实际中应用好, 不需要调整超参数.  上图展示了">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/output_3_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/output_4_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/3.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/4.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/5.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/7/6.png">
+<meta property="og:updated_time" content="2018-01-20T11:04:13.877Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scikit-learn 学习 (六) 线性和二次判别分析">
+<meta name="twitter:description" content="线性判别分析 (discriminant_analysis.LinearDiscriminantAnalysis) 和二次判别分析 (discriminant_analysis.QuadraticDiscriminantAnalysis) 是两种经典分类器, 分别有线性和二次的决策平面. 这些分类器是吸引人的是他们有闭形式解并容易计算, 多分类并且在实际中应用好, 不需要调整超参数.  上图展示了">
+<meta name="twitter:image" content="http://zc119.github.io/image/scikit-learn/7/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-scikit-learn-学习-六-线性和二次判别分析" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            scikit-learn 学习 (六) 线性和二次判别分析
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/20/scikit-learn-学习-六-线性和二次判别分析/">
+            <time datetime="2018-01-20T11:03:17.000Z" itemprop="datePublished">2018-01-20</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>线性判别分析 (discriminant_analysis.LinearDiscriminantAnalysis) 和二次判别分析 (discriminant_analysis.QuadraticDiscriminantAnalysis) 是两种经典分类器, 分别有线性和二次的决策平面.</p>
+<p>这些分类器是吸引人的是他们有闭形式解并容易计算, 多分类并且在实际中应用好, 不需要调整超参数.</p>
+<p><img src="/image/scikit-learn/7/1.png" alt=""></p>
+<p>上图展示了线性判别分析和二次判别分析的决策边界. 下面一行说明线性判别分析只能学习线性边界, 二次判别分析可以学习二次边界因此更灵活. </p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/classification/plot_lda_qda.html#sphx-glr-auto-examples-classification-plot-lda-qda-py" target="_blank" rel="noopener">Linear and Quadratic Discriminant Analysis with covariance ellipsoid</a></li>
+</ul>
+<p>这个例子绘制了LDA和QDA学习的每个类别的协方差椭球和决策边界。 椭球显示每类的双重标准偏差。 对于LDA，所有类别的标准差是相同的，而每个类别与QDA有其自己的标准偏差。</p>
+<h2 id="使用线性判别分析降维"><a href="#使用线性判别分析降维" class="headerlink" title="使用线性判别分析降维"></a>使用线性判别分析降维</h2><p>discriminant_analysis.LinearDiscriminantAnalysis 可以进行监督学习降维, 通过投影输入的数据到一个线性子空间包括最大化类的分隔的方向, 输出的维数少于类的数目, 所以这通常是一个相当强的维度降低，只能在多类别的环境中有意义。</p>
+<p>通过 discriminant_analysis.LinearDiscriminantAnalysis.transform 实现. 目标维数使用 n_components 参数. 这个参数对  discriminant_analysis.LinearDiscriminantAnalysis.fit or discriminant_analysis.LinearDiscriminantAnalysis.predict 没有影响. </p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/decomposition/plot_pca_vs_lda.html#sphx-glr-auto-examples-decomposition-plot-pca-vs-lda-py" target="_blank" rel="noopener">Comparison of LDA and PCA 2D projection of Iris dataset</a></li>
+</ul>
+<p>应用于此数据的主成分分析（PCA）标识了占据数据差异最大的属性（主要成分或特征空间中的方向）的组合。 在这里，我们绘制了2个第一主成分上的不同样本。</p>
+<p>线性判别分析（LDA）尝试识别占各类之间差异最大的属性。 具体而言，与PCA相比，LDA是使用已知类别标签的监督方法。</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA</span><br><span class="line"><span class="keyword">from</span> sklearn.discriminant_analysis <span class="keyword">import</span> LinearDiscriminantAnalysis</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">iris = datasets.load_iris()</span><br><span class="line">X = iris.data</span><br><span class="line">y = iris.target</span><br><span class="line">target_names = iris.target_names</span><br><span class="line"></span><br><span class="line">pca = PCA(n_components=<span class="number">2</span>)</span><br><span class="line">X_r = pca.fit(X).transform(X)</span><br><span class="line"></span><br><span class="line">lda = LinearDiscriminantAnalysis(n_components=<span class="number">2</span>)</span><br><span class="line">X_r2 = lda.fit(X, y).transform(X)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Percentage of variance explained for each components</span></span><br><span class="line">print(<span class="string">'explained variance ratio (first two components): %s'</span> % str(pca.explained_variance_ratio_))</span><br></pre></td></tr></table></figure>
+<pre><code>explained variance ratio (first two components): [ 0.92461621  0.05301557]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line">plt.figure()</span><br><span class="line">colors = [<span class="string">'navy'</span>, <span class="string">'turquoise'</span>, <span class="string">'darkorange'</span>]</span><br><span class="line">lw = <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> color, i, target_name <span class="keyword">in</span> zip(colors, [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], target_names):</span><br><span class="line">    plt.scatter(X_r[y == i, <span class="number">0</span>], X_r[y == i, <span class="number">1</span>], color=color, alpha=<span class="number">0.8</span>, </span><br><span class="line">               lw=lw, label=target_name)</span><br><span class="line">plt.legend(loc=<span class="string">'best'</span>, shadow=<span class="keyword">False</span>, scatterpoints=<span class="number">1</span>)</span><br><span class="line">plt.title(<span class="string">'PCA of IRIS dataset'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>Text(0.5,1,&apos;PCA of IRIS dataset&apos;)
+</code></pre><p><img src="/image/scikit-learn/7/output_3_1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">plt.figure()</span><br><span class="line"><span class="keyword">for</span> color, i, target_name <span class="keyword">in</span> zip(colors, [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>], target_names):</span><br><span class="line">    plt.scatter(X_r2[y == i, <span class="number">0</span>], X_r2[y == i, <span class="number">1</span>], alpha=<span class="number">0.8</span>, color=color,</span><br><span class="line">               label=target_name)</span><br><span class="line">plt.legend(loc=<span class="string">'best'</span>, shadow=<span class="keyword">False</span>, scatterpoints=<span class="number">1</span>)</span><br><span class="line">plt.title(<span class="string">'LDA of IRIS dataset'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>Text(0.5,1,&apos;LDA of IRIS dataset&apos;)
+</code></pre><p><img src="/image/scikit-learn/7/output_4_1.png" alt="png"></p>
+<h2 id="LDA-与-QDA-分类器数学推导"><a href="#LDA-与-QDA-分类器数学推导" class="headerlink" title="LDA 与 QDA 分类器数学推导"></a>LDA 与 QDA 分类器数学推导</h2><p>LDA 与 QDA 都可以通过简单的概率模型导出. 每一类 k 有条件分布 <img src="/image/scikit-learn/7/2.png" alt=""></p>
+<p>使用贝叶斯规则可得</p>
+<p><img src="/image/scikit-learn/7/3.png" alt=""></p>
+<p>我们选择最大化条件概率的 k.</p>
+<p>特别地, 线性或者二次判别分析</p>
+<p><img src="/image/scikit-learn/7/4.png" alt=""></p>
+<p>为了使用这个模型, 我们需要从训练数据中估计先验 P(y = k).（通过类k的实例的比例），类的均值（通过经验样本类的均值） 和协方差矩阵（或者由经验样本类协方差矩阵，或者由正则化估计量：参见下面的收缩部分）。</p>
+<p>在LDA中, 每一类的高斯函数假定共享同一个协方差阵. 这产生了一个线性决策面</p>
+<p><img src="/image/scikit-learn/7/5.png" alt=""></p>
+<p>QDA 中没有对协方差矩阵的假设, 因此有二次决策面</p>
+<h2 id="LDA-降维数学公式"><a href="#LDA-降维数学公式" class="headerlink" title="LDA 降维数学公式"></a>LDA 降维数学公式</h2><p>为了理解在降维中使用LDA，从上面解释的LDA分类规则的几何变换开始是有用的。 我们记K为目标类的总数。 由于在LDA中，我们假设所有类别具有相同的估计协方差Σ，我们可以重新调整数据以便这个协方差是同一：</p>
+<p><img src="/image/scikit-learn/7/6.png" alt=""></p>
+<p>那么可以表明，在缩放之后对数据点进行分类相当于找到距离欧式距离中的数据点最近的估计类别均值. 但是，在所有类别的所有均值生成的K-1仿射子空间H_K上投影之后，也可以这样做。 这表明，在LDA分类器中隐含着通过线性投影到K-1维空间上的降维. </p>
+<h2 id="收缩"><a href="#收缩" class="headerlink" title="收缩"></a>收缩</h2><p>收缩是一种改进协方差矩阵估计的工具，其中训练样本的数量与特征的数量相比较小。 在这种情况下，经验样本协方差是一个不好的估计量。 可以通过将discriminant_analysis.LinearDiscriminantAnalysis 类的收缩参数设置为“auto”来使用收缩LDA</p>
+<p>收缩参数也可以手动设置在0和1之间。特别地，值0对应于没有收缩（这意味着将使用经验协方差矩阵），并且值1对应于完全收缩（这意味着对角线 方差矩阵将被用作协方差矩阵的估计）。 将此参数设置为这两个极值之间的值将估计协方差矩阵的缩小版本。</p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/classification/plot_lda.html#sphx-glr-auto-examples-classification-plot-lda-py" target="_blank" rel="noopener">Normal and Shrinkage Linear Discriminant Analysis for classification</a></li>
+</ul>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/20/scikit-learn-学习-六-线性和二次判别分析/" data-id="cjq1zv309001udrihkbodlrtj" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/20/scikit-learn-学习-七-核岭回归/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    scikit-learn 学习 (七) 核岭回归
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/19/scikit-learn-学习-五-广义线性模型/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">scikit-learn 学习 (五) 广义线性模型</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorFlow 学习教程（一）Using GPUs | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="支持的设备在一个特定的系统中，有很多计算设备。TensorFlow 中，支持的设备是 CPU 与 GPU。它们用 strings 来表示。例如：  “/cpu:0”：表示CPU “/device:GPU:0”: 第一个GPU “/device:GPU:1”: 第二个GPU">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow 学习教程（一）Using GPUs">
+<meta property="og:url" content="http://zc119.github.io/2017/12/23/TensorFlow-学习教程（一）Using-GPUs/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="支持的设备在一个特定的系统中，有很多计算设备。TensorFlow 中，支持的设备是 CPU 与 GPU。它们用 strings 来表示。例如：  “/cpu:0”：表示CPU “/device:GPU:0”: 第一个GPU “/device:GPU:1”: 第二个GPU">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/Using%20GPUs/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/Using%20GPUs/2.png">
+<meta property="og:updated_time" content="2017-12-23T10:58:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow 学习教程（一）Using GPUs">
+<meta name="twitter:description" content="支持的设备在一个特定的系统中，有很多计算设备。TensorFlow 中，支持的设备是 CPU 与 GPU。它们用 strings 来表示。例如：  “/cpu:0”：表示CPU “/device:GPU:0”: 第一个GPU “/device:GPU:1”: 第二个GPU">
+<meta name="twitter:image" content="http://zc119.github.io/image/Using%20GPUs/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorFlow-学习教程（一）Using-GPUs" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorFlow 学习教程（一）Using GPUs
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/23/TensorFlow-学习教程（一）Using-GPUs/">
+            <time datetime="2017-12-23T10:57:15.000Z" itemprop="datePublished">2017-12-23</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="支持的设备"><a href="#支持的设备" class="headerlink" title="支持的设备"></a>支持的设备</h2><p>在一个特定的系统中，有很多计算设备。TensorFlow 中，支持的设备是 CPU 与 GPU。它们用 <code>strings</code> 来表示。例如：</p>
+<ul>
+<li>“/cpu:0”：表示CPU</li>
+<li>“/device:GPU:0”: 第一个GPU</li>
+<li>“/device:GPU:1”: 第二个GPU</li>
+</ul>
+<a id="more"></a>
+<p>如果一个 TensorFlow 操作同时使用 CPU 与 GPU，GPU 设备将会有更高的优先级。例如，<code>matmul</code> 操作同时有 CPU 与 GPU 实现。一个带有 <code>cpu：0</code> 与 <code>gpu:0</code> 的系统，<code>gpu：0</code> 将会被选择来运行 <code>matmul</code>。</p>
+<h2 id="记录设备指派情况"><a href="#记录设备指派情况" class="headerlink" title="记录设备指派情况"></a>记录设备指派情况</h2><p>为了找出你的 ops 与 tensors 被指派给了哪个设备，创建 session 时加上 <code>log_device_placement</code> 配置选项为 <code>True</code>。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># Creates a graph</span></span><br><span class="line">a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">2</span>, <span class="number">3</span>], name=<span class="string">'a'</span>)</span><br><span class="line">b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">3</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line">c = tf.matmul(a, b)</span><br><span class="line"><span class="comment"># Creates a session with log_device_placement set to True</span></span><br><span class="line">sess = tf.Session(config=tf.ConfigProto(log_device_placement=<span class="keyword">True</span>))</span><br><span class="line"><span class="comment"># Runs the op</span></span><br><span class="line">print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<p><img src="/image/Using GPUs/1.png" alt=""></p>
+<h2 id="手动指派设备"><a href="#手动指派设备" class="headerlink" title="手动指派设备"></a>手动指派设备</h2><p>如果你想要手动指派具体的设备，你可以使用 <code>with tf.device</code> 来创建一个设备上下文环境来使在环境内的所有操作都在同一个设备进行。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Creates a graph.</span></span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line">  a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">2</span>, <span class="number">3</span>], name=<span class="string">'a'</span>)</span><br><span class="line">  b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">3</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line">c = tf.matmul(a, b)</span><br><span class="line"><span class="comment"># Creates a session with log_device_placement set to True.</span></span><br><span class="line">sess = tf.Session(config=tf.ConfigProto(log_device_placement=<span class="keyword">True</span>))</span><br><span class="line"><span class="comment"># Runs the op.</span></span><br><span class="line">print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<p><img src="/image/Using GPUs/2.png" alt=""></p>
+<p>注意到 <code>matmul</code> 操作没有在 <code>with</code> 环境中。</p>
+<h2 id="允许-GPU-内存增长"><a href="#允许-GPU-内存增长" class="headerlink" title="允许 GPU 内存增长"></a>允许 GPU 内存增长</h2><p>默认情况下，TensorFlow 映射几乎所有的 GPU 显存来对过程可见。这使得更有效率地使用更精确的 GPU 显存资源来减少内存碎片。</p>
+<p>在一些情况下需要只分配部分的可见内存，或者只按照需要来分配内存。TensorFlow 在 Session 中提供了两个配置选项来控制。</p>
+<p>第一个是 <code>allow_growth</code> 选项，试图分配足够的内存：它一点一点地分配内存，只有需要更多内存时才增加内存。注意到我们没有释放内存，因为这会导致更严重的内存碎片化。为了开启这个选项，如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config = tf.ConfigProto()</span><br><span class="line">config.gpu_options.allow_growth = <span class="keyword">True</span></span><br><span class="line">session = tf.Session(config=config, ...)</span><br></pre></td></tr></table></figure>
+<p>第二种方法是 <code>per_process_gpu_memory_fraction</code> 选项，它决定了分配给每个 GPU 的内存的百分比。例如，你可以告诉 TensorFlow 只分配40% 的总内存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config = tf.ConfigProto()</span><br><span class="line">config.gpu_options.per_process_gpu_memory_fraction = <span class="number">0.4</span></span><br><span class="line">session = tf.Session(config=config, ...)</span><br></pre></td></tr></table></figure>
+<p>如果你想限制 GPU 内存的使用，这将很有效。</p>
+<h2 id="在多-GPU-系统中使用单-GPU"><a href="#在多-GPU-系统中使用单-GPU" class="headerlink" title="在多 GPU 系统中使用单 GPU"></a>在多 GPU 系统中使用单 GPU</h2><p>如果你有超过一个 GPU，带有最低 ID 的 GPU 将会被默认选中。如果你在另一个 GPU 上运行，你需要指定</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Creates a graph.</span></span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">'/device:GPU:2'</span>):</span><br><span class="line">  a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">2</span>, <span class="number">3</span>], name=<span class="string">'a'</span>)</span><br><span class="line">  b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">3</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line">  c = tf.matmul(a, b)</span><br><span class="line"><span class="comment"># Creates a session with log_device_placement set to True.</span></span><br><span class="line">sess = tf.Session(config=tf.ConfigProto(log_device_placement=<span class="keyword">True</span>))</span><br><span class="line"><span class="comment"># Runs the op.</span></span><br><span class="line">print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<p>如果这个设备不存在，将会报错：<code>InvalidArgumentError</code></p>
+<p>如果你想让 TensorFlow 自动选择一个存在并支持的设备来运行如果指定的那个不存在，你可以在 Session 中设置配置选项 <code>allow_soft_placement</code> 为 <code>True</code> 。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Creates a graph.</span></span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">'/device:GPU:2'</span>):</span><br><span class="line">  a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">2</span>, <span class="number">3</span>], name=<span class="string">'a'</span>)</span><br><span class="line">  b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">3</span>, <span class="number">2</span>], name=<span class="string">'b'</span>)</span><br><span class="line">  c = tf.matmul(a, b)</span><br><span class="line"><span class="comment"># Creates a session with allow_soft_placement and log_device_placement set</span></span><br><span class="line"><span class="comment"># to True.</span></span><br><span class="line">sess = tf.Session(config=tf.ConfigProto(</span><br><span class="line">      allow_soft_placement=<span class="keyword">True</span>, log_device_placement=<span class="keyword">True</span>))</span><br><span class="line"><span class="comment"># Runs the op.</span></span><br><span class="line">print(sess.run(c))</span><br></pre></td></tr></table></figure>
+<h2 id="使用多-GPUs"><a href="#使用多-GPUs" class="headerlink" title="使用多 GPUs"></a>使用多 GPUs</h2><p>如果你想运行 TensorFlow 在多 GPUs 上。你可以创建你的模型在一个 multi-tower 结构, 在这个结构里每个 tower 分别被指配给不同的 GPU 运行. 比如:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Creates a graph.</span></span><br><span class="line">c = []</span><br><span class="line"><span class="keyword">for</span> d <span class="keyword">in</span> [<span class="string">'/device:GPU:2'</span>, <span class="string">'/device:GPU:3'</span>]:</span><br><span class="line">  <span class="keyword">with</span> tf.device(d):</span><br><span class="line">    a = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line">    b = tf.constant([<span class="number">1.0</span>, <span class="number">2.0</span>, <span class="number">3.0</span>, <span class="number">4.0</span>, <span class="number">5.0</span>, <span class="number">6.0</span>], shape=[<span class="number">3</span>, <span class="number">2</span>])</span><br><span class="line">    c.append(tf.matmul(a, b))</span><br><span class="line"><span class="keyword">with</span> tf.device(<span class="string">'/cpu:0'</span>):</span><br><span class="line">  sum = tf.add_n(c)</span><br><span class="line"><span class="comment"># Creates a session with log_device_placement set to True.</span></span><br><span class="line">sess = tf.Session(config=tf.ConfigProto(log_device_placement=<span class="keyword">True</span>))</span><br><span class="line"><span class="comment"># Runs the op.</span></span><br><span class="line">print(sess.run(sum))</span><br></pre></td></tr></table></figure>
+<p>输出如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">Device mapping:</span><br><span class="line">/job:localhost/replica:0/task:0/device:GPU:0 -&gt; device: 0, name: Tesla K20m, pci bus</span><br><span class="line">id: 0000:02:00.0</span><br><span class="line">/job:localhost/replica:0/task:0/device:GPU:1 -&gt; device: 1, name: Tesla K20m, pci bus</span><br><span class="line">id: 0000:03:00.0</span><br><span class="line">/job:localhost/replica:0/task:0/device:GPU:2 -&gt; device: 2, name: Tesla K20m, pci bus</span><br><span class="line">id: 0000:83:00.0</span><br><span class="line">/job:localhost/replica:0/task:0/device:GPU:3 -&gt; device: 3, name: Tesla K20m, pci bus</span><br><span class="line">id: 0000:84:00.0</span><br><span class="line">Const_3: /job:localhost/replica:0/task:0/device:GPU:3</span><br><span class="line">Const_2: /job:localhost/replica:0/task:0/device:GPU:3</span><br><span class="line">MatMul_1: /job:localhost/replica:0/task:0/device:GPU:3</span><br><span class="line">Const_1: /job:localhost/replica:0/task:0/device:GPU:2</span><br><span class="line">Const: /job:localhost/replica:0/task:0/device:GPU:2</span><br><span class="line">MatMul: /job:localhost/replica:0/task:0/device:GPU:2</span><br><span class="line">AddN: /job:localhost/replica:0/task:0/cpu:0</span><br><span class="line">[[  44.   56.]</span><br><span class="line"> [  98.  128.]]</span><br></pre></td></tr></table></figure>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/23/TensorFlow-学习教程（一）Using-GPUs/" data-id="cjq1zv3020017drih27phr68d" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/23/TensorFlow-学习教程（二）Image-Recognition/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    TensorFlow 学习教程（二）Image Recognition
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/23/TensorFlow-学习教程-（引言）/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorFlow 学习教程 （引言）</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

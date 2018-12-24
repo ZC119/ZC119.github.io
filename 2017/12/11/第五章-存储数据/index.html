@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>第五章 存储数据 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="5.1媒体文件 urllib.request.urlretrieve 可以根据文件的 URL 下载文件">
+<meta name="keywords" content="python scraper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第五章 存储数据">
+<meta property="og:url" content="http://zc119.github.io/2017/12/11/第五章-存储数据/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="5.1媒体文件 urllib.request.urlretrieve 可以根据文件的 URL 下载文件">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-11T11:03:20.742Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第五章 存储数据">
+<meta name="twitter:description" content="5.1媒体文件 urllib.request.urlretrieve 可以根据文件的 URL 下载文件">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-第五章-存储数据" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            第五章 存储数据
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/11/第五章-存储数据/">
+            <time datetime="2017-12-11T10:58:26.000Z" itemprop="datePublished">2017-12-11</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="5-1媒体文件"><a href="#5-1媒体文件" class="headerlink" title="5.1媒体文件"></a>5.1媒体文件</h2><ul>
+<li>urllib.request.urlretrieve 可以根据文件的 URL 下载文件</li>
+</ul>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlretrieve</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">imageLocation = bsObj.find(<span class="string">'a'</span>, &#123;<span class="string">'id'</span>:<span class="string">'logo'</span>&#125;).find(<span class="string">'img'</span>)[<span class="string">'src'</span>]</span><br><span class="line">urlretrieve(imageLocation, <span class="string">'logo.jpg'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>(&apos;logo.jpg&apos;, &lt;http.client.HTTPMessage at 0x7f7a9ce0bcf8&gt;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlretrieve</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">downloadDirectory = <span class="string">'downloaded'</span></span><br><span class="line">baseUrl = <span class="string">'http://pythonscraping.com'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getAbsoluteURL</span><span class="params">(baseUrl, source)</span>:</span></span><br><span class="line">    <span class="keyword">if</span> source.startswith(<span class="string">'http://www.'</span>):</span><br><span class="line">        url = <span class="string">'http://'</span> + source[<span class="number">11</span>:]</span><br><span class="line">    <span class="keyword">elif</span> source.startswith(<span class="string">'http://'</span>):</span><br><span class="line">        url = source</span><br><span class="line">    <span class="keyword">elif</span> source.startswith(<span class="string">'www.'</span>):</span><br><span class="line">        url = source[<span class="number">4</span>:]</span><br><span class="line">        url = <span class="string">'http://'</span>+source</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        url = baseUrl+<span class="string">'/'</span>+source</span><br><span class="line">    <span class="keyword">if</span> baseUrl <span class="keyword">not</span> <span class="keyword">in</span> url:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    <span class="keyword">return</span> url</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getDownloadPath</span><span class="params">(baseUrl, absoluteUrl, downloadDirectory)</span>:</span></span><br><span class="line">    path = absoluteUrl.replace(<span class="string">'www.'</span>,<span class="string">''</span>)</span><br><span class="line">    path = path.replace(baseUrl, <span class="string">''</span>)</span><br><span class="line">    path = downloadDirectory+path</span><br><span class="line">    directory = os.path.dirname(path)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(directory):</span><br><span class="line">        os.makedirs(directory)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> path</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">downloadList = bsObj.findAll(src=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> download <span class="keyword">in</span> downloadList:</span><br><span class="line">    fileUrl = getAbsoluteURL(baseUrl, download[<span class="string">'src'</span>])</span><br><span class="line">    <span class="keyword">if</span> fileUrl <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        print(fileUrl)</span><br><span class="line"></span><br><span class="line">urlretrieve(fileUrl, getDownloadPath(baseUrl, fileUrl, downloadDirectory))</span><br></pre></td></tr></table></figure>
+<pre><code>http://pythonscraping.com/misc/jquery.js?v=1.4.4
+http://pythonscraping.com/misc/jquery.once.js?v=1.2
+http://pythonscraping.com/misc/drupal.js?os2esm
+http://pythonscraping.com/sites/all/themes/skeletontheme/js/jquery.mobilemenu.js?os2esm
+http://pythonscraping.com/sites/all/modules/google_analytics/googleanalytics.js?os2esm
+http://pythonscraping.com/sites/default/files/lrg_0.jpg
+http://pythonscraping.com/img/lrg%20(1).jpg
+
+
+
+---------------------------------------------------------------------------
+</code></pre><h2 id="5-2把数据存储到CSV"><a href="#5-2把数据存储到CSV" class="headerlink" title="5.2把数据存储到CSV"></a>5.2把数据存储到CSV</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"></span><br><span class="line">csvFile = open(<span class="string">'test.csv'</span>,<span class="string">'w+'</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    writer = csv.writer(csvFile)</span><br><span class="line">    writer.writerow((<span class="string">'number'</span>, <span class="string">'number plus 2'</span>, <span class="string">'number times 2'</span>))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">        writer.writerow((i, i+<span class="number">2</span>, i*<span class="number">2</span>))</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    csvFile.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> csv</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://en.wikipedia.org/wiki/Comparison_of_text_editors'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"><span class="comment">#主对比表格是当前页面上的第一个表格</span></span><br><span class="line">table = bsObj.findAll(<span class="string">'table'</span>,&#123;<span class="string">'class'</span>:<span class="string">'wikitable'</span>&#125;)[<span class="number">0</span>]</span><br><span class="line">rows = table.findAll(<span class="string">'tr'</span>)</span><br><span class="line"></span><br><span class="line">csvFile = open(<span class="string">'editors.csv'</span>,<span class="string">'wt'</span>,newline=<span class="string">''</span>,encoding=<span class="string">'utf-8'</span>)</span><br><span class="line">writer = csv.writer(csvFile)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">for</span> row <span class="keyword">in</span> rows:</span><br><span class="line">        csvRow = []</span><br><span class="line">        <span class="keyword">for</span> cell <span class="keyword">in</span> row.findAll([<span class="string">'td'</span>,<span class="string">'th'</span>]):</span><br><span class="line">            csvRow.append(cell.get_text())</span><br><span class="line">            writer.writerow(csvRow)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    csvFile.close()</span><br></pre></td></tr></table></figure>
+<h2 id="5-3MySql"><a href="#5-3MySql" class="headerlink" title="5.3MySql"></a>5.3MySql</h2><ul>
+<li>CREATE DATABASE scraping;</li>
+<li>USE scraping;</li>
+<li>CREATE TABLE pages (id BIGINT(7) NOT NULL AUTO_INCREMENT, title VARCHAR(200),content VARCHAR(10000), created TIMESTAMP DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY(id));</li>
+<li>DESCRIBE pages</li>
+<li>INSERT INTO pages (title, content) VALUES (“Test page title”, “This is some test page content. It can be up to 10,000 characters long.”);</li>
+<li>SELECT id, title FROM pages WHERE content LIKE “%page content%”;</li>
+<li>DELETE FROM pages WHERE id = 1;</li>
+<li>UPDATE pages SET title=”A new title”, content=”Some new content” WHERE id=2;</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line">conn = pymysql.connect(host=<span class="string">'127.0.0.1'</span>,user=<span class="string">'root'</span>, passwd=<span class="string">'1234'</span>, db=<span class="string">'mysql'</span>)</span><br><span class="line">cur = conn.cursor()</span><br><span class="line">cur.execute(<span class="string">'USE scraping'</span>)</span><br><span class="line"></span><br><span class="line">cur.execute(<span class="string">'SELECT * FROM pages WHERE id=3'</span>)</span><br><span class="line">print(cur.fetchone())</span><br><span class="line">cur.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<pre><code>(3, &apos;A new title&apos;, &apos;some new content&apos;, datetime.datetime(2014, 9, 21, 10, 25, 32))
+</code></pre><ul>
+<li>连接对象( conn )和光标对象( cur )</li>
+<li>连接模式除了要连接数据库之外,还要发送数据库信息,处理回滚操作(当一个查询或一组查询被中断时,数据库需要回到初始状态,一般用事务控制手段实现状态回滚),创建新的光标对象,等等。</li>
+<li>而一个连接可以有很多个光标。一个光标跟踪一种状态(state)信息,比如跟踪数据库的使用状态。如果你有多个数据库,且需要向所有数据库写内容,就需要多个光标来处理。光标还会包含最后一次查询执行的结果。通过调用光标函数,比如 cur.fetchone() ,可以获取查询结果。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(host=<span class="string">'127.0.0.1'</span>, user=<span class="string">'root'</span>, passwd=<span class="string">'1234'</span>, </span><br><span class="line">                      db=<span class="string">'mysql'</span>, charset=<span class="string">'utf8'</span>)</span><br><span class="line">cur = conn.cursor()</span><br><span class="line">cur.execute(<span class="string">'USE scraping'</span>)</span><br><span class="line"></span><br><span class="line">random.seed(datetime.datetime.now())</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">store</span><span class="params">(title, content)</span>:</span></span><br><span class="line">    cur.execute(<span class="string">'INSERT INTO pages (title, content) VALUES (\"%s\", \"%s\")'</span>, (title, content))</span><br><span class="line">    cur.connection.commit()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLinks</span><span class="params">(articleUrl)</span>:</span></span><br><span class="line">    html = urlopen(<span class="string">'http://en.wikipedia.org'</span>+articleUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    title = bsObj.find(<span class="string">'h1'</span>).get_text()</span><br><span class="line">    content = bsObj.find(<span class="string">'div'</span>, &#123;<span class="string">'id'</span>:<span class="string">'mw-content-text'</span>&#125;).find(<span class="string">'p'</span>).get_text()</span><br><span class="line">    store(title, content)</span><br><span class="line">    <span class="keyword">return</span> bsObj.find(<span class="string">'div'</span>, &#123;<span class="string">'id'</span>:<span class="string">'bodyContent'</span>&#125;).findAll(<span class="string">'a'</span>,</span><br><span class="line">                                                          href=re.compile(<span class="string">'^(/wiki/)((?!:).)*$'</span>))</span><br><span class="line">links = getLinks(<span class="string">'/wiki/Kevin_Bacon'</span>)</span><br><span class="line"><span class="keyword">try</span>:</span><br><span class="line">    <span class="keyword">while</span> len(links) &gt; <span class="number">0</span>:</span><br><span class="line">        newArticle = links[random.randint(<span class="number">0</span>, len(links)<span class="number">-1</span>)].attrs[<span class="string">'href'</span>]</span><br><span class="line">        print(newArticle)</span><br><span class="line">        links = getLinks(newArticle)</span><br><span class="line"><span class="keyword">finally</span>:</span><br><span class="line">    cur.close()</span><br><span class="line">    conn.close()</span><br></pre></td></tr></table></figure>
+<pre><code>/wiki/Daniel_Day-Lewis
+/wiki/Charles_Boyer
+/wiki/Federico_Fellini
+/wiki/Rashomon
+/wiki/Son_of_Saul
+/wiki/Shoeshine_(film)
+/wiki/Caroline_Link
+/wiki/Jos%C3%A9_Luis_Garci
+/wiki/Ingmar_Bergman
+/wiki/Hanif_Kureishi
+/wiki/Academy_Awards
+/wiki/List_of_Jewish_Academy_Award_winners_and_nominees
+/wiki/Watch_on_the_Rhine
+/wiki/Lillian_Hellman
+/wiki/Dashiell_Hammett
+/wiki/United_States_Army
+/wiki/Uniformed_services_of_the_United_States
+
+
+
+---------------------------------------------------------------------------
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"></span><br><span class="line">conn = pymysql.connect(host=<span class="string">'127.0.0.1'</span>, user=<span class="string">'root'</span>, passwd=<span class="string">'1234'</span>, db=<span class="string">'mysql'</span>, charset=<span class="string">'utf8'</span>)</span><br><span class="line"></span><br><span class="line">cur = conn.cursor()</span><br><span class="line">cur.execute(<span class="string">'USE wikipedia'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">insertPageIfNotExists</span><span class="params">(url)</span>:</span></span><br><span class="line">    cur.execute(<span class="string">'SELECT * FROM pages WHERE url = %s'</span>, (url))</span><br><span class="line">    <span class="keyword">if</span> cur.rowcount == <span class="number">0</span>:</span><br><span class="line">        cur.execute(<span class="string">'INSERT INTO pages (url) VALUES (%s)'</span>, (url))</span><br><span class="line">        conn.commit()</span><br><span class="line">        <span class="keyword">return</span> cur.lastrowid</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> cur.fetchone()[<span class="number">0</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">insertLink</span><span class="params">(fromPageId, toPageId)</span>:</span></span><br><span class="line">    cur.execute(<span class="string">'SELECT * FROM links WHERE fromPageId = %s AND toPageId = %s'</span>,</span><br><span class="line">               (int(fromPageId), int(toPageId)))</span><br><span class="line">    <span class="keyword">if</span> cur.rowcount == <span class="number">0</span>:</span><br><span class="line">        cur.execute(<span class="string">'INSERT INTO links (fromPageId, toPageId) VALUES (%s, %s)'</span>, </span><br><span class="line">                   (int(fromPageId), int(toPageId)))</span><br><span class="line">        conn.commit()</span><br><span class="line">pages = set()</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLinks</span><span class="params">(pageUrl, recursionLevel)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> pages</span><br><span class="line">    <span class="keyword">if</span> recursionLevel &gt; <span class="number">4</span>:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    pageId = insertPageIfNotExists(pageUrl)</span><br><span class="line">    html = urlopen(<span class="string">'http://en.wikipedia.org'</span>+pageUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> bsObj.findAll(<span class="string">'a'</span>,href=re.compile(<span class="string">'^(/wiki/)((?!:).)*$'</span>)):</span><br><span class="line">        insertLink(pageId, insertPageIfNotExists(link.attrs[<span class="string">'href'</span>]))</span><br><span class="line">        <span class="keyword">if</span> link.attrs[<span class="string">'href'</span>] <span class="keyword">not</span> <span class="keyword">in</span> pages:</span><br><span class="line">            <span class="comment">#遇到一个新页面，加入集合并搜索里面的词条链接</span></span><br><span class="line">            newPage = link.attrs[<span class="string">'href'</span>]</span><br><span class="line">            pages.add(newPage)</span><br><span class="line">            getLinks(newPage, recursionLevel+<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">getLinks(<span class="string">'/wiki/Kevin_Bacon'</span>, <span class="number">0</span>)</span><br><span class="line">cur.close()</span><br><span class="line">conn.close()</span><br></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+</code></pre><h2 id="5-4Email"><a href="#5-4Email" class="headerlink" title="5.4Email"></a>5.4Email</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"></span><br><span class="line">msg = MIMEText(<span class="string">'The body of the email is here'</span>, <span class="string">'plain'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line"></span><br><span class="line">from_addr = <span class="string">'******@126.com'</span></span><br><span class="line">password = <span class="string">'******'</span></span><br><span class="line">to_addr = <span class="string">'******@qq.com'</span></span><br><span class="line">smtp_server = <span class="string">'smtp.126.com'</span></span><br><span class="line"></span><br><span class="line">server = smtplib.SMTP(smtp_server, <span class="number">25</span>)</span><br><span class="line">server.set_debuglevel(<span class="number">1</span>)</span><br><span class="line">server.login(from_addr, password)</span><br><span class="line">server.sendmail(from_addr, [to_addr], msg.as_string())</span><br><span class="line">server.quit()</span><br></pre></td></tr></table></figure>
+<h2 id="获取浙大数学学术讲座信息并用邮件提醒"><a href="#获取浙大数学学术讲座信息并用邮件提醒" class="headerlink" title="获取浙大数学学术讲座信息并用邮件提醒"></a>获取浙大数学学术讲座信息并用邮件提醒</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> email <span class="keyword">import</span> encoders</span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> parseaddr, formataddr</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_format_addr</span><span class="params">(s)</span>:</span></span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="keyword">return</span> formataddr((Header(name, <span class="string">'utf-8'</span>).encode(), addr))</span><br><span class="line"></span><br><span class="line">from_addr = <span class="string">'******@126.com'</span></span><br><span class="line">password = <span class="string">'******'</span></span><br><span class="line">to_addr = <span class="string">'******@qq.com'</span></span><br><span class="line">smtp_server = <span class="string">'smtp.126.com'</span></span><br><span class="line"></span><br><span class="line">msg = MIMEText(<span class="string">'数学学术讲座内容'</span>, <span class="string">'plain'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">msg[<span class="string">'From'</span>] = _format_addr(<span class="string">'Python &lt;%s&gt;'</span> % from_addr)</span><br><span class="line">msg[<span class="string">'To'</span>] = _format_addr(<span class="string">'zc &lt;%s&gt;'</span> % to_addr)</span><br><span class="line">msg[<span class="string">'Subject'</span>] = Header(<span class="string">'数学学术讲座内容更新'</span>, <span class="string">'utf-8'</span>).encode()</span><br><span class="line"></span><br><span class="line">server = smtplib.SMTP(smtp_server, <span class="number">25</span>)</span><br><span class="line"><span class="comment">#server.set_debuglevel(1)</span></span><br><span class="line">server.login(from_addr, password)</span><br><span class="line">server.sendmail(from_addr, [to_addr], msg.as_string())</span><br><span class="line">server.quit()</span><br></pre></td></tr></table></figure>
+<pre><code>(221, b&apos;Bye&apos;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> email <span class="keyword">import</span> encoders</span><br><span class="line"><span class="keyword">from</span> email.header <span class="keyword">import</span> Header</span><br><span class="line"><span class="keyword">from</span> email.mime.text <span class="keyword">import</span> MIMEText</span><br><span class="line"><span class="keyword">from</span> email.utils <span class="keyword">import</span> parseaddr, formataddr</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> smtplib</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_format_addr</span><span class="params">(s)</span>:</span></span><br><span class="line">    name, addr = parseaddr(s)</span><br><span class="line">    <span class="keyword">return</span> formataddr((Header(name, <span class="string">'utf-8'</span>).encode(), addr))</span><br><span class="line"></span><br><span class="line">from_addr = <span class="string">'******@126.com'</span></span><br><span class="line">password = <span class="string">'******'</span></span><br><span class="line">to_addr = <span class="string">'******@qq.com'</span></span><br><span class="line">smtp_server = <span class="string">'smtp.126.com'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#讲座通知页面</span></span><br><span class="line">html = urlopen(<span class="string">'http://www.math.zju.edu.cn/news.asp?id=6624&amp;TabName=%B1%BE%BF%C6%BD%CC%D1%A7'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#讲座报名链接</span></span><br><span class="line">URL = bsObj.find(<span class="string">'a'</span>, href=re.compile(<span class="string">'^(http://cn.mikecrm.com/)'</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">    <span class="keyword">if</span> URL <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">if</span> URL != bsObj.find(<span class="string">'a'</span>, href=re.compile(<span class="string">'^(http://cn.mikecrm.com/)'</span>)):</span><br><span class="line">        URL = bsObj.find(<span class="string">'a'</span>, href=re.compile(<span class="string">'^(http://cn.mikecrm.com/)'</span>))</span><br><span class="line">        <span class="comment">#讲座具体内容链接</span></span><br><span class="line">        newsURL = bsObj.find(<span class="string">'a'</span>, href=re.compile(<span class="string">'^http://www.math.zju.edu.cn/news'</span>))</span><br><span class="line"></span><br><span class="line">        <span class="comment">#获取讲座内容</span></span><br><span class="line">        htmlnews = urlopen(newsURL.get_text())</span><br><span class="line">        bsObj = BeautifulSoup(htmlnews, <span class="string">'lxml'</span>)</span><br><span class="line">        news = bsObj.findAll(<span class="string">'td'</span>, class_ = <span class="string">'NewsBody'</span>)</span><br><span class="line">        newtext = <span class="string">'您好！**同学：\n以下是更新的学术讲座内容，欢迎报名\n报名地址： '</span>+URL[<span class="string">'href'</span>]+<span class="string">'\n'</span>+<span class="string">'通知地址： '</span>+newsURL[<span class="string">'href'</span>]+<span class="string">'\n'</span></span><br><span class="line">        <span class="keyword">for</span> new <span class="keyword">in</span> news:</span><br><span class="line">            newtext = newtext + new.get_text() + <span class="string">'\n'</span></span><br><span class="line">        print(newtext)</span><br><span class="line">        </span><br><span class="line">        msg = MIMEText(newtext, <span class="string">'plain'</span>, <span class="string">'utf-8'</span>)</span><br><span class="line">        msg[<span class="string">'From'</span>] = _format_addr(<span class="string">'** &lt;%s&gt;'</span> % from_addr)</span><br><span class="line">        msg[<span class="string">'To'</span>] = _format_addr(<span class="string">'******* &lt;%s&gt;'</span> % to_addr)</span><br><span class="line">        msg[<span class="string">'Subject'</span>] = Header(<span class="string">'浙江大学数学科学学术报告'</span>, <span class="string">'utf-8'</span>).encode()</span><br><span class="line">        </span><br><span class="line">        server = smtplib.SMTP(smtp_server, <span class="number">25</span>)</span><br><span class="line">        <span class="comment">#server.set_debuglevel(1)</span></span><br><span class="line">        server.login(from_addr, password)</span><br><span class="line">        server.sendmail(from_addr, [to_addr], msg.as_string())</span><br><span class="line">        server.quit()</span><br><span class="line">    time.sleep(<span class="number">600</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>您好！**同学：
+以下是更新的学术讲座内容，欢迎报名
+报名地址： http://cn.mikecrm.com/ajIyYIp
+通知地址： http://www.math.zju.edu.cn/news.asp?id=7212&amp;TabName=%D1%A7%CA%F5%BF%C6%D1%D0
+题目 
+
+Waves near Resonance: from Fast Train Track to Moving Loads on Very Large Floating Structures
+
+摘要 
+The problem of forced unsteady water waves under an elastic sheet is a model for waves under ice or under very large floating structures. Even though small amplitude solitary waves are not predicted to exist by standard perturbation analyses, we find large amplitude solitary waves, and explore their crucial role in the forced problem of a moving load on the surface. This is meant to represent a model of the use of extended ice sheets as roads and aircraft runways. Some open problems on the theoretical side of this topic will be mentioned in the end.
+
+Speaker: 王展，中科院力学所
+
+
+
+Time and place: Friday Nov 17th，15:40-16:40, 欧阳纯美楼316
+联系人：张庆海老师（qinghai@zju.edu.cn）
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/11/第五章-存储数据/" data-id="cjq1zv30k002xdrihnpk8zn4g" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/11/第六章-读取文档/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    第六章 读取文档
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/11/第四章-使用API/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">第四章 使用API</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

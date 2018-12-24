@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorFlow 实现卷积神经网络 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="5.1 卷积神经网络简介一般的 CNN 由多个卷积层构成, 每个卷基层中通常会进行如下操作:  图像通过多个不同的卷积核的滤波, 加上 bias, 提取局部特征, 每一个卷积核映射出一个新的图像 卷积核的滤波结果进行非线性激活函数处理, 最常见是 ReLU 进行 pooling 操作 (降采样), 一般使用 max pooling, 保留最显著特征  上面即最常见卷积层, 也可以加上 LRN (L">
+<meta name="keywords" content="TensorFlow 实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow 实现卷积神经网络">
+<meta property="og:url" content="http://zc119.github.io/2018/01/28/TensorFlow-实现卷积神经网络/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="5.1 卷积神经网络简介一般的 CNN 由多个卷积层构成, 每个卷基层中通常会进行如下操作:  图像通过多个不同的卷积核的滤波, 加上 bias, 提取局部特征, 每一个卷积核映射出一个新的图像 卷积核的滤波结果进行非线性激活函数处理, 最常见是 ReLU 进行 pooling 操作 (降采样), 一般使用 max pooling, 保留最显著特征  上面即最常见卷积层, 也可以加上 LRN (L">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/4/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/4/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/4/3.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/4/4.png">
+<meta property="og:updated_time" content="2018-01-28T12:42:57.518Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow 实现卷积神经网络">
+<meta name="twitter:description" content="5.1 卷积神经网络简介一般的 CNN 由多个卷积层构成, 每个卷基层中通常会进行如下操作:  图像通过多个不同的卷积核的滤波, 加上 bias, 提取局部特征, 每一个卷积核映射出一个新的图像 卷积核的滤波结果进行非线性激活函数处理, 最常见是 ReLU 进行 pooling 操作 (降采样), 一般使用 max pooling, 保留最显著特征  上面即最常见卷积层, 也可以加上 LRN (L">
+<meta name="twitter:image" content="http://zc119.github.io/image/tensorflow/4/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorFlow-实现卷积神经网络" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorFlow 实现卷积神经网络
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/28/TensorFlow-实现卷积神经网络/">
+            <time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="5-1-卷积神经网络简介"><a href="#5-1-卷积神经网络简介" class="headerlink" title="5.1 卷积神经网络简介"></a>5.1 卷积神经网络简介</h2><p>一般的 CNN 由多个卷积层构成, 每个卷基层中通常会进行如下操作:</p>
+<ol>
+<li>图像通过多个不同的卷积核的滤波, 加上 bias, 提取局部特征, 每一个卷积核映射出一个新的图像</li>
+<li>卷积核的滤波结果进行非线性激活函数处理, 最常见是 ReLU</li>
+<li>进行 pooling 操作 (降采样), 一般使用 max pooling, 保留最显著特征</li>
+</ol>
+<p>上面即最常见卷积层, 也可以加上 LRN (Local Response Normalization, 局部响应归一化层), 流行的 trick 有 Batch Normalization. </p>
+<ul>
+<li>卷积核权值共享, 不必担心隐含节点和图片大小, 参数量只和卷积核大小, 卷积核数量有关</li>
+<li>局部连接  </li>
+<li>增加卷积核数量提取多种特征, 每一个卷积核滤波结果是一类特征映射 Feature Map. 使用 100 个卷积核在第一个卷积层已经很充足</li>
+<li>参数数量下降, 但隐含节点数量没有下降, 与步长有关. </li>
+</ul>
+<p>CNN 要点</p>
+<ol>
+<li>局部连接 (Local Connection): 减少参数, 减轻过拟合</li>
+<li>权值共享 (Weight Sharing): 减少参数, 减轻过拟合, 对平移容忍性</li>
+<li>池化层 (Pooling) 中的降采样 (Down-Sampling): 对轻度形变容忍性</li>
+</ol>
+<p>LeNet5 是最早的 DCNN 之一, 特性:</p>
+<ul>
+<li>每个卷积层包括: 卷积, 池化, 非线性激活函数</li>
+<li>使用卷积提取空间特征</li>
+<li>降采样 (Subsample) 的平均池化层 (Average Pooling)</li>
+<li>双曲正切 (Tanh) 或 S 型 (Sigmoid) 激活函数</li>
+<li>MLP 作为最后的分类器</li>
+<li>层与层之间稀疏连接</li>
+</ul>
+<p><img src="/image/tensorflow/4/1.png" alt=""></p>
+<p>C1 有 6 个卷积核, 尺寸 5*5, 共 (5*5+1)*6=156 个参数, 1 代表 1 个 bias. 后面是 2*2 的平均池化层 S2 降采样. 再 Sigmoid 激活函数. 第二个卷积层 C3, 尺寸 5*5, 16 个卷积核. S4 与 S2 一致. 第三个卷积层 C5 有 120 个卷积核, 尺寸 5*5, 构成了全连接. F6 全连接, 84 个隐含节点, Sigmoid 激活函数. 最后一层由欧式 RBF 单元组成, 输出分类结果.</p>
+<h2 id="5-2-TensorFlow-实现简单的卷积网络"><a href="#5-2-TensorFlow-实现简单的卷积网络" class="headerlink" title="5.2 TensorFlow 实现简单的卷积网络"></a>5.2 TensorFlow 实现简单的卷积网络</h2><p>本节使用两个卷积层与一个全连接层.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">'MNIST_data'</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line">sess = tf.InteractiveSession()</span><br></pre></td></tr></table></figure>
+<pre><code>Extracting MNIST_data/train-images-idx3-ubyte.gz
+Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">weight_variable</span><span class="params">(shape)</span>:</span></span><br><span class="line">    initial = tf.truncated_normal(shape, stddev=<span class="number">0.1</span>)</span><br><span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bias_variable</span><span class="params">(shape)</span>:</span></span><br><span class="line">    <span class="comment"># 因为使用 ReLU, bias 置小的正值避免 dead neurons</span></span><br><span class="line">    initial = tf.constant(<span class="number">0.1</span>, shape=shape) </span><br><span class="line">    <span class="keyword">return</span> tf.Variable(initial)</span><br></pre></td></tr></table></figure>
+<p>接下来定义卷积与池化函数  </p>
+<p>tf.nn.conv2d 参数 x 是输入, W 是卷积的参数, 例如 [5, 5, 1, 32], 前面两个是卷积核尺寸, 第三个是代表几个 channel, 这里只有灰度单色, 故为 1, RGB 为 3. 最后一个数字代表卷积核数量. strides 代表每一维度的步长, strides[0]=strides[3]=1. padding 代表边界处理方式. SAME 代表给边界加上 Padding 使卷积的输出与输入尺寸 SAME. 用 0 填充.</p>
+<p>tf.nn.max_pool 是最大池化函数. 2*2 最大池化, strides 横竖方向步长为 2.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">conv2d</span><span class="params">(x, W)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.nn.conv2d(x, W, strides=[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">max_pool_2x2</span><span class="params">(x)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> tf.nn.max_pool(x, ksize=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">                         padding=<span class="string">'SAME'</span>)</span><br></pre></td></tr></table></figure>
+<p>定义输入, 将 1 维向量转换为 2 维图像, 尺寸为 [-1,28,28,1], -1 代表样本数量不固定, 最后的 1 代表 channel 数量. </p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">784</span>])</span><br><span class="line">y_ = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>])</span><br><span class="line">x_image = tf.reshape(x, [<span class="number">-1</span>, <span class="number">28</span>, <span class="number">28</span>, <span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<p>定义第一个卷积层</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">W_conv1 = weight_variable([<span class="number">5</span>, <span class="number">5</span>, <span class="number">1</span>, <span class="number">32</span>])</span><br><span class="line">b_conv1 = bias_variable([<span class="number">32</span>])</span><br><span class="line">h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1)</span><br><span class="line">h_pool1 = max_pool_2x2(h_conv1)</span><br></pre></td></tr></table></figure>
+<p>定义第二个卷积层</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">W_conv2 = weight_variable([<span class="number">5</span>, <span class="number">5</span>, <span class="number">32</span>, <span class="number">64</span>]) <span class="comment"># 第一个卷积层层有 32 个 channel</span></span><br><span class="line">b_conv2 = bias_variable([<span class="number">64</span>])</span><br><span class="line">h_conv2 = tf.nn.relu(conv2d(h_pool1, W_conv2) + b_conv2)</span><br><span class="line">h_pool2 = max_pool_2x2(h_conv2)</span><br></pre></td></tr></table></figure>
+<p>经过两次 2*2 的最大池化, 边长为 1/4, 图片尺寸变为 7*7. 第二个卷积层卷积核数量 64, 输出的 tensor 为 7*7*64. 接下来全连接层, 隐含节点 1024</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">W_fc1 = weight_variable([<span class="number">7</span> * <span class="number">7</span> * <span class="number">64</span>, <span class="number">1024</span>])</span><br><span class="line">b_fc1 = bias_variable([<span class="number">1024</span>])</span><br><span class="line">h_pool2_flat = tf.reshape(h_pool2, [<span class="number">-1</span>, <span class="number">7</span>*<span class="number">7</span>*<span class="number">64</span>])</span><br><span class="line">h_fc1 = tf.nn.relu(tf.matmul(h_pool2_flat, W_fc1) + b_fc1)</span><br></pre></td></tr></table></figure>
+<p>使用 Dropout 减轻过拟合</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">keep_prob = tf.placeholder(tf.float32)</span><br><span class="line">h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)</span><br></pre></td></tr></table></figure>
+<p>最后链接 Softmax 得到概率输出</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">W_fc2 = weight_variable([<span class="number">1024</span>, <span class="number">10</span>])</span><br><span class="line">b_fc2 = bias_variable([<span class="number">10</span>])</span><br><span class="line">y_conv = tf.nn.softmax(tf.matmul(h_fc1_drop, W_fc2) + b_fc2)</span><br></pre></td></tr></table></figure>
+<p>定义损失函数 cross entropy</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y_conv),</span><br><span class="line">                                             reduction_indices=[<span class="number">1</span>]))</span><br><span class="line">train_step = tf.train.AdamOptimizer(<span class="number">1e-4</span>).minimize(cross_entropy)</span><br></pre></td></tr></table></figure>
+<p>定义评测准确率</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">correct_prediction = tf.equal(tf.argmax(y_conv, <span class="number">1</span>), tf.argmax(y_, <span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br></pre></td></tr></table></figure>
+<p>下面开始训练, keep_prob 为 0.5, mini-batch 为 50, 20000 次迭代</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">tf.global_variables_initializer().run()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">20000</span>):</span><br><span class="line">    batch = mnist.train.next_batch(<span class="number">50</span>)</span><br><span class="line">    <span class="keyword">if</span> i%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">        train_accuracy = accuracy.eval(feed_dict=&#123;x: batch[<span class="number">0</span>],</span><br><span class="line">                                                 y_: batch[<span class="number">1</span>],</span><br><span class="line">                                                 keep_prob: <span class="number">1.0</span>&#125;)</span><br><span class="line">        print(<span class="string">'step %d, training accuracy %g'</span> % (i, train_accuracy))</span><br><span class="line">    train_step.run(feed_dict=&#123;x: batch[<span class="number">0</span>], y_: batch[<span class="number">1</span>], keep_prob: <span class="number">0.5</span>&#125;)</span><br></pre></td></tr></table></figure>
+<pre><code>step 0, training accuracy 0.06
+step 100, training accuracy 0.92
+step 200, training accuracy 0.9
+......
+step 19600, training accuracy 1
+step 19700, training accuracy 1
+step 19800, training accuracy 1
+step 19900, training accuracy 1
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'test accuracy %g'</span> % accuracy.eval(feed_dict=&#123;</span><br><span class="line">    x: mnist.test.images, y_: mnist.test.labels, keep_prob: <span class="number">1.0</span>&#125;))</span><br></pre></td></tr></table></figure>
+<pre><code>test accuracy 0.9919
+</code></pre><p>接下来实现稍微复杂的 CNN, 采用 CIFAR-10 数据集训练</p>
+<h2 id="5-3-TensorFlow-实现进阶的卷积网络"><a href="#5-3-TensorFlow-实现进阶的卷积网络" class="headerlink" title="5.3 TensorFlow 实现进阶的卷积网络"></a>5.3 TensorFlow 实现进阶的卷积网络</h2><p>CIFAR-10 包含 60000 张 32*32 的彩色图像, 训练集 50000 张, 测试集 10000 张. 一共 10 类, 每类 6000 张. 分别是 airplane, automobile, bird, cat, deer, dog, frog, horse, ship, truck. 一张图片只有 1 类物体. 兄弟版本 CIFAR-100. </p>
+<p><img src="/image/tensorflow/4/2.png" alt=""></p>
+<p>state-of-art 错误率 3.5%. 本节实现的 CNN 根据 Alex 描述的 cuda-convnet 模型修改得到. 3000 个 batch, 每个 128 个样本, 正确率 73%. 100k 个 batch, 结合学习速度的 decay, 正确率 86%. </p>
+<p>本模型技巧:</p>
+<ol>
+<li>对 weights L2 正则化</li>
+<li>对图片翻转随机裁剪等数据增强, 制造更多样本</li>
+<li>每个卷积-最大池化层后使用 LRN, 增强泛化能力</li>
+</ol>
+<p><img src="/image/tensorflow/4/3.png" alt=""></p>
+<p>下载 TensorFlow Models 库, 来获得 CIFAR-10 数据</p>
+<p><code>git clone https://github.com/tensorflow/models.git
+cd models/tutorials/image/cifar10</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> cifar10, cifar10_input</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> time</span><br></pre></td></tr></table></figure>
+<pre><code>/root/anaconda3/envs/tensorflow/lib/python3.6/importlib/_bootstrap.py:219: RuntimeWarning: compiletime version 3.5 of module &apos;tensorflow.python.framework.fast_tensor_util&apos; does not match runtime version 3.6
+  return f(*args, **kwds)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">max_steps = <span class="number">3000</span> <span class="comment"># 训练轮数</span></span><br><span class="line">batch_size = <span class="number">128</span></span><br><span class="line">data_dir = <span class="string">'/tmp/cifar10_data/cifar-10-batches-bin'</span> <span class="comment"># 数据下载路径</span></span><br></pre></td></tr></table></figure>
+<p>定义初始化 weight 的函数. 使用 w1 控制 L2 loss 大小, 使用 tf.nn.l2_loss 计算 weight 的 L2 loss, 再用 tf.multiply 让 L2 loss 乘 w1, 得到 weight loss.<br>使用 tf.add_to_collection 把 weight loss 统一存到 collection 中, 名为 ‘losses’, 计算神经网络总体 loss 时用上.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">variable_with_loss</span><span class="params">(shape, stddev, w1)</span>:</span></span><br><span class="line">    var = tf.Variable(tf.truncated_normal(shape, stddev=stddev))</span><br><span class="line">    <span class="keyword">if</span> w1 <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">        weight_loss = tf.multiply(tf.nn.l2_loss(var), w1, name=<span class="string">'weight_loss'</span>)</span><br><span class="line">        tf.add_to_collection(<span class="string">'losses'</span>, weight_loss)</span><br><span class="line">    <span class="keyword">return</span> var</span><br></pre></td></tr></table></figure>
+<p>下载数据集并解压</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cifar10.maybe_download_and_extract()</span><br></pre></td></tr></table></figure>
+<p>使用 cifar10_input 类中的 distorted_inputs 函数产生训练数据, 包括特征及 label, 每次执行生成一个 batch_size 的样本, 并进行了数据增强, 并做了标准化. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">images_train, labels_train = cifar10_input.distorted_inputs(</span><br><span class="line">                                data_dir=data_dir, batch_size=batch_size)</span><br></pre></td></tr></table></figure>
+<pre><code>Filling queue with 20000 CIFAR images before starting to train. This will take a few minutes.
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">images_train</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;tf.Tensor &apos;shuffle_batch:0&apos; shape=(128, 24, 24, 3) dtype=float32&gt;
+</code></pre><p>再使用 cifar10_input.inputs 生成测试数据, 进行了裁剪与标准化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">images_test, labels_test = cifar10_input.inputs(eval_data=<span class="keyword">True</span>,</span><br><span class="line">                                               data_dir=data_dir,</span><br><span class="line">                                               batch_size=batch_size)</span><br></pre></td></tr></table></figure>
+<p>创建输入数据的 placeholder, 包括特征和 label. 数据尺寸中第一个值应为 batch_size</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">image_holder = tf.placeholder(tf.float32, [batch_size, <span class="number">24</span>, <span class="number">24</span>, <span class="number">3</span>])</span><br><span class="line">label_holder = tf.placeholder(tf.int32, [batch_size])</span><br></pre></td></tr></table></figure>
+<p>接下来创建第一个卷积层. 其中最后使用了 LRN 层, 它模仿了生物神经系统的’侧抑制’机制, 响应较大的值更大, 抑制其他反馈较小的神经元, 增强泛化能力. 在 AlexNet 中使用了 LRN 层. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">weight1 = variable_with_loss(shape=[<span class="number">5</span>, <span class="number">5</span>, <span class="number">3</span>, <span class="number">64</span>] ,stddev=<span class="number">5e-2</span>, w1=<span class="number">0.0</span>)</span><br><span class="line">kernel1 = tf.nn.conv2d(image_holder, weight1, [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line">bias1 = tf.Variable(tf.constant(<span class="number">0.0</span>, shape=[<span class="number">64</span>]))</span><br><span class="line">conv1 = tf.nn.relu(tf.nn.bias_add(kernel1, bias1))</span><br><span class="line">pool1 = tf.nn.max_pool(conv1, ksize=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">                      padding=<span class="string">'SAME'</span>)</span><br><span class="line">norm1 = tf.nn.lrn(pool1, <span class="number">4</span>, bias=<span class="number">1.0</span>, alpha=<span class="number">0.001</span> / <span class="number">9.0</span>, beta=<span class="number">0.75</span>)</span><br></pre></td></tr></table></figure>
+<p>现在创建第二个卷积层. 上一层卷积核数目 64, 故本层卷积核尺寸第三个维度为 64. bias 初始化 0.1. 最后调换了最大池化层与 LRN 的顺序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">weight2 = variable_with_loss(shape=[<span class="number">5</span>, <span class="number">5</span>, <span class="number">64</span>, <span class="number">64</span>], stddev=<span class="number">5e-2</span>,</span><br><span class="line">                            w1=<span class="number">0.0</span>)</span><br><span class="line">kernel2 = tf.nn.conv2d(norm1, weight2, [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], padding=<span class="string">'SAME'</span>)</span><br><span class="line">bias2 = tf.Variable(tf.constant(<span class="number">0.1</span>, shape=[<span class="number">64</span>]))</span><br><span class="line">conv2 = tf.nn.relu(tf.nn.bias_add(kernel2, bias2))</span><br><span class="line">norm2 = tf.nn.lrn(conv2, <span class="number">4</span>, bias=<span class="number">1.0</span>, alpha=<span class="number">0.001</span> / <span class="number">9.0</span>, beta=<span class="number">0.75</span>)</span><br><span class="line">pool2 = tf.nn.max_pool(norm2, ksize=[<span class="number">1</span>, <span class="number">3</span>, <span class="number">3</span>, <span class="number">1</span>], strides=[<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>, <span class="number">1</span>],</span><br><span class="line">                      padding=<span class="string">'SAME'</span>)</span><br></pre></td></tr></table></figure>
+<p>下面使用全连接层. 使用 tf.reshape 将每个样本变成一维向量. get_shape 获取扁平化后的长度. 隐含层节点数 384, 对这里的权重做了 L2 正则.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">reshape = tf.reshape(pool2, [batch_size, <span class="number">-1</span>])</span><br><span class="line">dim = reshape.get_shape()[<span class="number">1</span>].value</span><br><span class="line">weight3 = variable_with_loss(shape=[dim, <span class="number">384</span>], stddev=<span class="number">0.04</span>, w1=<span class="number">0.004</span>)</span><br><span class="line">bias3 = tf.Variable(tf.constant(<span class="number">0.1</span>, shape=[<span class="number">384</span>]))</span><br><span class="line">local3 = tf.nn.relu(tf.matmul(reshape, weight3) + bias3)</span><br></pre></td></tr></table></figure>
+<p>再次全连接</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">weight4 = variable_with_loss(shape=[<span class="number">384</span>, <span class="number">192</span>], stddev=<span class="number">0.4</span>, w1=<span class="number">0.004</span>)</span><br><span class="line">bias4 = tf.Variable(tf.constant(<span class="number">0.1</span>, shape=[<span class="number">192</span>]))</span><br><span class="line">local4 = tf.nn.relu(tf.matmul(local3, weight4) + bias4)</span><br></pre></td></tr></table></figure>
+<p>最后一层, weight 正态分布方差为上个隐含层节点数的倒数. 这里我们把 softmax 操作放在了计算 loss 的部分, 直接比较 inference 输出各类数值大小即可获得分类结果.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">weight5 = variable_with_loss(shape=[<span class="number">192</span>, <span class="number">10</span>], stddev=<span class="number">1</span>/<span class="number">192.0</span>, w1=<span class="number">0.0</span>)</span><br><span class="line">bias5 = tf.Variable(tf.constant(<span class="number">0.0</span>, shape=[<span class="number">10</span>]))</span><br><span class="line">logits = tf.add(tf.matmul(local4, weight5), bias5)</span><br></pre></td></tr></table></figure>
+<p>到这里完成了 inference 的部分. </p>
+<p><img src="/image/tensorflow/4/4.png" alt=""></p>
+<p>接下来计算 CNN 的 loss. 我们把 softmax 与 cross entropy loss 的计算合在一起. tf.nn.sparse_softmax_cross_entropy_with_logits.</p>
+<p>tf.add_n 将整体 losses 的 collection 中 loss 求和, 得到最终 loss</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">loss</span><span class="params">(logits, labels)</span>:</span></span><br><span class="line">    labels = tf.cast(labels, tf.int64)</span><br><span class="line">    cross_entropy = tf.nn.sparse_softmax_cross_entropy_with_logits(</span><br><span class="line">        logits=logits, labels=labels, name=<span class="string">'cross_entropy_per_example'</span>)</span><br><span class="line">    cross_entropy_mean = tf.reduce_mean(cross_entropy,</span><br><span class="line">                                       name=<span class="string">'cross_entropy'</span>)</span><br><span class="line">    tf.add_to_collection(<span class="string">'losses'</span>, cross_entropy_mean)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> tf.add_n(tf.get_collection(<span class="string">'losses'</span>), name=<span class="string">'total_loss'</span>)</span><br></pre></td></tr></table></figure>
+<p>将 logits 节点和 label_placeholder 传入 loss 函数获得最终 loss</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss = loss(logits, label_holder)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">train_op = tf.train.AdamOptimizer(<span class="number">1e-3</span>).minimize(loss)</span><br></pre></td></tr></table></figure>
+<p>使用 tf.nn.in_top_k 函数求输出结果中 top k 的准确率, 默认 top 1. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">top_k_op = tf.nn.in_top_k(logits, label_holder, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.InteractiveSession()</span><br><span class="line">tf.global_variables_initializer().run()</span><br></pre></td></tr></table></figure>
+<p>启动图片数据增强的线程队列, 一共使用 16 个线程加速. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tf.train.start_queue_runners()</span><br></pre></td></tr></table></figure>
+<p>正式开始训练. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(max_steps):</span><br><span class="line">    start_time = time.time()</span><br><span class="line">    image_batch, label_batch = sess.run([images_train, labels_train])</span><br><span class="line">    _, loss_value = sess.run([train_op, loss],</span><br><span class="line">                            feed_dict=&#123;image_holder: image_batch,</span><br><span class="line">                                      label_holder: label_batch&#125;)</span><br><span class="line">    duration = time.time() - start_time</span><br><span class="line">    <span class="keyword">if</span> step % <span class="number">10</span> == <span class="number">0</span>:</span><br><span class="line">        examples_per_sec = batch_size / duration</span><br><span class="line">        sec_per_batch = float(duration)</span><br><span class="line">        </span><br><span class="line">        format_str = (<span class="string">'step %d, loss=%.2f (%.1f examples/sec; %.3f sec/batch)'</span>)</span><br><span class="line">        print(format_str % (step, loss_value, examples_per_sec, sec_per_batch))</span><br></pre></td></tr></table></figure>
+<pre><code>step 0, loss=22.67 (18.1 examples/sec; 7.089 sec/batch)
+step 10, loss=21.20 (2764.8 examples/sec; 0.046 sec/batch)
+step 20, loss=19.86 (2382.6 examples/sec; 0.054 sec/batch)
+step 30, loss=18.91 (2671.7 examples/sec; 0.048 sec/batch)
+......
+step 2940, loss=1.16 (2765.8 examples/sec; 0.046 sec/batch)
+step 2950, loss=1.00 (2583.5 examples/sec; 0.050 sec/batch)
+step 2960, loss=0.98 (2499.1 examples/sec; 0.051 sec/batch)
+step 2970, loss=1.01 (2658.3 examples/sec; 0.048 sec/batch)
+step 2980, loss=1.16 (2629.0 examples/sec; 0.049 sec/batch)
+step 2990, loss=1.01 (2608.5 examples/sec; 0.049 sec/batch)
+</code></pre><p>下面评测模型在测试集上准确率</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">num_examples = <span class="number">10000</span></span><br><span class="line"><span class="keyword">import</span> math</span><br><span class="line">num_iter = int(math.ceil(num_examples / batch_size))</span><br><span class="line">true_count = <span class="number">0</span></span><br><span class="line">total_sample_count = num_iter * batch_size</span><br><span class="line">step = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">total_sample_count</span><br></pre></td></tr></table></figure>
+<pre><code>10112
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">num_iter</span><br></pre></td></tr></table></figure>
+<pre><code>79
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> step &lt; num_iter:</span><br><span class="line">    image_batch, label_batch = sess.run([images_test, labels_test])</span><br><span class="line">    predictions = sess.run([top_k_op], feed_dict=&#123;image_holder: image_batch,</span><br><span class="line">                                                 label_holder: label_batch&#125;)</span><br><span class="line">    true_count += np.sum(predictions)</span><br><span class="line">    step += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">precision = true_count / total_sample_count</span><br><span class="line">print(<span class="string">'precision @ 1 = %.3f'</span> % precision)</span><br></pre></td></tr></table></figure>
+<pre><code>precision @ 1 = 0.694
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/28/TensorFlow-实现卷积神经网络/" data-id="cjq1zv3010014drihpzkxazmv" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorFlow 实现自编码器及多层感知机</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

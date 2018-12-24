@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>第二章 复杂HTML解析 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="2.1避免直接写语句抽取信息 寻找移动版 寻找JavaScript的信息">
+<meta name="keywords" content="python scraper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二章 复杂HTML解析">
+<meta property="og:url" content="http://zc119.github.io/2017/12/11/第二章-复杂HTML解析/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="2.1避免直接写语句抽取信息 寻找移动版 寻找JavaScript的信息">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/python%20scraper/1.png">
+<meta property="og:updated_time" content="2017-12-11T10:50:07.213Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第二章 复杂HTML解析">
+<meta name="twitter:description" content="2.1避免直接写语句抽取信息 寻找移动版 寻找JavaScript的信息">
+<meta name="twitter:image" content="http://zc119.github.io/image/python%20scraper/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-第二章-复杂HTML解析" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            第二章 复杂HTML解析
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/11/第二章-复杂HTML解析/">
+            <time datetime="2017-12-11T10:42:23.000Z" itemprop="datePublished">2017-12-11</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="2-1避免直接写语句抽取信息"><a href="#2-1避免直接写语句抽取信息" class="headerlink" title="2.1避免直接写语句抽取信息"></a>2.1避免直接写语句抽取信息</h2><ul>
+<li>寻找移动版</li>
+<li>寻找JavaScript的信息</li>
+</ul>
+<a id="more"></a>
+<ul>
+<li>url链接获取网页标题</li>
+<li>寻找其他网站</li>
+</ul>
+<h2 id="2-2继续BeautifulSoup"><a href="#2-2继续BeautifulSoup" class="headerlink" title="2.2继续BeautifulSoup"></a>2.2继续BeautifulSoup</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com/pages/warandpeace.html'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>bsObj.findAll(tagName, tagAttributes)可以获取页面中所有指定的标签</p>
+</blockquote>
+<blockquote>
+<p>.get_text()会把你正在处理的HTML文档中所有的标签都清除，然后返回一个只包含文字的字符串</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">namelist = bsObj.findAll(<span class="string">'span'</span>, &#123;<span class="string">'class'</span>:<span class="string">'green'</span>&#125;)</span><br><span class="line"><span class="keyword">for</span> name <span class="keyword">in</span> namelist:</span><br><span class="line">    print(name.get_text())</span><br></pre></td></tr></table></figure>
+<pre><code>Anna
+Pavlovna Scherer
+Empress Marya
+Fedorovna
+Prince Vasili Kuragin
+Anna Pavlovna
+St. Petersburg
+the prince
+Anna Pavlovna
+Anna Pavlovna
+the prince
+the prince
+the prince
+Prince Vasili
+Anna Pavlovna
+Anna Pavlovna
+the prince
+Wintzingerode
+King of Prussia
+le Vicomte de Mortemart
+Montmorencys
+Rohans
+Abbe Morio
+the Emperor
+the prince
+Prince Vasili
+Dowager Empress Marya Fedorovna
+the baron
+Anna Pavlovna
+the Empress
+the Empress
+Anna Pavlovna&apos;s
+Her Majesty
+Baron
+Funke
+The prince
+Anna
+Pavlovna
+the Empress
+The prince
+Anatole
+the prince
+The prince
+Anna
+Pavlovna
+Anna Pavlovna
+</code></pre><h3 id="2-2-1-BeautifulSoup的find-和findAll"><a href="#2-2-1-BeautifulSoup的find-和findAll" class="headerlink" title="2.2.1 BeautifulSoup的find()和findAll()"></a>2.2.1 BeautifulSoup的find()和findAll()</h3><ul>
+<li>findAll(tag, attributes, recursive, text, limit, keywords)</li>
+<li>find(tag, attributes, recursive, text, keywords)<br>.findAll({“h1”,”h2”,”h3”,”h4”,”h5”,”h6”})<br>.findAll(“span”, {“class”:{“green”, “red”}})</li>
+<li>findAll默认是支持递归查找的（recursive 默认值是True)</li>
+<li>文本参数text 有点不同，它是用标签的文本内容去匹配，而不是用标签的属性。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">namelist = bsObj.findAll(text=<span class="string">'the prince'</span>)</span><br><span class="line">print(len(namelist))</span><br></pre></td></tr></table></figure>
+<pre><code>7
+</code></pre><ul>
+<li>limit:如果你只对网页中获取的前x 项结果感兴趣，就可以设置它。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">allText = bsObj.findAll(id=<span class="string">'text'</span>)</span><br><span class="line">print(allText[<span class="number">0</span>].get_text)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;bound method Tag.get_text of &lt;div id=&quot;text&quot;&gt;
+&quot;&lt;span class=&quot;red&quot;&gt;Well, Prince, so Genoa and Lucca are now just family estates of the
+Buonapartes. But I warn you, if you don&apos;t tell me that this means war,
+if you still try to defend the infamies and horrors perpetrated by
+that Antichrist- I really believe he is Antichrist- I will have
+nothing more to do with you and you are no longer my friend, no longer
+my &apos;faithful slave,&apos; as you call yourself! But how do you do? I see
+I have frightened you- sit down and tell me all the news.&lt;/span&gt;&quot;
+&lt;p&gt;&lt;/p&gt;
+......
+</code></pre><h3 id="2-2-3导航树"><a href="#2-2-3导航树" class="headerlink" title="2.2.3导航树"></a>2.2.3导航树</h3><blockquote>
+<p>通过标签在文档中的位置来查找标签</p>
+</blockquote>
+<h4 id="1处理子标签和其他后代标签"><a href="#1处理子标签和其他后代标签" class="headerlink" title="1处理子标签和其他后代标签"></a>1处理子标签和其他后代标签</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com/pages/page3.html'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> child <span class="keyword">in</span> bsObj.find(<span class="string">'table'</span>, &#123;<span class="string">'id'</span>:<span class="string">'giftList'</span>&#125;).children:</span><br><span class="line">    print(child)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;tr&gt;&lt;th&gt;
+Item Title
+&lt;/th&gt;&lt;th&gt;
+Description
+&lt;/th&gt;&lt;th&gt;
+Cost
+&lt;/th&gt;&lt;th&gt;
+Image
+&lt;/th&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift1&quot;&gt;&lt;td&gt;
+Vegetable Basket
+&lt;/td&gt;&lt;td&gt;
+This vegetable basket is the perfect gift for your health conscious (or overweight) friends!
+&lt;span class=&quot;excitingNote&quot;&gt;Now with super-colorful bell peppers!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$15.00
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img1.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift2&quot;&gt;&lt;td&gt;
+Russian Nesting Dolls
+&lt;/td&gt;&lt;td&gt;
+Hand-painted by trained monkeys, these exquisite dolls are priceless! And by &quot;priceless,&quot; we mean &quot;extremely expensive&quot;! &lt;span class=&quot;excitingNote&quot;&gt;8 entire dolls per set! Octuple the presents!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$10,000.52
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img2.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift3&quot;&gt;&lt;td&gt;
+Fish Painting
+&lt;/td&gt;&lt;td&gt;
+If something seems fishy about this painting, it&apos;s because it&apos;s a fish! &lt;span class=&quot;excitingNote&quot;&gt;Also hand-painted by trained monkeys!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$10,005.00
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img3.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift4&quot;&gt;&lt;td&gt;
+Dead Parrot
+&lt;/td&gt;&lt;td&gt;
+This is an ex-parrot! &lt;span class=&quot;excitingNote&quot;&gt;Or maybe he&apos;s only resting?&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$0.50
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img4.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift5&quot;&gt;&lt;td&gt;
+Mystery Box
+&lt;/td&gt;&lt;td&gt;
+If you love suprises, this mystery box is for you! Do not place on light-colored surfaces. May cause oil staining. &lt;span class=&quot;excitingNote&quot;&gt;Keep your friends guessing!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$1.50
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img6.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+</code></pre><h4 id="2处理兄弟标签"><a href="#2处理兄弟标签" class="headerlink" title="2处理兄弟标签"></a>2处理兄弟标签</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com/pages/page3.html'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> sibling <span class="keyword">in</span> bsObj.find(<span class="string">'table'</span>, &#123;<span class="string">'id'</span>:<span class="string">'giftList'</span>&#125;).tr.next_siblings:</span><br><span class="line">    print(sibling)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;tr class=&quot;gift&quot; id=&quot;gift1&quot;&gt;&lt;td&gt;
+Vegetable Basket
+&lt;/td&gt;&lt;td&gt;
+This vegetable basket is the perfect gift for your health conscious (or overweight) friends!
+&lt;span class=&quot;excitingNote&quot;&gt;Now with super-colorful bell peppers!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$15.00
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img1.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift2&quot;&gt;&lt;td&gt;
+Russian Nesting Dolls
+&lt;/td&gt;&lt;td&gt;
+Hand-painted by trained monkeys, these exquisite dolls are priceless! And by &quot;priceless,&quot; we mean &quot;extremely expensive&quot;! &lt;span class=&quot;excitingNote&quot;&gt;8 entire dolls per set! Octuple the presents!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$10,000.52
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img2.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift3&quot;&gt;&lt;td&gt;
+Fish Painting
+&lt;/td&gt;&lt;td&gt;
+If something seems fishy about this painting, it&apos;s because it&apos;s a fish! &lt;span class=&quot;excitingNote&quot;&gt;Also hand-painted by trained monkeys!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$10,005.00
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img3.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift4&quot;&gt;&lt;td&gt;
+Dead Parrot
+&lt;/td&gt;&lt;td&gt;
+This is an ex-parrot! &lt;span class=&quot;excitingNote&quot;&gt;Or maybe he&apos;s only resting?&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$0.50
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img4.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+
+
+&lt;tr class=&quot;gift&quot; id=&quot;gift5&quot;&gt;&lt;td&gt;
+Mystery Box
+&lt;/td&gt;&lt;td&gt;
+If you love suprises, this mystery box is for you! Do not place on light-colored surfaces. May cause oil staining. &lt;span class=&quot;excitingNote&quot;&gt;Keep your friends guessing!&lt;/span&gt;
+&lt;/td&gt;&lt;td&gt;
+$1.50
+&lt;/td&gt;&lt;td&gt;
+&lt;img src=&quot;../img/gifts/img6.jpg&quot;/&gt;
+&lt;/td&gt;&lt;/tr&gt;
+</code></pre><h4 id="3父标签处理"><a href="#3父标签处理" class="headerlink" title="3父标签处理"></a>3父标签处理</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com/pages/page3.html'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">print(bsObj.find(<span class="string">'img'</span>, &#123;<span class="string">'src'</span>:<span class="string">'../img/gifts/img1.jpg'</span>&#125;).parent.previous_sibling.get_text())</span><br></pre></td></tr></table></figure>
+<pre><code>$15.00
+</code></pre><h2 id="2-3正则表达式"><a href="#2-3正则表达式" class="headerlink" title="2.3正则表达式"></a>2.3正则表达式</h2><p>aa<em><br>a至少重复一次<br>a</em>表示重复任意次a，包括0(cc)*<br>重复任意偶数次c<br><img src="/image/python scraper/1.png" alt=""></p>
+<h2 id="2-4正则表达式和BeautifulSoup"><a href="#2-4正则表达式和BeautifulSoup" class="headerlink" title="2.4正则表达式和BeautifulSoup"></a>2.4正则表达式和BeautifulSoup</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">'http://www.pythonscraping.com/pages/page3.html'</span>)</span><br><span class="line">bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">images = bsObj.findAll(<span class="string">'img'</span>, &#123;<span class="string">'src'</span>:re.compile(<span class="string">'\.\.\/img\/gifts\/img.*\.jpg'</span>)&#125;)</span><br><span class="line"><span class="keyword">for</span> image <span class="keyword">in</span> images:</span><br><span class="line">    print(image[<span class="string">'src'</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>../img/gifts/img1.jpg
+../img/gifts/img2.jpg
+../img/gifts/img3.jpg
+../img/gifts/img4.jpg
+../img/gifts/img6.jpg
+</code></pre><h2 id="2-5获取属性"><a href="#2-5获取属性" class="headerlink" title="2.5获取属性"></a>2.5获取属性</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">myImgTag.attrs[<span class="string">"src"</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="2-6lambda表达式"><a href="#2-6lambda表达式" class="headerlink" title="2.6lambda表达式"></a>2.6lambda表达式</h2><p>BeautifulSoup 允许我们把特定函数类型当作findAll 函数的参数。唯一的限制条件是这些<br>函数必须把一个标签作为参数且返回结果是布尔类型。BeautifulSoup 用这个函数来评估它<br>遇到的每个标签对象，最后把评估结果为“真”的标签保留，把其他标签剔除。</p>
+<h2 id="2-7超越BeautifulSoup"><a href="#2-7超越BeautifulSoup" class="headerlink" title="2.7超越BeautifulSoup"></a>2.7超越BeautifulSoup</h2><p>lxml<br>HTML parser</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/11/第二章-复杂HTML解析/" data-id="cjq1zv30j002sdrihiuo9rzlx" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/11/第三章-开始采集/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    第三章 开始采集
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/11/第一章-初见网络爬虫/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">第一章 初见网络爬虫</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

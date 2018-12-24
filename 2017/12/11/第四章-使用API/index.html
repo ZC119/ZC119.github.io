@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>第四章 使用API | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="4.1API概述http://freegeoip.net/json/50.78.253.58">
+<meta name="keywords" content="python scraper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第四章 使用API">
+<meta property="og:url" content="http://zc119.github.io/2017/12/11/第四章-使用API/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="4.1API概述http://freegeoip.net/json/50.78.253.58">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-12-11T10:57:59.501Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第四章 使用API">
+<meta name="twitter:description" content="4.1API概述http://freegeoip.net/json/50.78.253.58">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-第四章-使用API" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            第四章 使用API
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/11/第四章-使用API/">
+            <time datetime="2017-12-11T10:56:14.000Z" itemprop="datePublished">2017-12-11</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/python-scraper/">python scraper</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/python-scraper/">python scraper</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="4-1API概述"><a href="#4-1API概述" class="headerlink" title="4.1API概述"></a>4.1API概述</h2><p><a href="http://freegeoip.net/json/50.78.253.58" target="_blank" rel="noopener">http://freegeoip.net/json/50.78.253.58</a></p>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;&quot;ip&quot;:&quot;50.78.253.58&quot;,&quot;country_code&quot;:&quot;US&quot;,&quot;country_name&quot;:&quot;美国&quot;,&quot;region_</span><br><span class="line">code&quot;:&quot;MA&quot;,&quot;region_name&quot;:&quot;Massachusetts&quot;,&quot;city&quot;:&quot;Chelmsford&quot;,&quot;zipcode&quot;:&quot;01824&quot;,</span><br><span class="line">&quot;latitude&quot;:42.5879,&quot;longitude&quot;:-71.3498,&quot;metro_code&quot;:&quot;506&quot;,&quot;area_code&quot;:&quot;978&quot;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-2API通用规则"><a href="#4-2API通用规则" class="headerlink" title="4.2API通用规则"></a>4.2API通用规则</h2><h3 id="4-2-1方法"><a href="#4-2-1方法" class="headerlink" title="4.2.1方法"></a>4.2.1方法</h3><p>利用HTTP从网络服务获取信息的方式</p>
+<blockquote>
+<p>GET 输入网址浏览网站</p>
+</blockquote>
+<blockquote>
+<p>POST 填写表单、提交信息</p>
+</blockquote>
+<blockquote>
+<p>PUT 更新对象或信息</p>
+</blockquote>
+<blockquote>
+<p>DELETE 删除对象</p>
+</blockquote>
+<h3 id="4-2-2验证"><a href="#4-2-2验证" class="headerlink" title="4.2.2验证"></a>4.2.2验证</h3><p><a href="http://developer.echonest.com/api/v4/artist/songs?api_key=" target="_blank" rel="noopener">http://developer.echonest.com/api/v4/artist/songs?api_key=</a>&lt;你的api_key&gt;<br>%20&amp;name=guns%20n%27%20roses&amp;format=json&amp;start=0&amp;results=100</p>
+<h2 id="4-3服务器响应"><a href="#4-3服务器响应" class="headerlink" title="4.3服务器响应"></a>4.3服务器响应</h2><ul>
+<li>JSON 比XML 更受欢迎</li>
+</ul>
+<h2 id="4-4Echo-Nest"><a href="#4-4Echo-Nest" class="headerlink" title="4.4Echo Nest"></a>4.4Echo Nest</h2><h2 id="4-5Twitter-API"><a href="#4-5Twitter-API" class="headerlink" title="4.5Twitter API"></a>4.5Twitter API</h2><h2 id="4-6GOOGLE-API"><a href="#4-6GOOGLE-API" class="headerlink" title="4.6GOOGLE API"></a>4.6GOOGLE API</h2><h2 id="4-7解析JSON数据"><a href="#4-7解析JSON数据" class="headerlink" title="4.7解析JSON数据"></a>4.7解析JSON数据</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getCountry</span><span class="params">(ipAddress)</span>:</span></span><br><span class="line">    response = urlopen(<span class="string">'http://freegeoip.net/json/'</span>+ipAddress).read().decode(<span class="string">'utf-8'</span>)</span><br><span class="line">    responseJson = json.loads(response)</span><br><span class="line">    <span class="keyword">return</span> responseJson.get(<span class="string">'country_code'</span>)</span><br><span class="line"></span><br><span class="line">print(getCountry(<span class="string">'50.78.253.58'</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>US
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line">jsonString = <span class="string">'&#123;"arrayOfNums":[&#123;"number":0&#125;, &#123;"number":1&#125;, &#123;"number":2&#125;],"arrayOfFruits":[&#123;"fruit":"apple"&#125;, &#123;"fruit":"banana"&#125;,&#123;"fruit":"pear"&#125;]&#125;'</span></span><br><span class="line">jsonObj = json.loads(jsonString)</span><br><span class="line">print(jsonObj.get(<span class="string">"arrayOfNums"</span>))</span><br><span class="line">print(jsonObj.get(<span class="string">"arrayOfNums"</span>)[<span class="number">1</span>])</span><br><span class="line">print(jsonObj.get(<span class="string">"arrayOfNums"</span>)[<span class="number">1</span>].get(<span class="string">"number"</span>)+</span><br><span class="line">    jsonObj.get(<span class="string">"arrayOfNums"</span>)[<span class="number">2</span>].get(<span class="string">"number"</span>))</span><br><span class="line">print(jsonObj.get(<span class="string">"arrayOfFruits"</span>)[<span class="number">2</span>].get(<span class="string">"fruit"</span>))</span><br></pre></td></tr></table></figure>
+<pre><code>[{&apos;number&apos;: 0}, {&apos;number&apos;: 1}, {&apos;number&apos;: 2}]
+{&apos;number&apos;: 1}
+3
+pear
+</code></pre><h2 id="4-8回到主题"><a href="#4-8回到主题" class="headerlink" title="4.8回到主题"></a>4.8回到主题</h2><ul>
+<li>寻找维基百科贡献者来自哪里</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> datetime</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">random.seed(datetime.datetime.now())</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLinks</span><span class="params">(articleUrl)</span>:</span></span><br><span class="line">    html = urlopen(<span class="string">'http://en.wikipedia.org'</span>+articleUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="keyword">return</span> bsObj.find(<span class="string">'div'</span>,&#123;<span class="string">'id'</span>:<span class="string">'bodyContent'</span>&#125;).findAll(<span class="string">'a'</span>,</span><br><span class="line">                                                        href=re.compile(<span class="string">'^(/wiki)((?!:).)*$'</span>))</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHistoryIPs</span><span class="params">(pageUrl)</span>:</span></span><br><span class="line">    <span class="comment">#编辑历史页面URL链接格式是：</span></span><br><span class="line">    <span class="comment">#http://en.wikipedia.org/w/index/php?title=Title_in_URL&amp;action=history</span></span><br><span class="line">    pageUrl = pageUrl.replace(<span class="string">'/wiki/'</span>,<span class="string">''</span>)</span><br><span class="line">    historyUrl = <span class="string">"http://en.wikipedia.org/w/index.php?title="</span>+pageUrl+<span class="string">'&amp;action=history'</span></span><br><span class="line">    print(<span class="string">'history url is:'</span>+historyUrl)</span><br><span class="line">    html = urlopen(historyUrl)</span><br><span class="line">    bsObj = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    <span class="comment">#找出class属性是'mw-anonuserlink'的链接</span></span><br><span class="line">    <span class="comment">#它们用IP地址代替用户名</span></span><br><span class="line">    ipAddresses = bsObj.findAll(<span class="string">'a'</span>,&#123;<span class="string">'class'</span>:<span class="string">'mw-anonuserlink'</span>&#125;)</span><br><span class="line">    addressList = set()</span><br><span class="line">    <span class="keyword">for</span> ipAddress <span class="keyword">in</span> ipAddresses:</span><br><span class="line">        addressList.add(ipAddress.get_text())</span><br><span class="line">    <span class="keyword">return</span> addressList</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getCountry</span><span class="params">(ipAddress)</span>:</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        response = urlopen(<span class="string">'http://freegeoip.net/json/'</span>+ipAddress).read().decode(<span class="string">'utf-8'</span>)</span><br><span class="line">    <span class="keyword">except</span> HTTPError:</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">None</span></span><br><span class="line">    responseJson = json.loads(response)</span><br><span class="line">    <span class="keyword">return</span> responseJson.get(<span class="string">'country_code'</span>)</span><br><span class="line"></span><br><span class="line">links = getLinks(<span class="string">'/wiki/Python_(programming_language)'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>(len(links) &gt; <span class="number">0</span>):</span><br><span class="line">    <span class="keyword">for</span> link <span class="keyword">in</span> links:</span><br><span class="line">        print(<span class="string">'-----------'</span>)</span><br><span class="line">        historyIPs = getHistoryIPs(link.attrs[<span class="string">'href'</span>])</span><br><span class="line">        <span class="keyword">for</span> historyIP <span class="keyword">in</span> historyIPs:</span><br><span class="line">            country = getCountry(historyIP)</span><br><span class="line">            <span class="keyword">if</span> country <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                print(historyIP+<span class="string">'is from'</span>+country)</span><br><span class="line">    newLink = links[random.randint(<span class="number">0</span>, len(links)<span class="number">-1</span>)].attrs[<span class="string">'href'</span>]</span><br><span class="line">    links = getLinks(newLink)</span><br></pre></td></tr></table></figure>
+<pre><code>-----------
+history url is:http://en.wikipedia.org/w/index.php?title=Programming_paradigm&amp;action=history
+2605:a601:e0c:6300:996d:68c0:fb03:af2cis fromUS
+168.216.130.133is fromUS
+92.115.222.143is fromMD
+113.162.8.249is fromVN
+
+
+
+---------------------------------------------------------------------------
+
+KeyboardInterrupt                         Traceback (most recent call last)
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/11/第四章-使用API/" data-id="cjq1zv30r003hdrihgsi9j5nc" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/11/第五章-存储数据/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    第五章 存储数据
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/11/第三章-开始采集/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">第三章 开始采集</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

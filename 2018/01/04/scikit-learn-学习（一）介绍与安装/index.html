@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>scikit-learn 学习（一）介绍与安装 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="现在开始学习 scikit-learn 库。直接从学习官方文档入手，打算边翻译边码代码。 1. 安装pip 安装 pip install -U scikit-learn">
+<meta name="keywords" content="scikit-learn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scikit-learn 学习（一）介绍与安装">
+<meta property="og:url" content="http://zc119.github.io/2018/01/04/scikit-learn-学习（一）介绍与安装/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="现在开始学习 scikit-learn 库。直接从学习官方文档入手，打算边翻译边码代码。 1. 安装pip 安装 pip install -U scikit-learn">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/1/1.png">
+<meta property="og:updated_time" content="2018-01-05T09:06:21.247Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scikit-learn 学习（一）介绍与安装">
+<meta name="twitter:description" content="现在开始学习 scikit-learn 库。直接从学习官方文档入手，打算边翻译边码代码。 1. 安装pip 安装 pip install -U scikit-learn">
+<meta name="twitter:image" content="http://zc119.github.io/image/scikit-learn/1/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-scikit-learn-学习（一）介绍与安装" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            scikit-learn 学习（一）介绍与安装
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/04/scikit-learn-学习（一）介绍与安装/">
+            <time datetime="2018-01-04T13:05:43.000Z" itemprop="datePublished">2018-01-04</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>现在开始学习 scikit-learn 库。直接从学习<a href="http://scikit-learn.org/stable/tutorial/index.html" target="_blank" rel="noopener">官方文档</a>入手，打算边翻译边码代码。</p>
+<h2 id="1-安装"><a href="#1-安装" class="headerlink" title="1. 安装"></a>1. 安装</h2><p>pip 安装</p>
+<p><code>pip install -U scikit-learn</code></p>
+<a id="more"></a>
+<h2 id="2-介绍"><a href="#2-介绍" class="headerlink" title="2. 介绍"></a>2. 介绍</h2><h3 id="2-1-加载一个样例数据集"><a href="#2-1-加载一个样例数据集" class="headerlink" title="2. 1 加载一个样例数据集"></a>2. 1 加载一个样例数据集</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">digits = datasets.load_digits()</span><br></pre></td></tr></table></figure>
+<p>一个数据集类似字典，存储所有数据和一些相关数据。数据存储在 <code>.data</code> 成员中。是 <code>n_samples, n_features</code> 维的数组。监督学习中的响应变量存储在 <code>.target</code> 中。例如，<code>digits.data</code>给出了数字样例的特征。<code>digits</code> 数据集给出了手写字体数据,每一个数字代表写字过程中的压力.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(digits.data)</span><br></pre></td></tr></table></figure>
+<pre><code>[[  0.   0.   5. ...,   0.   0.   0.]
+ [  0.   0.   0. ...,  10.   0.   0.]
+ [  0.   0.   0. ...,  16.   9.   0.]
+ ..., 
+ [  0.   0.   1. ...,   6.   0.   0.]
+ [  0.   0.   2. ...,  12.   0.   0.]
+ [  0.   0.  10. ...,  12.   1.   0.]]
+</code></pre><p><code>digits.target</code> 给出了真实的数字, 他是我们想要学习的数字图像的响应变量.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">digits.target</span><br></pre></td></tr></table></figure>
+<pre><code>array([0, 1, 2, ..., 8, 9, 8])
+</code></pre><blockquote>
+<p>数据集的维度:<br>虽然原始数据可能有不同维数,但我们总是将数据处理为2维数组, 维数为(n_samples, n_features). 在 <code>digits</code> 中,每一个样本都是(8, 8)的图像,可以通过如下获得</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">digits.images[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>array([[  0.,   0.,   5.,  13.,   9.,   1.,   0.,   0.],
+       [  0.,   0.,  13.,  15.,  10.,  15.,   5.,   0.],
+       [  0.,   3.,  15.,   2.,   0.,  11.,   8.,   0.],
+       [  0.,   4.,  12.,   0.,   0.,   8.,   8.,   0.],
+       [  0.,   5.,   8.,   0.,   0.,   9.,   8.,   0.],
+       [  0.,   4.,  11.,   0.,   1.,  12.,   7.,   0.],
+       [  0.,   2.,  14.,   5.,  10.,  12.,   0.,   0.],
+       [  0.,   0.,   6.,  13.,  10.,   0.,   0.,   0.]])
+</code></pre><p>通过如下代码可见,每一个样本,即数据集中每一行都是将一个数字图像矩阵拉直成向量的结果</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">digits.data[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>array([  0.,   0.,   5.,  13.,   9.,   1.,   0.,   0.,   0.,   0.,  13.,
+        15.,  10.,  15.,   5.,   0.,   0.,   3.,  15.,   2.,   0.,  11.,
+         8.,   0.,   0.,   4.,  12.,   0.,   0.,   8.,   8.,   0.,   0.,
+         5.,   8.,   0.,   0.,   9.,   8.,   0.,   0.,   4.,  11.,   0.,
+         1.,  12.,   7.,   0.,   0.,   2.,  14.,   5.,  10.,  12.,   0.,
+         0.,   0.,   0.,   6.,  13.,  10.,   0.,   0.,   0.])
+</code></pre><h3 id="2-2-学习和预测"><a href="#2-2-学习和预测" class="headerlink" title="2.2 学习和预测"></a>2.2 学习和预测</h3><p>给出10个类别的样本,从数字0到9,我们拟合一个 estimator 来预测类别.</p>
+<p>在 sclkit-learn 中,一个 estimator 是一个 Python 对象,并有方法 <code>fit(X, y)</code> 和 <code>predict(T)</code>.</p>
+<p>一个 estimator 例子是类 <code>sklean.svm.SVC</code> ,它实现了支持向量分类(support vector classification).</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm</span><br><span class="line">clf = svm.SVC(gamma=<span class="number">0.001</span>, C=<span class="number">100.</span>)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>选择模型参数:<br>在这里我们手动设置 <code>gamma</code> 值.通过使用 <code>grid search</code> 与交叉验证可能会自动找到好的参数.<code>gamma</code> 越大,RBF核函数的高斯分布方差越小,峰越窄.C 是惩罚因子.</p>
+</blockquote>
+<p>这里我们把 estimator 实例称为 <code>clf</code> 表示它是一个 classifier.现在拟合模型.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.fit(digits.data[:<span class="number">-1</span>], digits.target[:<span class="number">-1</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>SVC(C=100.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=0.001, kernel=&apos;rbf&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre><p>现在预测最后一个我们没有训练的数据</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.predict(digits.data[<span class="number">-1</span>:])</span><br></pre></td></tr></table></figure>
+<pre><code>array([8])
+</code></pre><p>真实图像如下所示<br><img src="/image/scikit-learn/1/1.png" alt=""></p>
+<p>(真没看出来)</p>
+<h3 id="2-3-模型持久化"><a href="#2-3-模型持久化" class="headerlink" title="2.3 模型持久化"></a>2.3 模型持久化</h3><p>通过使用Python内置的持久化模块–pickle,可以在scikit中存储模型.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line">clf = svm.SVC()</span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">X, y = iris.data, iris.target</span><br><span class="line">clf.fit(X[<span class="number">1</span>:], y[<span class="number">1</span>:])</span><br></pre></td></tr></table></figure>
+<pre><code>SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=&apos;auto&apos;, kernel=&apos;rbf&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pickle</span><br><span class="line">s = pickle.dumps(clf)</span><br><span class="line">clf2 = pickle.loads(s)</span><br><span class="line">clf2.predict(X[<span class="number">0</span>:<span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>array([0])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">y[<span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>0
+</code></pre><p>在具体情形下，可能使用 joblib 代替 pickle。它在大数据上更有效，但是只能从磁盘中读取。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib</span><br><span class="line">joblib.dump(clf, <span class="string">'filename.pkl'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;filename.pkl&apos;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf = joblib.load(<span class="string">'filename.pkl'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-约定"><a href="#2-4-约定" class="headerlink" title="2.4 约定"></a>2.4 约定</h3><p>scikit-learn estimators 遵循一些规则</p>
+<ul>
+<li>类型转换<br>:除非特别指定，输入将被转换成 <code>float64</code></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> random_projection</span><br><span class="line"></span><br><span class="line">rng = np.random.RandomState(<span class="number">0</span>) <span class="comment"># 随机数种子</span></span><br><span class="line">X = rng.rand(<span class="number">10</span>, <span class="number">2000</span>) <span class="comment"># 10*2000的 0~1的随机数</span></span><br><span class="line">X = np.array(X, dtype=<span class="string">'float32'</span>)</span><br><span class="line">X.dtype</span><br></pre></td></tr></table></figure>
+<pre><code>dtype(&apos;float32&apos;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">transformer = random_projection.GaussianRandomProjection()</span><br><span class="line">X_new = transformer.fit_transform(X)</span><br><span class="line">X_new.dtype</span><br></pre></td></tr></table></figure>
+<pre><code>dtype(&apos;float64&apos;)
+</code></pre><p>这里,<code>X</code>是<code>float32</code>,通过<code>fit_tranform(X)&#39;</code>转换到<code>float64</code>.</p>
+<p>回归的 targets 被转换为 <code>float64</code>,分类的 targets 保持不变:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line">iris = datasets.load_iris()</span><br><span class="line">clf = SVC()</span><br><span class="line">clf.fit(iris.data[<span class="number">3</span>:], iris.target[<span class="number">3</span>:])</span><br></pre></td></tr></table></figure>
+<pre><code>SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=&apos;auto&apos;, kernel=&apos;rbf&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list(clf.predict(iris.data[:<span class="number">3</span>]))</span><br></pre></td></tr></table></figure>
+<pre><code>[0, 0, 0]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.fit(iris.data[<span class="number">3</span>:], iris.target_names[iris.target[<span class="number">3</span>:]])</span><br></pre></td></tr></table></figure>
+<pre><code>SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=&apos;auto&apos;, kernel=&apos;rbf&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">list(clf.predict(iris.data[:<span class="number">3</span>]))</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;setosa&apos;, &apos;setosa&apos;, &apos;setosa&apos;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iris.target_names[iris.target[:<span class="number">3</span>]]</span><br></pre></td></tr></table></figure>
+<pre><code>array([&apos;setosa&apos;, &apos;setosa&apos;, &apos;setosa&apos;],
+      dtype=&apos;&lt;U10&apos;)
+</code></pre><p>这里第一个 <code>predict()</code> 返回整数数组因为拟合的是<code>iris.target</code>，第二个<code>predict()</code>返回字符串数组因为拟合的是<code>iris.target_names</code>。</p>
+<ul>
+<li>再拟合并更新参数</li>
+</ul>
+<p>estimator 的超参数可以在建立后通过 <code>sklearn.pipeline.Pipeline.set_params</code>方法更新。重复使用<code>fit()</code>会覆盖之前学习的参数。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"></span><br><span class="line">rng = np.random.RandomState(<span class="number">0</span>)</span><br><span class="line">X = rng.rand(<span class="number">100</span>, <span class="number">10</span>)</span><br><span class="line">y = rng.binomial(<span class="number">1</span>, <span class="number">0.5</span>, <span class="number">100</span>)</span><br><span class="line">X_test = rng.rand(<span class="number">5</span>, <span class="number">10</span>)</span><br><span class="line"></span><br><span class="line">clf = SVC()</span><br><span class="line">clf.set_params(kernel=<span class="string">'linear'</span>).fit(X, y)</span><br></pre></td></tr></table></figure>
+<pre><code>SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=&apos;auto&apos;, kernel=&apos;linear&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.predict(X_test)</span><br></pre></td></tr></table></figure>
+<pre><code>array([1, 0, 1, 1, 0])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.set_params(kernel=<span class="string">'rbf'</span>).fit(X, y)</span><br></pre></td></tr></table></figure>
+<pre><code>SVC(C=1.0, cache_size=200, class_weight=None, coef0=0.0,
+  decision_function_shape=&apos;ovr&apos;, degree=3, gamma=&apos;auto&apos;, kernel=&apos;rbf&apos;,
+  max_iter=-1, probability=False, random_state=None, shrinking=True,
+  tol=0.001, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.predict(X_test)</span><br></pre></td></tr></table></figure>
+<pre><code>array([0, 0, 0, 1, 0])
+</code></pre><p>这里默认的核函数 <code>rbf</code> 首先转换成了 <code>linear</code>，再转换回去。</p>
+<ul>
+<li>多分类和多标签拟合</li>
+</ul>
+<p>当使用多分类器，学习预测任务的表现依赖于 target 数据的格式</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"><span class="keyword">from</span> sklearn.multiclass <span class="keyword">import</span> OneVsRestClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> LabelBinarizer</span><br><span class="line"></span><br><span class="line">X = [[<span class="number">1</span>, <span class="number">2</span>], [<span class="number">2</span>, <span class="number">4</span>], [<span class="number">4</span>, <span class="number">5</span>], [<span class="number">3</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">1</span>]]</span><br><span class="line">y = [<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line">classif = OneVsRestClassifier(estimator=SVC(random_state=<span class="number">0</span>))</span><br><span class="line">classif.fit(X, y).predict(X)</span><br></pre></td></tr></table></figure>
+<pre><code>array([0, 0, 1, 1, 2])
+</code></pre><p>上面的分类器拟合了多分类标签的一维数组并用<code>predict</code> 方法提供了相应的预测。它也可以拟合二维标签数值化的2维数组</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">y = LabelBinarizer().fit_transform(y) <span class="comment"># 用二进制表示</span></span><br><span class="line">print(y)</span><br><span class="line">classif.fit(X, y).predict(X)</span><br></pre></td></tr></table></figure>
+<pre><code>[[1 0 0]
+ [1 0 0]
+ [0 1 0]
+ [0 1 0]
+ [0 0 1]]
+
+
+
+
+
+array([[1, 0, 0],
+       [1, 0, 0],
+       [0, 1, 0],
+       [0, 0, 0],
+       [0, 0, 0]])
+</code></pre><p>注意到第四个和第五个实例返回的都是0，这表明没有和标签拟合。对于多标签的输出，类似的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> MultiLabelBinarizer</span><br><span class="line">y = [[<span class="number">0</span>, <span class="number">1</span>], [<span class="number">0</span>, <span class="number">2</span>], [<span class="number">1</span>, <span class="number">3</span>], [<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>], [<span class="number">2</span>, <span class="number">4</span>]]</span><br><span class="line">y = MultiLabelBinarizer().fit_transform(y)</span><br><span class="line">classif.fit(X, y).predict(X)</span><br></pre></td></tr></table></figure>
+<pre><code>array([[1, 1, 0, 0, 0],
+       [1, 0, 1, 0, 0],
+       [0, 1, 0, 1, 0],
+       [1, 0, 1, 0, 0],
+       [1, 0, 1, 0, 0]])
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/04/scikit-learn-学习（一）介绍与安装/" data-id="cjq1zv30a001wdrihgoef7b1l" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/05/scikit-learn-学习-二-科学数据处理中的统计学习教程-上/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    scikit-learn 学习(二) 科学数据处理中的统计学习教程(上)
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/23/TensorFlow-学习教程（二）Image-Recognition/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorFlow 学习教程（二）Image Recognition</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

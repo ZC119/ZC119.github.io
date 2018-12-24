@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorFlow 实现自编码器及多层感知机 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="4.1 自编码器简介学者研究稀疏编码 (Sparse Coding) 时, 对大量黑白风景照提取许多 16*16 的图像碎片. 几乎所有的图像碎片可以由 64 种正交的边组合得到. 并且所需要的边数量是很少即稀疏的. 声音也如此, 音频有 20 种基本结构, 大多数声音可以由这些基本结构线性组合得到, 这就是特征的稀疏表达. 即用少量基本特征/基本结构 (basis) 组合成更高层抽象的特征. 特">
+<meta name="keywords" content="TensorFlow 实战">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorFlow 实现自编码器及多层感知机">
+<meta property="og:url" content="http://zc119.github.io/2018/01/28/TensorFlow-实现自编码器及多层感知机/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="4.1 自编码器简介学者研究稀疏编码 (Sparse Coding) 时, 对大量黑白风景照提取许多 16*16 的图像碎片. 几乎所有的图像碎片可以由 64 种正交的边组合得到. 并且所需要的边数量是很少即稀疏的. 声音也如此, 音频有 20 种基本结构, 大多数声音可以由这些基本结构线性组合得到, 这就是特征的稀疏表达. 即用少量基本特征/基本结构 (basis) 组合成更高层抽象的特征. 特">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/3/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/3/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/3/3.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/3/output_14_0.png">
+<meta property="og:image" content="http://zc119.github.io/image/tensorflow/3/output_15_1.png">
+<meta property="og:updated_time" content="2018-01-28T02:55:41.561Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorFlow 实现自编码器及多层感知机">
+<meta name="twitter:description" content="4.1 自编码器简介学者研究稀疏编码 (Sparse Coding) 时, 对大量黑白风景照提取许多 16*16 的图像碎片. 几乎所有的图像碎片可以由 64 种正交的边组合得到. 并且所需要的边数量是很少即稀疏的. 声音也如此, 音频有 20 种基本结构, 大多数声音可以由这些基本结构线性组合得到, 这就是特征的稀疏表达. 即用少量基本特征/基本结构 (basis) 组合成更高层抽象的特征. 特">
+<meta name="twitter:image" content="http://zc119.github.io/image/tensorflow/3/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorFlow-实现自编码器及多层感知机" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorFlow 实现自编码器及多层感知机
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/">
+            <time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <h2 id="4-1-自编码器简介"><a href="#4-1-自编码器简介" class="headerlink" title="4.1 自编码器简介"></a>4.1 自编码器简介</h2><p>学者研究稀疏编码 (Sparse Coding) 时, 对大量黑白风景照提取许多 16*16 的图像碎片. 几乎所有的图像碎片可以由 64 种正交的边组合得到. 并且所需要的边数量是很少即稀疏的.<br><img src="/image/tensorflow/3/1.png" alt=""></p>
+<p>声音也如此, 音频有 20 种基本结构, 大多数声音可以由这些基本结构线性组合得到, 这就是特征的稀疏表达. 即用少量基本特征/基本结构 (basis) 组合成更高层抽象的特征.</p>
+<p>特征可以不断抽象为高级特征</p>
+<ul>
+<li>若有很多标注数据, 则可以通过训练 DNN 抽象特征</li>
+<li>若没有标注的数据, 可以使用无监督的自编码器提取特征</li>
+</ul>
+<p>自编码器 (AutoEncoder): 使用自身的高阶特征编码自己<br>自编码器也是神经网络, 特点:</p>
+<ol>
+<li>输入和输出是一致的</li>
+<li>目标是使用稀疏的高阶特征重新组合来重构自己, 而不只是复制像素点</li>
+</ol>
+<p>自编码器输入节点和输出节点数量一致, 通常希望使用少量稀疏的高阶特征重构输入, 而不是单纯地逐个复制输入节点, 故做出以下限制:</p>
+<ol>
+<li>限制隐含层节点数量, 相当于降维. 若给隐含层权重加一个 L1 正则, 则可以控制稀疏程度</li>
+<li>给数据加入噪声, 即 Denoising AutoEncoder (去噪自编码器)</li>
+</ol>
+<p>去噪自编码器常用噪声是加性高斯噪声 (Additive Gaussian Noise, AGN)<br><img src="/image/tensorflow/3/2.png" alt=""></p>
+<p>也可以用 Masking Noise, 即有随机遮挡的噪声. 即置图像中部分像素为 0.</p>
+<h2 id="4-2-TensorFlow-实现自编码器"><a href="#4-2-TensorFlow-实现自编码器" class="headerlink" title="4.2 TensorFlow 实现自编码器"></a>4.2 TensorFlow 实现自编码器</h2><p>开始实现去噪自编码器; Variational AutoEncoder (VAE) 相对复杂, 对中间节点分布有强假设, 拥有额外损失项, 使用 SGVB (Stochastic Gradient Variational Bayes) 算法训练. 在生成模型中发挥巨大作用.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> sklearn.preprocessing <span class="keyword">as</span> prep</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line">%matplotlib inline</span><br></pre></td></tr></table></figure>
+<p>自编码器使用一种参数初始化方法 xavier initialization. 特点是根据某一层网络的输入, 输出节点数量自动调整最合适的分布. 如果深度学习权重初始化太小, 信号在层间传递时逐渐缩小难以产生作用. 初始化太大, 则造成发散. Xaivier 初始化器使权重初始化为合适值. 即 0 均值, 方差 $\frac{2}{n_{in}+n_{out}}$ 的均匀分布或高斯分布. 如</p>
+<p><img src="/image/tensorflow/3/3.png" alt=""></p>
+<p>内的均匀分布</p>
+<p>下面 fan_in 是输入节点数量, fan_out 是输出节点数量</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">xavier_init</span><span class="params">(fan_in, fan_out, constant = <span class="number">1</span>)</span>:</span></span><br><span class="line">    low = -constant * np.sqrt(<span class="number">6.0</span> / (fan_in + fan_out))</span><br><span class="line">    high = constant * np.sqrt(<span class="number">6.0</span> / (fan_in + fan_out))</span><br><span class="line">    <span class="keyword">return</span> tf.random_uniform((fan_in, fan_out), minval=low, maxval=high,</span><br><span class="line">                            dtype=tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_image</span><span class="params">(image)</span>:</span></span><br><span class="line">    plt.imshow(image.reshape([<span class="number">28</span>, <span class="number">28</span>]), interpolation=<span class="string">'nearest'</span>, cmap=<span class="string">'binary'</span>)</span><br></pre></td></tr></table></figure>
+<p>下面定义去噪自编码器的 class. </p>
+<p>先看构建函数. </p>
+<p>transfer_function: 激活函数<br>scale: 高斯噪声系数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AdditiveGaussianNoiseAutoencoder</span><span class="params">(object)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, n_input, n_hidden, transfer_function=tf.nn.softplus,</span></span></span><br><span class="line"><span class="function"><span class="params">                optimizer=tf.train.AdamOptimizer<span class="params">()</span>, scale=<span class="number">0.1</span>)</span>:</span></span><br><span class="line">        self.n_input = n_input</span><br><span class="line">        self.n_hidden = n_hidden</span><br><span class="line">        self.transfer = transfer_function</span><br><span class="line">        self.scale = tf.placeholder(tf.float32)</span><br><span class="line">        self.training_scale = scale</span><br><span class="line">        network_weights = self._initialize_weights()  <span class="comment"># 参数初始化</span></span><br><span class="line">        self.weights = network_weights</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 定义网络结构: 输入 x, 得到隐含层, 然后在输出层进行重建操作</span></span><br><span class="line">        self.x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, self.n_input])</span><br><span class="line">        self.hidden = self.transfer(tf.add(tf.matmul(</span><br><span class="line">                        self.x + scale * tf.random_normal((n_input,)),</span><br><span class="line">                        self.weights[<span class="string">'w1'</span>]), self.weights[<span class="string">'b1'</span>]))</span><br><span class="line">        self.reconstruction = tf.add(tf.matmul(self.hidden,</span><br><span class="line">                                self.weights[<span class="string">'w2'</span>]), self.weights[<span class="string">'b2'</span>])</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 定义损失函数, 直接使用平方误差</span></span><br><span class="line">        <span class="comment"># tf.reduce_mean 不指定第二个参数, 则对所有元素求和</span></span><br><span class="line">        self.cost = <span class="number">0.5</span> * tf.reduce_sum(tf.pow(tf.subtract(</span><br><span class="line">                            self.reconstruction, self.x), <span class="number">2.0</span>))</span><br><span class="line">        self.optimizer = optimizer.minimize(self.cost)</span><br><span class="line">        </span><br><span class="line">        init = tf.global_variables_initializer()</span><br><span class="line">        self.sess = tf.Session()</span><br><span class="line">        self.sess.run(init)</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 参数初始化函数 _initialize_weights</span></span><br><span class="line">    <span class="comment"># xavier 返回一个适合于 softplus 等激活函数的初始权重分布</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_initialize_weights</span><span class="params">(self)</span>:</span></span><br><span class="line">        all_weights = dict()</span><br><span class="line">        all_weights[<span class="string">'w1'</span>] = tf.Variable(xavier_init(self.n_input,</span><br><span class="line">                                                   self.n_hidden))</span><br><span class="line">        all_weights[<span class="string">'b1'</span>] = tf.Variable(tf.zeros([self.n_hidden],</span><br><span class="line">                                                dtype=tf.float32))</span><br><span class="line">        all_weights[<span class="string">'w2'</span>] = tf.Variable(tf.zeros([self.n_hidden,</span><br><span class="line">                                    self.n_input], dtype=tf.float32))</span><br><span class="line">        all_weights[<span class="string">'b2'</span>] = tf.Variable(tf.zeros([self.n_input],</span><br><span class="line">                                                dtype=tf.float32))</span><br><span class="line">        <span class="keyword">return</span> all_weights</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义损失 cost 和执行一步训练的函数 partial_fit</span></span><br><span class="line">    <span class="comment"># 函数里只需要让 Session 执行两个计算图节点: cost 与 optimizer</span></span><br><span class="line">    <span class="comment"># 用一个 batch 数据训练并返回当前 cost</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">partial_fit</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        cost, opt = self.sess.run((self.cost, self.optimizer),</span><br><span class="line">            feed_dict=&#123;self.x: X, self.scale: self.training_scale&#125;)</span><br><span class="line">        <span class="keyword">return</span> cost</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义只求 cost 的函数 calc_total_cost, 用于在测试集评测, 不会出发训练操作</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">calc_total_cost</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.sess.run(self.cost, feed_dict=&#123;self.x: X,</span><br><span class="line">                                        self.scale: self.training_scale&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义 transform 函数, 返回自编码器隐含层的输出结果</span></span><br><span class="line">    <span class="comment"># 提供一个接口来获取抽象后的特征/高阶特征</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">transform</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.sess.run(self.hidden, feed_dict=&#123;self.x: X, </span><br><span class="line">                    self.scale: self.training_scale&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义 generate 函数, 将隐含层结果作为输入</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">generate</span><span class="params">(self, hidden = None)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> hidden <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            hidden = np.random.normal(size=self.n_hidden)</span><br><span class="line">        <span class="keyword">return</span> self.sess.run(self.reconstruction,</span><br><span class="line">                            feed_dict=&#123;self.hidden: hidden&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义 reconstruct 函数, 包括 transform 与 generate</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reconstruct</span><span class="params">(self, X)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.sess.run(self.reconstruction, feed_dict=&#123;self.x: X,</span><br><span class="line">                self.scale: self.training_scale&#125;)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义 getWeights 函数获取隐含层权重 w1</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getWeights</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.sess.run(self.weights[<span class="string">'w1'</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 定义 getBiases 函数获取隐含层偏置 b1</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getBiases</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.sess.run(self.weights[<span class="string">'b1'</span>])</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 可视化原输入图像和加入噪声后的图像</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">plot_noiseimg</span><span class="params">(self, img, show_comp=True)</span>:</span></span><br><span class="line">        self.noise = self.sess.run(tf.random_normal((self.n_input,)))</span><br><span class="line">        noiseimg = img + self.training_scale * self.noise</span><br><span class="line">        plot_image(noiseimg)</span><br><span class="line">        <span class="keyword">if</span> show_comp:</span><br><span class="line">            plt.subplot(<span class="number">121</span>)</span><br><span class="line">            plot_image(img)</span><br><span class="line">            plt.subplot(<span class="number">122</span>)</span><br><span class="line">            plot_image(noiseimg)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sess = tf.Session()</span><br><span class="line"><span class="keyword">with</span> sess:</span><br><span class="line">    print(tf.random_normal((<span class="number">10</span>,)).eval())</span><br></pre></td></tr></table></figure>
+<pre><code>[ 0.63090104  1.07427788 -0.12856543 -0.81171554 -0.38272545  0.12628117
+ -0.89272839 -0.39979595 -0.88008153  0.78596574]
+</code></pre><p>接下来用定义好的 AGN 自编码器在 MNIST 上测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mnist = input_data.read_data_sets(<span class="string">'MNIST_data'</span>, one_hot=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>Extracting MNIST_data/train-images-idx3-ubyte.gz
+Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+</code></pre><p>先定义函数对训练与测试数据进行标准化处理, 0 均值, 方差 1 的分布<br>使用 sklearn.preprossing 的 StandardScaler 类</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">standard_scale</span><span class="params">(X_train, X_test)</span>:</span></span><br><span class="line">    preprocessor = prep.StandardScaler().fit(X_train)</span><br><span class="line">    X_train = preprocessor.transform(X_train)</span><br><span class="line">    X_test = preprocessor.transform(X_test)</span><br><span class="line">    <span class="keyword">return</span> X_train, X_test</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义一个获取随机 block 数据的函数: 取 0 到 len(data) - batch_size 间的随机</span></span><br><span class="line"><span class="comment"># 整数, 以此为起始位置获取 batch size 的数据. 这属于不放回抽样</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">get_random_block_from_data</span><span class="params">(data, batch_size)</span>:</span></span><br><span class="line">    start_index = np.random.randint(<span class="number">0</span>, len(data) - batch_size)</span><br><span class="line">    <span class="keyword">return</span> data[start_index:(start_index + batch_size)]</span><br><span class="line"></span><br><span class="line">X_train, X_test = standard_scale(mnist.train.images, mnist.test.images)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义常用参数, 总训练样本数, 最大训练轮数 (epoch) 为 20, batch_size 为 128</span></span><br><span class="line">n_samples = int(mnist.train.num_examples)</span><br><span class="line">training_epochs = <span class="number">20</span></span><br><span class="line">batch_size = <span class="number">128</span></span><br><span class="line">display_step = <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 选择一副图像</span></span><br><span class="line">image0 = mnist.train.images[<span class="number">5</span>]</span><br></pre></td></tr></table></figure>
+<p>创建一个 AGN 自编码器实例, 定义模型输入节点数 n_input 为 784, 隐含节点数 n_hidden 为 200</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">autoencoder = AdditiveGaussianNoiseAutoencoder(n_input=<span class="number">784</span>,</span><br><span class="line">                        n_hidden=<span class="number">200</span>,</span><br><span class="line">                        transfer_function=tf.nn.softplus,</span><br><span class="line">                        optimizer=tf.train.AdamOptimizer(learning_rate=<span class="number">0.001</span>),</span><br><span class="line">                        scale=<span class="number">0.1</span>)</span><br></pre></td></tr></table></figure>
+<p>下面开始训练, 每一轮 (epoch) 开始时, avg_cost 设为 0</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 可视化原输入图像和加入噪声后的图像</span></span><br><span class="line">autoencoder.plot_noiseimg(image0)</span><br></pre></td></tr></table></figure>
+<p><img src="/image/tensorflow/3/output_14_0.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(training_epochs):</span><br><span class="line">    avg_cost = <span class="number">0</span></span><br><span class="line">    total_batch = int(n_samples / batch_size)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(total_batch):</span><br><span class="line">        batch_xs = get_random_block_from_data(X_train, batch_size)</span><br><span class="line">        cost = autoencoder.partial_fit(batch_xs)</span><br><span class="line">        avg_cost += cost / n_samples * batch_size</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> epoch % display_step == <span class="number">0</span>:</span><br><span class="line">        print(<span class="string">'Epoch:'</span>, <span class="string">'%04d'</span> % (epoch + <span class="number">1</span>), <span class="string">'cost='</span>,</span><br><span class="line">             <span class="string">'&#123;:.9f&#125;'</span>.format(avg_cost))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化重建的图像        </span></span><br><span class="line">reimg = autoencoder.reconstruct(X_train)[<span class="number">5</span>]</span><br><span class="line">plot_image(reimg)</span><br></pre></td></tr></table></figure>
+<pre><code>Epoch: 0001 cost= 18786.078810227
+Epoch: 0002 cost= 12205.832331818
+Epoch: 0003 cost= 11051.004750000
+Epoch: 0004 cost= 10350.548848864
+Epoch: 0005 cost= 10492.156286364
+Epoch: 0006 cost= 9694.406333523
+Epoch: 0007 cost= 9424.200915909
+Epoch: 0008 cost= 9046.114718182
+Epoch: 0009 cost= 8117.241700000
+Epoch: 0010 cost= 9109.549274432
+Epoch: 0011 cost= 9446.577418182
+Epoch: 0012 cost= 8105.107715341
+Epoch: 0013 cost= 9239.229179545
+Epoch: 0014 cost= 8040.010325000
+Epoch: 0015 cost= 8492.325622727
+Epoch: 0016 cost= 7906.005873864
+Epoch: 0017 cost= 8360.524640341
+Epoch: 0018 cost= 7904.247780682
+Epoch: 0019 cost= 8273.081871591
+Epoch: 0020 cost= 8153.579868182
+</code></pre><p><img src="/image/tensorflow/3/output_15_1.png" alt="png"></p>
+<p>最后对训练完的模型测试</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'Total cost: '</span> + str(autoencoder.calc_total_cost(X_test)))</span><br></pre></td></tr></table></figure>
+<pre><code>Total cost: 697430.0
+</code></pre><h2 id="4-3-多层感知机简介"><a href="#4-3-多层感知机简介" class="headerlink" title="4.3 多层感知机简介"></a>4.3 多层感知机简介</h2><ul>
+<li>过拟合: Dropout</li>
+<li>参数调试: 自适应: Adagrad, Adam, Adadelta. 调试: SGD</li>
+<li>梯度消失: Sigmoid 函数在反向传播中梯度值指数减小. ReLU 解决.<br>y = max(0, x).  <blockquote>
+<p>特点  </p>
+<ol>
+<li>单侧抑制</li>
+<li>相对宽阔的兴奋边界</li>
+<li>稀疏激活性</li>
+</ol>
+</blockquote>
+</li>
+</ul>
+<p>当隐含层使用非线性激活函数, 可以学习 XOR 分类问题.  </p>
+<h2 id="4-4-TensorFlow-实现多层感知机"><a href="#4-4-TensorFlow-实现多层感知机" class="headerlink" title="4.4 TensorFlow 实现多层感知机"></a>4.4 TensorFlow 实现多层感知机</h2><p>现在, 给神经网络加上隐含层, 并使用 Dropout, Adagrad, ReLU.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> tensorflow.examples.tutorials.mnist <span class="keyword">import</span> input_data</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">mnist = input_data.read_data_sets(<span class="string">'MNIST_data'</span>, one_hot=<span class="keyword">True</span>)</span><br><span class="line">sess = tf.InteractiveSession()</span><br></pre></td></tr></table></figure>
+<pre><code>Extracting MNIST_data/train-images-idx3-ubyte.gz
+Extracting MNIST_data/train-labels-idx1-ubyte.gz
+Extracting MNIST_data/t10k-images-idx3-ubyte.gz
+Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">in_units = <span class="number">784</span> <span class="comment"># 输入层节点数</span></span><br><span class="line">h1_units = <span class="number">300</span> <span class="comment"># 隐含层节点数</span></span><br><span class="line">W1 = tf.Variable(tf.truncated_normal([in_units, h1_units], stddev=<span class="number">0.1</span>))</span><br><span class="line">b1 = tf.Variable(tf.zeros([h1_units]))</span><br><span class="line">W2 = tf.Variable(tf.zeros([h1_units, <span class="number">10</span>]))</span><br><span class="line">b2 = tf.Variable(tf.zeros([<span class="number">10</span>]))</span><br></pre></td></tr></table></figure>
+<p>接下来定义输入 x 的 placeholder. 在训练与测试时, Dropout 的比率 keep_prob (即保留节点的概率) 不同, 通常训练时小于 1, 预测时等于 1</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = tf.placeholder(tf.float32, [<span class="keyword">None</span>, in_units])</span><br><span class="line">keep_prob = tf.placeholder(tf.float32)</span><br></pre></td></tr></table></figure>
+<p>下面定义模型结构</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hidden1 = tf.nn.relu(tf.matmul(x, W1) + b1)</span><br><span class="line">hidden1_drop = tf.nn.dropout(hidden1, keep_prob)</span><br><span class="line">y = tf.nn.softmax(tf.matmul(hidden1, W2) + b2)</span><br></pre></td></tr></table></figure>
+<p>现在已完成训练神经网络第 1 步, 即 forward 计算. 第 2 步定义损失函数并选择优化器优化 loss</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">y_ = tf.placeholder(tf.float32, [<span class="keyword">None</span>, <span class="number">10</span>])</span><br><span class="line">cross_entropy = tf.reduce_mean(-tf.reduce_sum(y_ * tf.log(y),</span><br><span class="line">                                              reduction_indices=[<span class="number">1</span>]))</span><br><span class="line">train_step = tf.train.AdagradOptimizer(<span class="number">0.3</span>).minimize(cross_entropy)</span><br></pre></td></tr></table></figure>
+<p>第 3 步训练. 采用 3000 个 batch, 每一个 batch 有 100 个样本, 5 轮 (epoch) 迭代</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tf.global_variables_initializer().run()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3000</span>):</span><br><span class="line">    batch_xs, batch_ys = mnist.train.next_batch(<span class="number">100</span>)</span><br><span class="line">    train_step.run(&#123;x: batch_xs, y_: batch_ys, keep_prob: <span class="number">0.75</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>第 4 步, 评测</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">correct_prediction = tf.equal(tf.argmax(y, <span class="number">1</span>), tf.argmax(y_, <span class="number">1</span>))</span><br><span class="line">accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))</span><br><span class="line">print(accuracy.eval(&#123;x: mnist.test.images, y_: mnist.test.labels,</span><br><span class="line">                    keep_prob: <span class="number">1.0</span>&#125;))</span><br></pre></td></tr></table></figure>
+<pre><code>0.9779
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/28/TensorFlow-实现自编码器及多层感知机/" data-id="cjq1zv304001ddrihxzhbzygp" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/28/TensorFlow-实现卷积神经网络/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    TensorFlow 实现卷积神经网络
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/27/Tensorflow-第一步/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorFlow 第一步</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

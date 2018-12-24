@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>scikit-learn 学习（四）处理文本数据 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="本指南旨在一个单独实际任务中探索一些主要的 scikit-learn 工具: 分析关于 20 个不同主题的一个文档集合（新闻组帖子）。 在本节中，我们将会学习如何:  读取文件内容以及所属的类别 提取合适于机器学习的特征向量 训练一个线性模型来进行分类 使用网格搜索策略找到特征提取组件和分类器的最佳配置  教程设置本教程源码在 scikit-learn 文件夹中 scikit-learn/doc/">
+<meta name="keywords" content="scikit-learn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scikit-learn 学习（四）处理文本数据">
+<meta property="og:url" content="http://zc119.github.io/2018/01/07/scikit-learn-学习（四）处理文本数据/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="本指南旨在一个单独实际任务中探索一些主要的 scikit-learn 工具: 分析关于 20 个不同主题的一个文档集合（新闻组帖子）。 在本节中，我们将会学习如何:  读取文件内容以及所属的类别 提取合适于机器学习的特征向量 训练一个线性模型来进行分类 使用网格搜索策略找到特征提取组件和分类器的最佳配置  教程设置本教程源码在 scikit-learn 文件夹中 scikit-learn/doc/">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/5/1.png">
+<meta property="og:updated_time" content="2018-01-07T09:10:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scikit-learn 学习（四）处理文本数据">
+<meta name="twitter:description" content="本指南旨在一个单独实际任务中探索一些主要的 scikit-learn 工具: 分析关于 20 个不同主题的一个文档集合（新闻组帖子）。 在本节中，我们将会学习如何:  读取文件内容以及所属的类别 提取合适于机器学习的特征向量 训练一个线性模型来进行分类 使用网格搜索策略找到特征提取组件和分类器的最佳配置  教程设置本教程源码在 scikit-learn 文件夹中 scikit-learn/doc/">
+<meta name="twitter:image" content="http://zc119.github.io/image/scikit-learn/5/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-scikit-learn-学习（四）处理文本数据" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            scikit-learn 学习（四）处理文本数据
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/07/scikit-learn-学习（四）处理文本数据/">
+            <time datetime="2018-01-07T09:09:35.000Z" itemprop="datePublished">2018-01-07</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>本指南旨在一个单独实际任务中探索一些主要的 scikit-learn 工具: 分析关于 20 个不同主题的一个文档集合（新闻组帖子）。</p>
+<p>在本节中，我们将会学习如何:</p>
+<ul>
+<li>读取文件内容以及所属的类别</li>
+<li>提取合适于机器学习的特征向量</li>
+<li>训练一个线性模型来进行分类</li>
+<li>使用网格搜索策略找到特征提取组件和分类器的最佳配置</li>
+</ul>
+<h2 id="教程设置"><a href="#教程设置" class="headerlink" title="教程设置"></a>教程设置</h2><p>本教程源码在 scikit-learn 文件夹中</p>
+<p><code>scikit-learn/doc/tutorial/text_analytics/</code></p>
+<p>教程文件夹包含下列文件夹：</p>
+<ul>
+<li>*.rst files - 教程文档源文件</li>
+<li>data - 输入数据集的文件夹</li>
+<li>skeletons - 为了练习用的不完整样本</li>
+<li>solutions - 练习的答案</li>
+</ul>
+<h2 id="载入-20-新闻组数据集"><a href="#载入-20-新闻组数据集" class="headerlink" title="载入 20 新闻组数据集"></a>载入 20 新闻组数据集</h2><p>这个数据集包含20000个新闻文档，几乎被平均分成20个不同的组。这是在文本应用中非常流行的数据。</p>
+<p>首先，我们只考虑20个类中的其中4个</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">categories = [<span class="string">'alt.atheism'</span>, <span class="string">'soc.religion.christian'</span>,<span class="string">'comp.graphics'</span>, <span class="string">'sci.med'</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> fetch_20newsgroups</span><br><span class="line">twenty_train = fetch_20newsgroups(subset=<span class="string">'train'</span>, categories=categories, </span><br><span class="line">                                 shuffle=<span class="keyword">True</span>, random_state=<span class="number">42</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twenty_train.target_names</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;alt.atheism&apos;, &apos;comp.graphics&apos;, &apos;sci.med&apos;, &apos;soc.religion.christian&apos;]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">len(twenty_train.data)</span><br></pre></td></tr></table></figure>
+<pre><code>2257
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">len(twenty_train.filenames)</span><br></pre></td></tr></table></figure>
+<pre><code>2257
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(<span class="string">'\n'</span>.join(twenty_train.data[<span class="number">0</span>].split(<span class="string">'\n'</span>)[:<span class="number">3</span>]))</span><br></pre></td></tr></table></figure>
+<pre><code>From: sd345@city.ac.uk (Michael Collier)
+Subject: Converting images to HP LaserJet III?
+Nntp-Posting-Host: hampton
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(twenty_train.target_names[twenty_train.target[<span class="number">0</span>]])</span><br></pre></td></tr></table></figure>
+<pre><code>comp.graphics
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twenty_train.target[:<span class="number">10</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>array([1, 1, 3, 3, 3, 3, 3, 2, 2, 2])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> t <span class="keyword">in</span> twenty_train.target[:<span class="number">10</span>]:</span><br><span class="line">    print(twenty_train.target_names[t])</span><br></pre></td></tr></table></figure>
+<pre><code>comp.graphics
+comp.graphics
+soc.religion.christian
+soc.religion.christian
+soc.religion.christian
+soc.religion.christian
+soc.religion.christian
+sci.med
+sci.med
+sci.med
+</code></pre><h2 id="从文本文件里提取特征"><a href="#从文本文件里提取特征" class="headerlink" title="从文本文件里提取特征"></a>从文本文件里提取特征</h2><p>首先将文本内容转换成数值特征向量。  </p>
+<h3 id="词袋"><a href="#词袋" class="headerlink" title="词袋"></a>词袋</h3><p>最直观的方式是用词袋表示：</p>
+<ol>
+<li>对训练集文档中的每个词映射到一个固定的整数ID</li>
+<li>对每个文档 #i，计算每个词 w 出现的次数并存储在 X[i,j] 中作为特征 #j 的值，其中 j 是单词 w 的ID</li>
+</ol>
+<p>词袋的表示意味着 n_features 是语料库中不同单词的数目，它常常超过 100000.</p>
+<p>如果 n_samples == 10000，以 float32 类型存储在 numpy array 中要求内存 10000 x 100000 x 4 bytes = 4GB in RAM。<br>不过这是稀疏矩阵，scipy.sparse 矩阵存储高维稀疏数据集。</p>
+<h3 id="用-scikit-learn-符号化文本"><a href="#用-scikit-learn-符号化文本" class="headerlink" title="用 scikit-learn 符号化文本"></a>用 scikit-learn 符号化文本</h3><p>文本处理中，符号化和过滤停用词能够建立特征字典，将文档转换为特征向量。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> CountVectorizer</span><br><span class="line">count_vect = CountVectorizer()</span><br><span class="line">X_train_counts = count_vect.fit_transform(twenty_train.data)</span><br><span class="line">X_train_counts.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(2257, 35788)
+</code></pre><p>CountVectorizer 支持 N-grams 的数量或连续特征。一旦拟合，vectorizer 建立了特征下标的字典</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count_vect.vocabulary_.get(<span class="string">'algorithm'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>4690
+</code></pre><p>值是键对应的词汇在整个文档中出现的次数。</p>
+<h3 id="从次数到频率"><a href="#从次数到频率" class="headerlink" title="从次数到频率"></a>从次数到频率</h3><p>将单词在文档中出现的次数除以文档总字数，这个新特征称为 tf。</p>
+<p>最重要的另一个改进是缩减语料库中许多文档中出现的单词的权重，因此比仅在语料库的较小部分中出现的单词更少提供信息。</p>
+<p>这个缩减称为 tf-idf</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.feature_extraction.text <span class="keyword">import</span> TfidfTransformer</span><br><span class="line">tf_transformer = TfidfTransformer(use_idf=<span class="keyword">False</span>).fit(X_train_counts)</span><br><span class="line">X_train_tf = tf_transformer.transform(X_train_counts)</span><br><span class="line">X_train_tf.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(2257, 35788)
+</code></pre><p>可以如下将 fit 与 transform 操作合在一起</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tfidf_transformer = TfidfTransformer()</span><br><span class="line">X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)</span><br><span class="line">X_train_tfidf.shape</span><br></pre></td></tr></table></figure>
+<pre><code>(2257, 35788)
+</code></pre><h2 id="训练分类器"><a href="#训练分类器" class="headerlink" title="训练分类器"></a>训练分类器</h2><p>从朴素贝叶斯分类器开始，它提供了很好的 baseline。scikit-learn 提供了很多这个分类器的变体，其中一个最适合 word counts 的分类器是多项式变体。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.naive_bayes <span class="keyword">import</span> MultinomialNB</span><br><span class="line">clf = MultinomialNB().fit(X_train_tfidf, twenty_train.target)</span><br></pre></td></tr></table></figure>
+<p>为了预测，我们需要和之前一样提取特征。不同的是我们使用 trainform 因为已经在训练集上拟合过了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">docs_new = [<span class="string">'God is love'</span>, <span class="string">'OpenGl on the GPU is fast'</span>]</span><br><span class="line">X_new_counts = count_vect.transform(docs_new)</span><br><span class="line">X_new_tfidf = tfidf_transformer.transform(X_new_counts)</span><br><span class="line"></span><br><span class="line">predicted = clf.predict(X_new_tfidf)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> doc, category <span class="keyword">in</span> zip(docs_new, predicted):</span><br><span class="line">    print(<span class="string">'%r =&gt; %s'</span> % (doc, twenty_train.target_names[category]))</span><br></pre></td></tr></table></figure>
+<pre><code>&apos;God is love&apos; =&gt; soc.religion.christian
+&apos;OpenGl on the GPU is fast&apos; =&gt; comp.graphics
+</code></pre><h3 id="建立流水线"><a href="#建立流水线" class="headerlink" title="建立流水线"></a>建立流水线</h3><p>为了使 vectorizer =&gt; transformer =&gt; classifier 更容易实现,scikit-learn 提供了一个 Pipeline 类如同一个复合分类器</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line">text_clf = Pipeline([(<span class="string">'vect'</span>, CountVectorizer()),</span><br><span class="line">                    (<span class="string">'tfidf'</span>, TfidfTransformer()),</span><br><span class="line">                    (<span class="string">'clf'</span>, MultinomialNB())])</span><br></pre></td></tr></table></figure>
+<p>名字 vect, tfidf, clf 是任意的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text_clf.fit(twenty_train.data, twenty_train.target)</span><br></pre></td></tr></table></figure>
+<pre><code>Pipeline(memory=None,
+     steps=[(&apos;vect&apos;, CountVectorizer(analyzer=&apos;word&apos;, binary=False, decode_error=&apos;strict&apos;,
+        dtype=&lt;class &apos;numpy.int64&apos;&gt;, encoding=&apos;utf-8&apos;, input=&apos;content&apos;,
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), preprocessor=None, stop_words=None,
+        strip...inear_tf=False, use_idf=True)), (&apos;clf&apos;, MultinomialNB(alpha=1.0, class_prior=None, fit_prior=True))])
+</code></pre><h2 id="在测试集上评估"><a href="#在测试集上评估" class="headerlink" title="在测试集上评估"></a>在测试集上评估</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">twenty_test = fetch_20newsgroups(subset=<span class="string">'test'</span>, </span><br><span class="line">                                categories=categories, shuffle=<span class="keyword">True</span>,random_state=<span class="number">42</span>)</span><br><span class="line">docs_test = twenty_test.data</span><br><span class="line">predicted = text_clf.predict(docs_test)</span><br><span class="line">np.mean(predicted == twenty_test.target)</span><br></pre></td></tr></table></figure>
+<pre><code>0.83488681757656458
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">np.mean([<span class="keyword">True</span>, <span class="keyword">False</span>, <span class="keyword">True</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>0.66666666666666663
+</code></pre><p>下面采用 SVM，广泛被视为文本分类最好的算法之一，虽然比朴素贝叶斯速度慢一些。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> SGDClassifier</span><br><span class="line">text_clf = Pipeline([(<span class="string">'vect'</span>, CountVectorizer()),</span><br><span class="line">                    (<span class="string">'tfidf'</span>, TfidfTransformer()), </span><br><span class="line">                    (<span class="string">'clf'</span>, SGDClassifier(loss=<span class="string">'hinge'</span>, penalty=<span class="string">'l2'</span>,</span><br><span class="line">                                         alpha=<span class="number">1e-3</span>, random_state=<span class="number">42</span>,</span><br><span class="line">                                         max_iter=<span class="number">5</span>, tol=<span class="keyword">None</span>))])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">text_clf.fit(twenty_train.data, twenty_train.target)</span><br></pre></td></tr></table></figure>
+<pre><code>Pipeline(memory=None,
+     steps=[(&apos;vect&apos;, CountVectorizer(analyzer=&apos;word&apos;, binary=False, decode_error=&apos;strict&apos;,
+        dtype=&lt;class &apos;numpy.int64&apos;&gt;, encoding=&apos;utf-8&apos;, input=&apos;content&apos;,
+        lowercase=True, max_df=1.0, max_features=None, min_df=1,
+        ngram_range=(1, 1), preprocessor=None, stop_words=None,
+        strip...ty=&apos;l2&apos;, power_t=0.5, random_state=42, shuffle=True,
+       tol=None, verbose=0, warm_start=False))])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">predicted = text_clf.predict(docs_test)</span><br><span class="line">np.mean(predicted == twenty_test.target)</span><br></pre></td></tr></table></figure>
+<pre><code>0.9127829560585885
+</code></pre><p>更多分类信息</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> metrics</span><br><span class="line"><span class="keyword">print</span></span><br></pre></td></tr></table></figure>
+<pre><code>&lt;function print&gt;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print(metrics.classification_report(twenty_test.target, predicted, </span><br><span class="line">                               target_names=twenty_test.target_names))</span><br></pre></td></tr></table></figure>
+<pre><code>                        precision    recall  f1-score   support
+
+           alt.atheism       0.95      0.81      0.87       319
+         comp.graphics       0.88      0.97      0.92       389
+               sci.med       0.94      0.90      0.92       396
+soc.religion.christian       0.90      0.95      0.93       398
+
+           avg / total       0.92      0.91      0.91      1502
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">metrics.confusion_matrix(twenty_test.target, predicted)</span><br></pre></td></tr></table></figure>
+<pre><code>array([[258,  11,  15,  35],
+       [  4, 379,   3,   3],
+       [  5,  33, 355,   3],
+       [  5,  10,   4, 379]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twenty_test.target_names</span><br></pre></td></tr></table></figure>
+<pre><code>[&apos;alt.atheism&apos;, &apos;comp.graphics&apos;, &apos;sci.med&apos;, &apos;soc.religion.christian&apos;]
+</code></pre><p>正如预期的那样，混淆矩阵表明，atheism 和 christian 新闻组的帖子比 graphics 更容易混淆彼此。</p>
+<h2 id="使用网格搜索进行参数调整"><a href="#使用网格搜索进行参数调整" class="headerlink" title="使用网格搜索进行参数调整"></a>使用网格搜索进行参数调整</h2><p>我们已经遇到了一些超参数例如 TfidfTransformer 中的 use_idf。分类器也有许多参数。MultinomialNB 有光滑参数 alpha，SGDClassifier 有惩罚参数 alpha。</p>
+<p>我们尝试线性 SVM 的各种参数</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> GridSearchCV</span><br><span class="line">parameters = &#123;<span class="string">'vect__ngram_range'</span>: [(<span class="number">1</span>, <span class="number">1</span>), (<span class="number">1</span>, <span class="number">2</span>)],</span><br><span class="line">             <span class="string">'tfidf__use_idf'</span>: (<span class="keyword">True</span>, <span class="keyword">False</span>),</span><br><span class="line">             <span class="string">'clf__alpha'</span>: (<span class="number">1e-2</span>, <span class="number">1e-3</span>)&#125;</span><br></pre></td></tr></table></figure>
+<p>用 n_jobs 参数进行多 CPU 并行计算，-1表示使用所有 CPU</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gs_clf = GridSearchCV(text_clf, parameters, n_jobs=<span class="number">-1</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gs_clf = gs_clf.fit(twenty_train.data[:<span class="number">400</span>], twenty_train.target[:<span class="number">400</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">twenty_train.target_names[gs_clf.predict([<span class="string">'God is love'</span>])[<span class="number">0</span>]]</span><br></pre></td></tr></table></figure>
+<pre><code>&apos;soc.religion.christian&apos;
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gs_clf.best_score_</span><br></pre></td></tr></table></figure>
+<pre><code>0.90000000000000002
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> param_name <span class="keyword">in</span> sorted(parameters.keys()):</span><br><span class="line">    print(<span class="string">"%s: %r"</span> % (param_name, gs_clf.best_params_[param_name]))</span><br></pre></td></tr></table></figure>
+<pre><code>clf__alpha: 0.001
+tfidf__use_idf: True
+vect__ngram_range: (1, 1)
+</code></pre><p><code>gs_clf.cv_results_</code> 给出了更多详细细节</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gs_clf.cv_results_</span><br></pre></td></tr></table></figure>
+<pre><code>/root/anaconda3/lib/python3.6/site-packages/sklearn/utils/deprecation.py:122: FutureWarning: You are accessing a training score (&apos;mean_train_score&apos;), which will not be available by default any more in 0.21. If you need training scores, please set return_train_score=True
+  warnings.warn(*warn_args, **warn_kwargs)
+/root/anaconda3/lib/python3.6/site-packages/sklearn/utils/deprecation.py:122: FutureWarning: You are accessing a training score (&apos;split0_train_score&apos;), which will not be available by default any more in 0.21. If you need training scores, please set return_train_score=True
+  warnings.warn(*warn_args, **warn_kwargs)
+/root/anaconda3/lib/python3.6/site-packages/sklearn/utils/deprecation.py:122: FutureWarning: You are accessing a training score (&apos;split1_train_score&apos;), which will not be available by default any more in 0.21. If you need training scores, please set return_train_score=True
+  warnings.warn(*warn_args, **warn_kwargs)
+/root/anaconda3/lib/python3.6/site-packages/sklearn/utils/deprecation.py:122: FutureWarning: You are accessing a training score (&apos;split2_train_score&apos;), which will not be available by default any more in 0.21. If you need training scores, please set return_train_score=True
+  warnings.warn(*warn_args, **warn_kwargs)
+/root/anaconda3/lib/python3.6/site-packages/sklearn/utils/deprecation.py:122: FutureWarning: You are accessing a training score (&apos;std_train_score&apos;), which will not be available by default any more in 0.21. If you need training scores, please set return_train_score=True
+  warnings.warn(*warn_args, **warn_kwargs)
+
+
+
+
+
+{&apos;mean_fit_time&apos;: array([ 0.18523932,  0.78656578,  0.17453774,  0.62395978,  0.20309472,
+         0.53238297,  0.19375126,  0.53748655]),
+ &apos;mean_score_time&apos;: array([ 0.1029977 ,  0.18591921,  0.0927794 ,  0.19722565,  0.08967264,
+         0.12721872,  0.12251814,  0.09853498]),
+ &apos;mean_test_score&apos;: array([ 0.8775,  0.875 ,  0.765 ,  0.78  ,  0.9   ,  0.89  ,  0.7675,  0.81  ]),
+ &apos;mean_train_score&apos;: array([ 0.99374372,  1.        ,  0.94123886,  0.97623272,  1.        ,
+         1.        ,  0.98499057,  1.        ]),
+ &apos;param_clf__alpha&apos;: masked_array(data = [0.01 0.01 0.01 0.01 0.001 0.001 0.001 0.001],
+              mask = [False False False False False False False False],
+        fill_value = ?),
+ &apos;param_tfidf__use_idf&apos;: masked_array(data = [True True False False True True False False],
+              mask = [False False False False False False False False],
+        fill_value = ?),
+ &apos;param_vect__ngram_range&apos;: masked_array(data = [(1, 1) (1, 2) (1, 1) (1, 2) (1, 1) (1, 2) (1, 1) (1, 2)],
+              mask = [False False False False False False False False],
+        fill_value = ?),
+ &apos;params&apos;: [{&apos;clf__alpha&apos;: 0.01,
+   &apos;tfidf__use_idf&apos;: True,
+   &apos;vect__ngram_range&apos;: (1, 1)},
+  {&apos;clf__alpha&apos;: 0.01, &apos;tfidf__use_idf&apos;: True, &apos;vect__ngram_range&apos;: (1, 2)},
+  {&apos;clf__alpha&apos;: 0.01, &apos;tfidf__use_idf&apos;: False, &apos;vect__ngram_range&apos;: (1, 1)},
+  {&apos;clf__alpha&apos;: 0.01, &apos;tfidf__use_idf&apos;: False, &apos;vect__ngram_range&apos;: (1, 2)},
+  {&apos;clf__alpha&apos;: 0.001, &apos;tfidf__use_idf&apos;: True, &apos;vect__ngram_range&apos;: (1, 1)},
+  {&apos;clf__alpha&apos;: 0.001, &apos;tfidf__use_idf&apos;: True, &apos;vect__ngram_range&apos;: (1, 2)},
+  {&apos;clf__alpha&apos;: 0.001, &apos;tfidf__use_idf&apos;: False, &apos;vect__ngram_range&apos;: (1, 1)},
+  {&apos;clf__alpha&apos;: 0.001, &apos;tfidf__use_idf&apos;: False, &apos;vect__ngram_range&apos;: (1, 2)}],
+ &apos;rank_test_score&apos;: array([3, 4, 8, 6, 1, 2, 7, 5], dtype=int32),
+ &apos;split0_test_score&apos;: array([ 0.85820896,  0.8358209 ,  0.69402985,  0.70149254,  0.89552239,
+         0.88059701,  0.76119403,  0.76119403]),
+ &apos;split0_train_score&apos;: array([ 0.9887218 ,  1.        ,  0.93233083,  0.96240602,  1.        ,
+         1.        ,  0.97744361,  1.        ]),
+ &apos;split1_test_score&apos;: array([ 0.87969925,  0.88721805,  0.78947368,  0.82706767,  0.86466165,
+         0.86466165,  0.71428571,  0.80451128]),
+ &apos;split1_train_score&apos;: array([ 0.99625468,  1.        ,  0.95131086,  0.98501873,  1.        ,
+         1.        ,  0.97752809,  1.        ]),
+ &apos;split2_test_score&apos;: array([ 0.89473684,  0.90225564,  0.81203008,  0.81203008,  0.93984962,
+         0.92481203,  0.82706767,  0.86466165]),
+ &apos;split2_train_score&apos;: array([ 0.99625468,  1.        ,  0.94007491,  0.98127341,  1.        ,
+         1.        ,  1.        ,  1.        ]),
+ &apos;std_fit_time&apos;: array([ 0.0227632 ,  0.10502007,  0.03802567,  0.03324145,  0.06592948,
+         0.09490877,  0.06331322,  0.08667628]),
+ &apos;std_score_time&apos;: array([ 0.02282605,  0.03587807,  0.04588374,  0.07623751,  0.02072694,
+         0.01909799,  0.01674307,  0.03193668]),
+ &apos;std_test_score&apos;: array([ 0.01500217,  0.02847571,  0.05120452,  0.05605779,  0.03082125,
+         0.0254174 ,  0.04620275,  0.04244373]),
+ &apos;std_train_score&apos;: array([ 0.00355103,  0.        ,  0.00779216,  0.00989579,  0.        ,
+         0.        ,  0.01061333,  0.        ])}
+</code></pre><h2 id="Exercise"><a href="#Exercise" class="headerlink" title="Exercise"></a><a href="http://sklearn.apachecn.org/en/0.19.0/tutorial/text_analytics/working_with_text_data.html#exercises" target="_blank" rel="noopener">Exercise</a></h2><h2 id="选择合适的-estimator"><a href="#选择合适的-estimator" class="headerlink" title="选择合适的 estimator"></a>选择合适的 estimator</h2><p><img src="/image/scikit-learn/5/1.png" alt=""></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/07/scikit-learn-学习（四）处理文本数据/" data-id="cjq1zv30d0028drihqlz38unt" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/19/scikit-learn-学习-五-广义线性模型/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    scikit-learn 学习 (五) 广义线性模型
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/07/scikit-learn-学习（三）可视化股市结构/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">scikit-learn 学习（三）可视化股市结构</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>10 分钟入门 pandas | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="123import pandas as pdimport numpy as npimport matplotlib.pyplot as plt Object Creation1s = pd.Series([1, 3, 5, np.nan, 6, 8]) 1s 0    1.0 1    3.0 2    5.0 3    NaN 4    6.0 5    8.0 dtype: float64 1">
+<meta name="keywords" content="data analysis">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10 分钟入门 pandas">
+<meta property="og:url" content="http://zc119.github.io/2018/01/20/10-分钟入门-pandas/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="123import pandas as pdimport numpy as npimport matplotlib.pyplot as plt Object Creation1s = pd.Series([1, 3, 5, np.nan, 6, 8]) 1s 0    1.0 1    3.0 2    5.0 3    NaN 4    6.0 5    8.0 dtype: float64 1">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/data/1/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/data/1/2.png">
+<meta property="og:updated_time" content="2018-01-20T11:12:49.138Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="10 分钟入门 pandas">
+<meta name="twitter:description" content="123import pandas as pdimport numpy as npimport matplotlib.pyplot as plt Object Creation1s = pd.Series([1, 3, 5, np.nan, 6, 8]) 1s 0    1.0 1    3.0 2    5.0 3    NaN 4    6.0 5    8.0 dtype: float64 1">
+<meta name="twitter:image" content="http://zc119.github.io/image/data/1/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-10-分钟入门-pandas" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            10 分钟入门 pandas
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/20/10-分钟入门-pandas/">
+            <time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/data-analysis/">data analysis</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/data-analysis/">data analysis</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br></pre></td></tr></table></figure>
+<h2 id="Object-Creation"><a href="#Object-Creation" class="headerlink" title="Object Creation"></a>Object Creation</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = pd.Series([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, np.nan, <span class="number">6</span>, <span class="number">8</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s</span><br></pre></td></tr></table></figure>
+<pre><code>0    1.0
+1    3.0
+2    5.0
+3    NaN
+4    6.0
+5    8.0
+dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dates = pd.date_range(<span class="string">'20130101'</span>, periods=<span class="number">6</span>)</span><br><span class="line">dates</span><br></pre></td></tr></table></figure>
+<pre><code>DatetimeIndex([&apos;2013-01-01&apos;, &apos;2013-01-02&apos;, &apos;2013-01-03&apos;, &apos;2013-01-04&apos;,
+               &apos;2013-01-05&apos;, &apos;2013-01-06&apos;],
+              dtype=&apos;datetime64[ns]&apos;, freq=&apos;D&apos;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">6</span>, <span class="number">4</span>), index=dates, columns=list(<span class="string">'ABCD'</span>))</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">df2 = pd.DataFrame(&#123;<span class="string">'A'</span>:<span class="number">1</span>, </span><br><span class="line">                   <span class="string">'B'</span>:pd.Timestamp(<span class="string">'20130102'</span>),</span><br><span class="line">                   <span class="string">'C'</span>:pd.Series(<span class="number">1</span>, index=list(range(<span class="number">4</span>)), dtype=<span class="string">'float32'</span>),</span><br><span class="line">                   <span class="string">'D'</span>:np.array([<span class="number">3</span>] * <span class="number">4</span>, dtype=<span class="string">'int32'</span>),</span><br><span class="line">                   <span class="string">'E'</span>:pd.Categorical([<span class="string">'test'</span>, <span class="string">'train'</span>, <span class="string">'test'</span>, <span class="string">'train'</span>]),</span><br><span class="line">                   <span class="string">'F'</span>:<span class="string">'foo'</span>&#125;)</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>      <th>F</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>1</td><br>      <td>2013-01-02</td><br>      <td>1.0</td><br>      <td>3</td><br>      <td>test</td><br>      <td>foo</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>1</td><br>      <td>2013-01-02</td><br>      <td>1.0</td><br>      <td>3</td><br>      <td>train</td><br>      <td>foo</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>1</td><br>      <td>2013-01-02</td><br>      <td>1.0</td><br>      <td>3</td><br>      <td>test</td><br>      <td>foo</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>1</td><br>      <td>2013-01-02</td><br>      <td>1.0</td><br>      <td>3</td><br>      <td>train</td><br>      <td>foo</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2.dtypes</span><br></pre></td></tr></table></figure>
+<pre><code>A             int64
+B    datetime64[ns]
+C           float32
+D             int32
+E          category
+F            object
+dtype: object
+</code></pre><h2 id="Viewing-Data"><a href="#Viewing-Data" class="headerlink" title="Viewing Data"></a>Viewing Data</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.head()</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.tail(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.index</span><br></pre></td></tr></table></figure>
+<pre><code>DatetimeIndex([&apos;2013-01-01&apos;, &apos;2013-01-02&apos;, &apos;2013-01-03&apos;, &apos;2013-01-04&apos;,
+               &apos;2013-01-05&apos;, &apos;2013-01-06&apos;],
+              dtype=&apos;datetime64[ns]&apos;, freq=&apos;D&apos;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.columns</span><br></pre></td></tr></table></figure>
+<pre><code>Index([&apos;A&apos;, &apos;B&apos;, &apos;C&apos;, &apos;D&apos;], dtype=&apos;object&apos;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.values</span><br></pre></td></tr></table></figure>
+<pre><code>array([[ 0.57991721, -1.4064839 ,  0.58429379, -0.9391043 ],
+       [ 0.53322459, -0.23365533, -0.08499029,  0.08471479],
+       [ 0.05603044, -1.61856825,  1.71557651,  1.33503104],
+       [ 0.95023069, -0.37093663, -0.74721488,  0.11169788],
+       [ 1.09559791,  0.5776104 ,  0.01660636, -1.25176432],
+       [ 0.73087463, -0.1637906 , -0.64266787,  1.41997504]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.describe()</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>count</th><br>      <td>6.000000</td><br>      <td>6.000000</td><br>      <td>6.000000</td><br>      <td>6.000000</td><br>    </tr><br>    <tr><br>      <th>mean</th><br>      <td>0.657646</td><br>      <td>-0.535971</td><br>      <td>0.140267</td><br>      <td>0.126758</td><br>    </tr><br>    <tr><br>      <th>std</th><br>      <td>0.365030</td><br>      <td>0.827892</td><br>      <td>0.910539</td><br>      <td>1.110920</td><br>    </tr><br>    <tr><br>      <th>min</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>-0.747215</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>25%</th><br>      <td>0.544898</td><br>      <td>-1.147597</td><br>      <td>-0.503248</td><br>      <td>-0.683150</td><br>    </tr><br>    <tr><br>      <th>50%</th><br>      <td>0.655396</td><br>      <td>-0.302296</td><br>      <td>-0.034192</td><br>      <td>0.098206</td><br>    </tr><br>    <tr><br>      <th>75%</th><br>      <td>0.895392</td><br>      <td>-0.181257</td><br>      <td>0.442372</td><br>      <td>1.029198</td><br>    </tr><br>    <tr><br>      <th>max</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>1.715577</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.T</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>2013-01-01 00:00:00</th><br>      <th>2013-01-02 00:00:00</th><br>      <th>2013-01-03 00:00:00</th><br>      <th>2013-01-04 00:00:00</th><br>      <th>2013-01-05 00:00:00</th><br>      <th>2013-01-06 00:00:00</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>A</th><br>      <td>0.579917</td><br>      <td>0.533225</td><br>      <td>0.056030</td><br>      <td>0.950231</td><br>      <td>1.095598</td><br>      <td>0.730875</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>-1.406484</td><br>      <td>-0.233655</td><br>      <td>-1.618568</td><br>      <td>-0.370937</td><br>      <td>0.577610</td><br>      <td>-0.163791</td><br>    </tr><br>    <tr><br>      <th>C</th><br>      <td>0.584294</td><br>      <td>-0.084990</td><br>      <td>1.715577</td><br>      <td>-0.747215</td><br>      <td>0.016606</td><br>      <td>-0.642668</td><br>    </tr><br>    <tr><br>      <th>D</th><br>      <td>-0.939104</td><br>      <td>0.084715</td><br>      <td>1.335031</td><br>      <td>0.111698</td><br>      <td>-1.251764</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sort_index(axis=<span class="number">1</span>, ascending=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>D</th><br>      <th>C</th><br>      <th>B</th><br>      <th>A</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>-0.939104</td><br>      <td>0.584294</td><br>      <td>-1.406484</td><br>      <td>0.579917</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.084715</td><br>      <td>-0.084990</td><br>      <td>-0.233655</td><br>      <td>0.533225</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>1.335031</td><br>      <td>1.715577</td><br>      <td>-1.618568</td><br>      <td>0.056030</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.111698</td><br>      <td>-0.747215</td><br>      <td>-0.370937</td><br>      <td>0.950231</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>-1.251764</td><br>      <td>0.016606</td><br>      <td>0.577610</td><br>      <td>1.095598</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>1.419975</td><br>      <td>-0.642668</td><br>      <td>-0.163791</td><br>      <td>0.730875</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sort_index(axis=<span class="number">0</span>, ascending=<span class="keyword">False</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sort_values(by=<span class="string">'B'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h2 id="Selection"><a href="#Selection" class="headerlink" title="Selection"></a>Selection</h2><p>虽然用于选择和设置的标准Python / Numpy表达式非常直观，可用于交互式工作，但对于生产代码，我们推荐优化的 pandas 数据访问方法 .at，.iat，.loc，.iloc和.ix</p>
+<h3 id="Getting"><a href="#Getting" class="headerlink" title="Getting"></a>Getting</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'A'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>2013-01-01    0.579917
+2013-01-02    0.533225
+2013-01-03    0.056030
+2013-01-04    0.950231
+2013-01-05    1.095598
+2013-01-06    0.730875
+Freq: D, Name: A, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="number">0</span>:<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'20130102'</span>:<span class="string">'20130104'</span>]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h3 id="Selection-by-Label"><a href="#Selection-by-Label" class="headerlink" title="Selection by Label"></a>Selection by Label</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[dates[<span class="number">0</span>]]</span><br></pre></td></tr></table></figure>
+<pre><code>A    0.579917
+B   -1.406484
+C    0.584294
+D   -0.939104
+Name: 2013-01-01 00:00:00, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, [<span class="string">'A'</span>, <span class="string">'B'</span>]]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">'20130102'</span>:<span class="string">'20130104'</span>, [<span class="string">'A'</span>, <span class="string">'B'</span>]]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[<span class="string">'20130102'</span>, [<span class="string">'A'</span>, <span class="string">'B'</span>]]</span><br></pre></td></tr></table></figure>
+<pre><code>A    0.533225
+B   -0.233655
+Name: 2013-01-02 00:00:00, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[dates[<span class="number">0</span>], <span class="string">'A'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>0.57991721046639744
+</code></pre><p>For getting fast access to a scalar (equiv to the prior method)</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.at[dates[<span class="number">0</span>], <span class="string">'A'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>0.57991721046639744
+</code></pre><h3 id="Selection-by-Position"><a href="#Selection-by-Position" class="headerlink" title="Selection by Position"></a>Selection by Position</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>A    0.950231
+B   -0.370937
+C   -0.747215
+D    0.111698
+Name: 2013-01-04 00:00:00, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[<span class="number">3</span>:<span class="number">5</span>, <span class="number">0</span>:<span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[[<span class="number">1</span>, <span class="number">2</span>, <span class="number">4</span>], [<span class="number">0</span>, <span class="number">2</span>]]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>C</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.084990</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>1.715577</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.016606</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[<span class="number">1</span>:<span class="number">3</span>, :]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[:, <span class="number">1</span>:<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>B</th><br>      <th>C</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>0.577610</td><br>      <td>0.016606</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iloc[<span class="number">1</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>-0.2336553320711513
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iat[<span class="number">1</span>, <span class="number">1</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>-0.2336553320711513
+</code></pre><h3 id="Boolean-Indexing"><a href="#Boolean-Indexing" class="headerlink" title="Boolean Indexing"></a>Boolean Indexing</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[df.B &gt; <span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.57761</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[df &gt; <span class="number">0</span>]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>NaN</td><br>      <td>0.584294</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>NaN</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.57761</td><br>      <td>0.016606</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df2 = df.copy()</span><br><span class="line">df2[<span class="string">'E'</span>] = [<span class="string">'one'</span>, <span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>, <span class="string">'four'</span>, <span class="string">'three'</span>]</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.579917</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>      <td>one</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>      <td>one</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>      <td>two</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>      <td>three</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>      <td>four</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>      <td>three</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df2[df2[<span class="string">'E'</span>].isin([<span class="string">'two'</span>, <span class="string">'four'</span>])]</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>      <td>two</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>      <td>four</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h3 id="Setting"><a href="#Setting" class="headerlink" title="Setting"></a>Setting</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s1 = pd.Series([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>], index=pd.date_range(<span class="string">'20130102'</span>, periods=<span class="number">6</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s1</span><br></pre></td></tr></table></figure>
+<pre><code>2013-01-02    1
+2013-01-03    2
+2013-01-04    3
+2013-01-05    4
+2013-01-06    5
+2013-01-07    6
+Freq: D, dtype: int64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.at[dates[<span class="number">0</span>], <span class="string">'A'</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>-1.406484</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.iat[<span class="number">0</span>, <span class="number">1</span>] = <span class="number">0</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>-0.939104</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>0.084715</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>1.335031</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>0.111698</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>-1.251764</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>1.419975</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.loc[:, <span class="string">'D'</span>] = np.array([<span class="number">5</span>] * len(df))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df2 = df.copy()</span><br><span class="line">df2[df2 &gt; <span class="number">0</span>] = -df2</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>-0.584294</td><br>      <td>-5</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>-0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>-5</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>-0.056030</td><br>      <td>-1.618568</td><br>      <td>-1.715577</td><br>      <td>-5</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>-0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>-5</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>-1.095598</td><br>      <td>-0.577610</td><br>      <td>-0.016606</td><br>      <td>-5</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>-0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>-5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h2 id="Missing-Data"><a href="#Missing-Data" class="headerlink" title="Missing Data"></a>Missing Data</h2><p>pandas primarily uses the value np.nan to represent missing data. It is by default not included in computations. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df1 = df.reindex(index=dates[<span class="number">0</span>:<span class="number">4</span>],columns=list(df.columns) + [<span class="string">'E'</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df1</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>5</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>5</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>5</td><br>      <td>NaN</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df1.loc[dates[<span class="number">0</span>]:dates[<span class="number">1</span>], <span class="string">'E'</span>] = <span class="number">1</span></span><br><span class="line">df1</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>      <td>1.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>5</td><br>      <td>1.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>5</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>5</td><br>      <td>NaN</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<p>To drop any rows that have missing data.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df1.dropna(how=<span class="string">'any'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>      <td>1.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>5</td><br>      <td>1.0</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<p>Filling missing data</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df1.fillna(value=<span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>      <td>1.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>5</td><br>      <td>1.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>5</td><br>      <td>5.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>5</td><br>      <td>5.0</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.isna(df1)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>True</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>False</td><br>      <td>True</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h2 id="Operations"><a href="#Operations" class="headerlink" title="Operations"></a>Operations</h2><h3 id="Stats"><a href="#Stats" class="headerlink" title="Stats"></a>Stats</h3><p>Operations in general exclude missing data.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.mean()</span><br></pre></td></tr></table></figure>
+<pre><code>A    0.560993
+B   -0.301557
+C    0.140267
+D    5.000000
+dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.mean(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>2013-01-01    1.396073
+2013-01-02    1.303645
+2013-01-03    1.288260
+2013-01-04    1.208020
+2013-01-05    1.672454
+2013-01-06    1.231104
+Freq: D, dtype: float64
+</code></pre><p>shift() 平移</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = pd.Series([<span class="number">1</span>, <span class="number">3</span>, <span class="number">5</span>, np.nan, <span class="number">6</span>, <span class="number">8</span>], index=dates).shift(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s</span><br></pre></td></tr></table></figure>
+<pre><code>2013-01-01    NaN
+2013-01-02    NaN
+2013-01-03    1.0
+2013-01-04    3.0
+2013-01-05    5.0
+2013-01-06    NaN
+Freq: D, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sub(s, axis=<span class="string">'index'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>-0.943970</td><br>      <td>-2.618568</td><br>      <td>0.715577</td><br>      <td>4.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>-2.049769</td><br>      <td>-3.370937</td><br>      <td>-3.747215</td><br>      <td>2.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>-3.904402</td><br>      <td>-4.422390</td><br>      <td>-4.983394</td><br>      <td>0.0</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>NaN</td><br>      <td>NaN</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h3 id="Apply"><a href="#Apply" class="headerlink" title="Apply"></a>Apply</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.apply(np.cumsum)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>0.499304</td><br>      <td>10</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.589255</td><br>      <td>-1.852224</td><br>      <td>2.214880</td><br>      <td>15</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>1.539486</td><br>      <td>-2.223160</td><br>      <td>1.467665</td><br>      <td>20</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>2.635084</td><br>      <td>-1.645550</td><br>      <td>1.484271</td><br>      <td>25</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>3.365958</td><br>      <td>-1.809340</td><br>      <td>0.841604</td><br>      <td>30</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2013-01-01</th><br>      <td>0.000000</td><br>      <td>0.000000</td><br>      <td>0.584294</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-02</th><br>      <td>0.533225</td><br>      <td>-0.233655</td><br>      <td>-0.084990</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-03</th><br>      <td>0.056030</td><br>      <td>-1.618568</td><br>      <td>1.715577</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-04</th><br>      <td>0.950231</td><br>      <td>-0.370937</td><br>      <td>-0.747215</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-05</th><br>      <td>1.095598</td><br>      <td>0.577610</td><br>      <td>0.016606</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2013-01-06</th><br>      <td>0.730875</td><br>      <td>-0.163791</td><br>      <td>-0.642668</td><br>      <td>5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.apply(<span class="keyword">lambda</span> x: x.max() - x.min())</span><br></pre></td></tr></table></figure>
+<pre><code>A    1.095598
+B    2.196179
+C    2.462791
+D    0.000000
+dtype: float64
+</code></pre><h3 id="Histogramming"><a href="#Histogramming" class="headerlink" title="Histogramming"></a>Histogramming</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = pd.Series(np.random.randint(<span class="number">0</span>, <span class="number">7</span>, size=<span class="number">10</span>))</span><br><span class="line">s</span><br></pre></td></tr></table></figure>
+<pre><code>0    3
+1    0
+2    4
+3    5
+4    5
+5    5
+6    3
+7    3
+8    1
+9    0
+dtype: int64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.value_counts()</span><br></pre></td></tr></table></figure>
+<pre><code>5    3
+3    3
+0    2
+4    1
+1    1
+dtype: int64
+</code></pre><h3 id="String-Methods"><a href="#String-Methods" class="headerlink" title="String Methods"></a>String Methods</h3><p>Series is equipped with a set of string processing methods in the str attribute that make it easy to operate on each element of the array, as in the code snippet below. Note that pattern-matching in str generally uses regular expressions by default (and in some cases always uses them). </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = pd.Series([<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'Aaba'</span>, <span class="string">'Baca'</span>, np.nan, <span class="string">'CABA'</span>, <span class="string">'dog'</span>, <span class="string">'cat'</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s</span><br></pre></td></tr></table></figure>
+<pre><code>0       A
+1       B
+2       C
+3    Aaba
+4    Baca
+5     NaN
+6    CABA
+7     dog
+8     cat
+dtype: object
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s.str.lower()</span><br></pre></td></tr></table></figure>
+<pre><code>0       a
+1       b
+2       c
+3    aaba
+4    baca
+5     NaN
+6    caba
+7     dog
+8     cat
+dtype: object
+</code></pre><h2 id="Merge"><a href="#Merge" class="headerlink" title="Merge"></a>Merge</h2><h3 id="Concat"><a href="#Concat" class="headerlink" title="Concat"></a>Concat</h3><p>pandas provides various facilities for easily combining together Series, DataFrame, and Panel objects with various kinds of set logic for the indexes and relational algebra functionality in the case of join / merge-type operations.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">10</span>, <span class="number">4</span>))</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>0</th><br>      <th>1</th><br>      <th>2</th><br>      <th>3</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>-0.172216</td><br>      <td>0.453155</td><br>      <td>-0.808231</td><br>      <td>-0.254001</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>0.547393</td><br>      <td>0.444988</td><br>      <td>0.664029</td><br>      <td>0.813927</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>-0.084124</td><br>      <td>-1.126096</td><br>      <td>-0.546502</td><br>      <td>-1.146282</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>-0.075791</td><br>      <td>1.405128</td><br>      <td>-0.976699</td><br>      <td>1.474235</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>-0.370291</td><br>      <td>-0.583410</td><br>      <td>0.635501</td><br>      <td>0.165744</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>1.027374</td><br>      <td>-0.303083</td><br>      <td>0.514810</td><br>      <td>0.048940</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>0.177177</td><br>      <td>1.875743</td><br>      <td>-0.406614</td><br>      <td>-0.413840</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>-0.556008</td><br>      <td>-0.153022</td><br>      <td>0.994405</td><br>      <td>0.798631</td><br>    </tr><br>    <tr><br>      <th>8</th><br>      <td>1.180055</td><br>      <td>-0.028602</td><br>      <td>-0.910111</td><br>      <td>1.187928</td><br>    </tr><br>    <tr><br>      <th>9</th><br>      <td>0.289311</td><br>      <td>-0.645251</td><br>      <td>-0.075802</td><br>      <td>-0.005709</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pieces = [df[:<span class="number">3</span>], df[<span class="number">3</span>:<span class="number">7</span>], df[<span class="number">7</span>:]]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pieces</span><br></pre></td></tr></table></figure>
+<pre><code>[          0         1         2         3
+ 0 -0.172216  0.453155 -0.808231 -0.254001
+ 1  0.547393  0.444988  0.664029  0.813927
+ 2 -0.084124 -1.126096 -0.546502 -1.146282,
+           0         1         2         3
+ 3 -0.075791  1.405128 -0.976699  1.474235
+ 4 -0.370291 -0.583410  0.635501  0.165744
+ 5  1.027374 -0.303083  0.514810  0.048940
+ 6  0.177177  1.875743 -0.406614 -0.413840,
+           0         1         2         3
+ 7 -0.556008 -0.153022  0.994405  0.798631
+ 8  1.180055 -0.028602 -0.910111  1.187928
+ 9  0.289311 -0.645251 -0.075802 -0.005709]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.concat(pieces)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>0</th><br>      <th>1</th><br>      <th>2</th><br>      <th>3</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>-0.172216</td><br>      <td>0.453155</td><br>      <td>-0.808231</td><br>      <td>-0.254001</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>0.547393</td><br>      <td>0.444988</td><br>      <td>0.664029</td><br>      <td>0.813927</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>-0.084124</td><br>      <td>-1.126096</td><br>      <td>-0.546502</td><br>      <td>-1.146282</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>-0.075791</td><br>      <td>1.405128</td><br>      <td>-0.976699</td><br>      <td>1.474235</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>-0.370291</td><br>      <td>-0.583410</td><br>      <td>0.635501</td><br>      <td>0.165744</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>1.027374</td><br>      <td>-0.303083</td><br>      <td>0.514810</td><br>      <td>0.048940</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>0.177177</td><br>      <td>1.875743</td><br>      <td>-0.406614</td><br>      <td>-0.413840</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>-0.556008</td><br>      <td>-0.153022</td><br>      <td>0.994405</td><br>      <td>0.798631</td><br>    </tr><br>    <tr><br>      <th>8</th><br>      <td>1.180055</td><br>      <td>-0.028602</td><br>      <td>-0.910111</td><br>      <td>1.187928</td><br>    </tr><br>    <tr><br>      <th>9</th><br>      <td>0.289311</td><br>      <td>-0.645251</td><br>      <td>-0.075802</td><br>      <td>-0.005709</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h3 id="Join"><a href="#Join" class="headerlink" title="Join"></a>Join</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">left = pd.DataFrame(&#123;<span class="string">'key'</span>:[<span class="string">'foo'</span>, <span class="string">'foo'</span>], <span class="string">'lval'</span>:[<span class="number">1</span>, <span class="number">2</span>]&#125;)</span><br><span class="line">right = pd.DataFrame(&#123;<span class="string">'key'</span>:[<span class="string">'foo'</span>, <span class="string">'foo'</span>], <span class="string">'rval'</span>:[<span class="number">4</span>, <span class="number">5</span>]&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">left</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>key</th><br>      <th>lval</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>1</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>foo</td><br>      <td>2</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">right</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>key</th><br>      <th>rval</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>4</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>foo</td><br>      <td>5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.merge(left, right, on=<span class="string">'key'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>key</th><br>      <th>lval</th><br>      <th>rval</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>1</td><br>      <td>4</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>foo</td><br>      <td>1</td><br>      <td>5</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>foo</td><br>      <td>2</td><br>      <td>4</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>foo</td><br>      <td>2</td><br>      <td>5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">left = pd.DataFrame(&#123;<span class="string">'key'</span>:[<span class="string">'foo'</span>, <span class="string">'bar'</span>], <span class="string">'lval'</span>:[<span class="number">1</span>, <span class="number">2</span>]&#125;)</span><br><span class="line">right = pd.DataFrame(&#123;<span class="string">'key'</span>:[<span class="string">'foo'</span>, <span class="string">'bar'</span>], <span class="string">'rval'</span>:[<span class="number">4</span>, <span class="number">5</span>]&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">left</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>key</th><br>      <th>lval</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>1</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>bar</td><br>      <td>2</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">right</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>key</th><br>      <th>rval</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>4</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>bar</td><br>      <td>5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.merge(left, right, on=<span class="string">'key'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>key</th><br>      <th>lval</th><br>      <th>rval</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>1</td><br>      <td>4</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>bar</td><br>      <td>2</td><br>      <td>5</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h3 id="Append"><a href="#Append" class="headerlink" title="Append"></a>Append</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">8</span>, <span class="number">4</span>), columns=[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>])</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>-0.010348</td><br>      <td>-1.092837</td><br>      <td>-1.243382</td><br>      <td>-2.109873</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>-1.242149</td><br>      <td>-0.109368</td><br>      <td>-1.450247</td><br>      <td>0.707071</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>-1.026163</td><br>      <td>1.243612</td><br>      <td>0.775890</td><br>      <td>-0.781992</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>0.163503</td><br>      <td>1.237187</td><br>      <td>0.835743</td><br>      <td>0.957505</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>1.499561</td><br>      <td>-0.699390</td><br>      <td>0.617964</td><br>      <td>-1.165497</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>-0.777156</td><br>      <td>0.182997</td><br>      <td>0.940488</td><br>      <td>1.112792</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>-0.344106</td><br>      <td>-1.180250</td><br>      <td>0.199295</td><br>      <td>1.158537</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>-0.806075</td><br>      <td>1.524947</td><br>      <td>1.048141</td><br>      <td>0.532292</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s = df.iloc[<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s</span><br></pre></td></tr></table></figure>
+<pre><code>A    0.163503
+B    1.237187
+C    0.835743
+D    0.957505
+Name: 3, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.append(s, ignore_index=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>-0.010348</td><br>      <td>-1.092837</td><br>      <td>-1.243382</td><br>      <td>-2.109873</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>-1.242149</td><br>      <td>-0.109368</td><br>      <td>-1.450247</td><br>      <td>0.707071</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>-1.026163</td><br>      <td>1.243612</td><br>      <td>0.775890</td><br>      <td>-0.781992</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>0.163503</td><br>      <td>1.237187</td><br>      <td>0.835743</td><br>      <td>0.957505</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>1.499561</td><br>      <td>-0.699390</td><br>      <td>0.617964</td><br>      <td>-1.165497</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>-0.777156</td><br>      <td>0.182997</td><br>      <td>0.940488</td><br>      <td>1.112792</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>-0.344106</td><br>      <td>-1.180250</td><br>      <td>0.199295</td><br>      <td>1.158537</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>-0.806075</td><br>      <td>1.524947</td><br>      <td>1.048141</td><br>      <td>0.532292</td><br>    </tr><br>    <tr><br>      <th>8</th><br>      <td>0.163503</td><br>      <td>1.237187</td><br>      <td>0.835743</td><br>      <td>0.957505</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h2 id="Grouping"><a href="#Grouping" class="headerlink" title="Grouping"></a>Grouping</h2><p>By “group by” we are referring to a process involving one or more of the following steps</p>
+<ul>
+<li>Splitting the data into groups based on some criteria</li>
+<li>Applying a function to each group independently</li>
+<li>Combining the results into a data structure</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(&#123;<span class="string">'A'</span>:[<span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>,</span><br><span class="line">                       <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'foo'</span>, <span class="string">'foo'</span>],</span><br><span class="line">                  <span class="string">'B'</span>:[<span class="string">'one'</span>, <span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>, </span><br><span class="line">                      <span class="string">'two'</span>, <span class="string">'two'</span>, <span class="string">'one'</span>, <span class="string">'three'</span>],</span><br><span class="line">                  <span class="string">'C'</span>:np.random.randn(<span class="number">8</span>),</span><br><span class="line">                  <span class="string">'D'</span>:np.random.randn(<span class="number">8</span>)&#125;)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>foo</td><br>      <td>one</td><br>      <td>-1.114415</td><br>      <td>-1.077195</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>bar</td><br>      <td>one</td><br>      <td>1.607636</td><br>      <td>-0.917627</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>foo</td><br>      <td>two</td><br>      <td>1.276651</td><br>      <td>-0.199080</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>bar</td><br>      <td>three</td><br>      <td>1.080608</td><br>      <td>0.803381</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>foo</td><br>      <td>two</td><br>      <td>0.179543</td><br>      <td>-0.991834</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>bar</td><br>      <td>two</td><br>      <td>0.044457</td><br>      <td>0.450798</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>foo</td><br>      <td>one</td><br>      <td>1.026045</td><br>      <td>0.458458</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>foo</td><br>      <td>three</td><br>      <td>0.578885</td><br>      <td>0.919283</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.groupby(<span class="string">'A'</span>).sum()</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>    <tr><br>      <th>A</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>bar</th><br>      <td>2.732701</td><br>      <td>0.336552</td><br>    </tr><br>    <tr><br>      <th>foo</th><br>      <td>1.946709</td><br>      <td>-0.890367</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.groupby([<span class="string">'A'</span>, <span class="string">'B'</span>]).sum()</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th></th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>    <tr><br>      <th>A</th><br>      <th>B</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="3" valign="top">bar</th><br>      <th>one</th><br>      <td>1.607636</td><br>      <td>-0.917627</td><br>    </tr><br>    <tr><br>      <th>three</th><br>      <td>1.080608</td><br>      <td>0.803381</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>0.044457</td><br>      <td>0.450798</td><br>    </tr><br>    <tr><br>      <th rowspan="3" valign="top">foo</th><br>      <th>one</th><br>      <td>-0.088370</td><br>      <td>-0.618736</td><br>    </tr><br>    <tr><br>      <th>three</th><br>      <td>0.578885</td><br>      <td>0.919283</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>1.456194</td><br>      <td>-1.190914</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h2 id="Reshaping"><a href="#Reshaping" class="headerlink" title="Reshaping"></a>Reshaping</h2><h3 id="Stack"><a href="#Stack" class="headerlink" title="Stack"></a>Stack</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tuples = list(zip(*[[<span class="string">'bar'</span>, <span class="string">'bar'</span>, <span class="string">'baz'</span>, <span class="string">'baz'</span>,</span><br><span class="line">       <span class="string">'foo'</span>, <span class="string">'foo'</span>, <span class="string">'qux'</span>, <span class="string">'qux'</span>],</span><br><span class="line">      [<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'one'</span>, <span class="string">'two'</span>,</span><br><span class="line">       <span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'one'</span>, <span class="string">'two'</span>]]))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tuples</span><br></pre></td></tr></table></figure>
+<pre><code>[(&apos;bar&apos;, &apos;one&apos;),
+ (&apos;bar&apos;, &apos;two&apos;),
+ (&apos;baz&apos;, &apos;one&apos;),
+ (&apos;baz&apos;, &apos;two&apos;),
+ (&apos;foo&apos;, &apos;one&apos;),
+ (&apos;foo&apos;, &apos;two&apos;),
+ (&apos;qux&apos;, &apos;one&apos;),
+ (&apos;qux&apos;, &apos;two&apos;)]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index = pd.MultiIndex.from_tuples(tuples, names=[<span class="string">'first'</span>, <span class="string">'second'</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">index</span><br></pre></td></tr></table></figure>
+<pre><code>MultiIndex(levels=[[&apos;bar&apos;, &apos;baz&apos;, &apos;foo&apos;, &apos;qux&apos;], [&apos;one&apos;, &apos;two&apos;]],
+           labels=[[0, 0, 1, 1, 2, 2, 3, 3], [0, 1, 0, 1, 0, 1, 0, 1]],
+           names=[&apos;first&apos;, &apos;second&apos;])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">8</span>, <span class="number">2</span>), index=index, columns=[<span class="string">'A'</span>, <span class="string">'B'</span>])</span><br><span class="line">df2 = df[:<span class="number">4</span>]</span><br><span class="line">df2</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>    </tr><br>    <tr><br>      <th>first</th><br>      <th>second</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="2" valign="top">bar</th><br>      <th>one</th><br>      <td>0.993661</td><br>      <td>1.034926</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>-1.308428</td><br>      <td>-0.548574</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">baz</th><br>      <th>one</th><br>      <td>1.203660</td><br>      <td>1.603470</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>-2.770462</td><br>      <td>-0.834044</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>    </tr><br>    <tr><br>      <th>first</th><br>      <th>second</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="2" valign="top">bar</th><br>      <th>one</th><br>      <td>0.993661</td><br>      <td>1.034926</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>-1.308428</td><br>      <td>-0.548574</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">baz</th><br>      <th>one</th><br>      <td>1.203660</td><br>      <td>1.603470</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>-2.770462</td><br>      <td>-0.834044</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">foo</th><br>      <th>one</th><br>      <td>1.384250</td><br>      <td>-0.198922</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>1.831291</td><br>      <td>-0.232852</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">qux</th><br>      <th>one</th><br>      <td>-0.619321</td><br>      <td>0.766814</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>0.971604</td><br>      <td>-0.044436</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<p>The stack() method “compresses” a level in the DataFrame’s columns.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stacked = df2.stack()</span><br><span class="line">stacked</span><br></pre></td></tr></table></figure>
+<pre><code>first  second   
+bar    one     A    0.993661
+               B    1.034926
+       two     A   -1.308428
+               B   -0.548574
+baz    one     A    1.203660
+               B    1.603470
+       two     A   -2.770462
+               B   -0.834044
+dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stacked.unstack()</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>    </tr><br>    <tr><br>      <th>first</th><br>      <th>second</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="2" valign="top">bar</th><br>      <th>one</th><br>      <td>0.993661</td><br>      <td>1.034926</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>-1.308428</td><br>      <td>-0.548574</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">baz</th><br>      <th>one</th><br>      <td>1.203660</td><br>      <td>1.603470</td><br>    </tr><br>    <tr><br>      <th>two</th><br>      <td>-2.770462</td><br>      <td>-0.834044</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stacked.unstack(<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>second</th><br>      <th>one</th><br>      <th>two</th><br>    </tr><br>    <tr><br>      <th>first</th><br>      <th></th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="2" valign="top">bar</th><br>      <th>A</th><br>      <td>0.993661</td><br>      <td>-1.308428</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>1.034926</td><br>      <td>-0.548574</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">baz</th><br>      <th>A</th><br>      <td>1.203660</td><br>      <td>-2.770462</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>1.603470</td><br>      <td>-0.834044</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stacked.unstack(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>first</th><br>      <th>bar</th><br>      <th>baz</th><br>    </tr><br>    <tr><br>      <th>second</th><br>      <th></th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="2" valign="top">one</th><br>      <th>A</th><br>      <td>0.993661</td><br>      <td>1.203660</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>1.034926</td><br>      <td>1.603470</td><br>    </tr><br>    <tr><br>      <th rowspan="2" valign="top">two</th><br>      <th>A</th><br>      <td>-1.308428</td><br>      <td>-2.770462</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>-0.548574</td><br>      <td>-0.834044</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h3 id="Pivot-Tables"><a href="#Pivot-Tables" class="headerlink" title="Pivot Tables"></a>Pivot Tables</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(&#123;<span class="string">'A'</span> : [<span class="string">'one'</span>, <span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>] * <span class="number">3</span>,</span><br><span class="line">                       <span class="string">'B'</span> : [<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>] * <span class="number">4</span>,</span><br><span class="line">                       <span class="string">'C'</span> : [<span class="string">'foo'</span>, <span class="string">'foo'</span>, <span class="string">'foo'</span>, <span class="string">'bar'</span>, <span class="string">'bar'</span>, <span class="string">'bar'</span>] * <span class="number">2</span>,</span><br><span class="line">                       <span class="string">'D'</span> : np.random.randn(<span class="number">12</span>),</span><br><span class="line">                       <span class="string">'E'</span> : np.random.randn(<span class="number">12</span>)&#125;)</span><br><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>      <th>E</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>one</td><br>      <td>A</td><br>      <td>foo</td><br>      <td>1.355760</td><br>      <td>1.065220</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>one</td><br>      <td>B</td><br>      <td>foo</td><br>      <td>-0.178326</td><br>      <td>-0.485148</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>two</td><br>      <td>C</td><br>      <td>foo</td><br>      <td>0.688998</td><br>      <td>-0.444242</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>three</td><br>      <td>A</td><br>      <td>bar</td><br>      <td>1.220353</td><br>      <td>2.014127</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>one</td><br>      <td>B</td><br>      <td>bar</td><br>      <td>0.240032</td><br>      <td>-0.636026</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>one</td><br>      <td>C</td><br>      <td>bar</td><br>      <td>-1.126072</td><br>      <td>-0.885649</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>two</td><br>      <td>A</td><br>      <td>foo</td><br>      <td>0.787169</td><br>      <td>-1.645967</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>three</td><br>      <td>B</td><br>      <td>foo</td><br>      <td>0.831231</td><br>      <td>-0.745306</td><br>    </tr><br>    <tr><br>      <th>8</th><br>      <td>one</td><br>      <td>C</td><br>      <td>foo</td><br>      <td>0.687459</td><br>      <td>0.903137</td><br>    </tr><br>    <tr><br>      <th>9</th><br>      <td>one</td><br>      <td>A</td><br>      <td>bar</td><br>      <td>0.265186</td><br>      <td>0.090426</td><br>    </tr><br>    <tr><br>      <th>10</th><br>      <td>two</td><br>      <td>B</td><br>      <td>bar</td><br>      <td>-0.681013</td><br>      <td>-0.556909</td><br>    </tr><br>    <tr><br>      <th>11</th><br>      <td>three</td><br>      <td>C</td><br>      <td>bar</td><br>      <td>0.975782</td><br>      <td>1.240485</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.pivot_table(df, values=<span class="string">'D'</span>, index=[<span class="string">'A'</span>, <span class="string">'B'</span>], columns=[<span class="string">'C'</span>])</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>C</th><br>      <th>bar</th><br>      <th>foo</th><br>    </tr><br>    <tr><br>      <th>A</th><br>      <th>B</th><br>      <th></th><br>      <th></th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th rowspan="3" valign="top">one</th><br>      <th>A</th><br>      <td>0.265186</td><br>      <td>1.355760</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>0.240032</td><br>      <td>-0.178326</td><br>    </tr><br>    <tr><br>      <th>C</th><br>      <td>-1.126072</td><br>      <td>0.687459</td><br>    </tr><br>    <tr><br>      <th rowspan="3" valign="top">three</th><br>      <th>A</th><br>      <td>1.220353</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>NaN</td><br>      <td>0.831231</td><br>    </tr><br>    <tr><br>      <th>C</th><br>      <td>0.975782</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th rowspan="3" valign="top">two</th><br>      <th>A</th><br>      <td>NaN</td><br>      <td>0.787169</td><br>    </tr><br>    <tr><br>      <th>B</th><br>      <td>-0.681013</td><br>      <td>NaN</td><br>    </tr><br>    <tr><br>      <th>C</th><br>      <td>NaN</td><br>      <td>0.688998</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+<h2 id="Time-Series"><a href="#Time-Series" class="headerlink" title="Time Series"></a>Time Series</h2><p>pandas has simple, powerful, and efficient functionality for performing resampling operations during frequency conversion (e.g., converting secondly data into 5-minutely data). This is extremely common in, but not limited to, financial applications. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rng = pd.date_range(<span class="string">'1/1/2012'</span>, periods=<span class="number">100</span>, freq=<span class="string">'S'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rng</span><br></pre></td></tr></table></figure>
+<pre><code>DatetimeIndex([&apos;2012-01-01 00:00:00&apos;, &apos;2012-01-01 00:00:01&apos;,
+               &apos;2012-01-01 00:00:02&apos;, &apos;2012-01-01 00:00:03&apos;,
+               &apos;2012-01-01 00:00:04&apos;, &apos;2012-01-01 00:00:05&apos;,
+               &apos;2012-01-01 00:00:06&apos;, &apos;2012-01-01 00:00:07&apos;,
+               &apos;2012-01-01 00:00:08&apos;, &apos;2012-01-01 00:00:09&apos;,
+               &apos;2012-01-01 00:00:10&apos;, &apos;2012-01-01 00:00:11&apos;,
+               &apos;2012-01-01 00:00:12&apos;, &apos;2012-01-01 00:00:13&apos;,
+               &apos;2012-01-01 00:00:14&apos;, &apos;2012-01-01 00:00:15&apos;,
+               &apos;2012-01-01 00:00:16&apos;, &apos;2012-01-01 00:00:17&apos;,
+               &apos;2012-01-01 00:00:18&apos;, &apos;2012-01-01 00:00:19&apos;,
+               &apos;2012-01-01 00:00:20&apos;, &apos;2012-01-01 00:00:21&apos;,
+               &apos;2012-01-01 00:00:22&apos;, &apos;2012-01-01 00:00:23&apos;,
+               &apos;2012-01-01 00:00:24&apos;, &apos;2012-01-01 00:00:25&apos;,
+               &apos;2012-01-01 00:00:26&apos;, &apos;2012-01-01 00:00:27&apos;,
+               &apos;2012-01-01 00:00:28&apos;, &apos;2012-01-01 00:00:29&apos;,
+               &apos;2012-01-01 00:00:30&apos;, &apos;2012-01-01 00:00:31&apos;,
+               &apos;2012-01-01 00:00:32&apos;, &apos;2012-01-01 00:00:33&apos;,
+               &apos;2012-01-01 00:00:34&apos;, &apos;2012-01-01 00:00:35&apos;,
+               &apos;2012-01-01 00:00:36&apos;, &apos;2012-01-01 00:00:37&apos;,
+               &apos;2012-01-01 00:00:38&apos;, &apos;2012-01-01 00:00:39&apos;,
+               &apos;2012-01-01 00:00:40&apos;, &apos;2012-01-01 00:00:41&apos;,
+               &apos;2012-01-01 00:00:42&apos;, &apos;2012-01-01 00:00:43&apos;,
+               &apos;2012-01-01 00:00:44&apos;, &apos;2012-01-01 00:00:45&apos;,
+               &apos;2012-01-01 00:00:46&apos;, &apos;2012-01-01 00:00:47&apos;,
+               &apos;2012-01-01 00:00:48&apos;, &apos;2012-01-01 00:00:49&apos;,
+               &apos;2012-01-01 00:00:50&apos;, &apos;2012-01-01 00:00:51&apos;,
+               &apos;2012-01-01 00:00:52&apos;, &apos;2012-01-01 00:00:53&apos;,
+               &apos;2012-01-01 00:00:54&apos;, &apos;2012-01-01 00:00:55&apos;,
+               &apos;2012-01-01 00:00:56&apos;, &apos;2012-01-01 00:00:57&apos;,
+               &apos;2012-01-01 00:00:58&apos;, &apos;2012-01-01 00:00:59&apos;,
+               &apos;2012-01-01 00:01:00&apos;, &apos;2012-01-01 00:01:01&apos;,
+               &apos;2012-01-01 00:01:02&apos;, &apos;2012-01-01 00:01:03&apos;,
+               &apos;2012-01-01 00:01:04&apos;, &apos;2012-01-01 00:01:05&apos;,
+               &apos;2012-01-01 00:01:06&apos;, &apos;2012-01-01 00:01:07&apos;,
+               &apos;2012-01-01 00:01:08&apos;, &apos;2012-01-01 00:01:09&apos;,
+               &apos;2012-01-01 00:01:10&apos;, &apos;2012-01-01 00:01:11&apos;,
+               &apos;2012-01-01 00:01:12&apos;, &apos;2012-01-01 00:01:13&apos;,
+               &apos;2012-01-01 00:01:14&apos;, &apos;2012-01-01 00:01:15&apos;,
+               &apos;2012-01-01 00:01:16&apos;, &apos;2012-01-01 00:01:17&apos;,
+               &apos;2012-01-01 00:01:18&apos;, &apos;2012-01-01 00:01:19&apos;,
+               &apos;2012-01-01 00:01:20&apos;, &apos;2012-01-01 00:01:21&apos;,
+               &apos;2012-01-01 00:01:22&apos;, &apos;2012-01-01 00:01:23&apos;,
+               &apos;2012-01-01 00:01:24&apos;, &apos;2012-01-01 00:01:25&apos;,
+               &apos;2012-01-01 00:01:26&apos;, &apos;2012-01-01 00:01:27&apos;,
+               &apos;2012-01-01 00:01:28&apos;, &apos;2012-01-01 00:01:29&apos;,
+               &apos;2012-01-01 00:01:30&apos;, &apos;2012-01-01 00:01:31&apos;,
+               &apos;2012-01-01 00:01:32&apos;, &apos;2012-01-01 00:01:33&apos;,
+               &apos;2012-01-01 00:01:34&apos;, &apos;2012-01-01 00:01:35&apos;,
+               &apos;2012-01-01 00:01:36&apos;, &apos;2012-01-01 00:01:37&apos;,
+               &apos;2012-01-01 00:01:38&apos;, &apos;2012-01-01 00:01:39&apos;],
+              dtype=&apos;datetime64[ns]&apos;, freq=&apos;S&apos;)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts = pd.Series(np.random.randint(<span class="number">0</span>, <span class="number">500</span>, len(rng)), index=rng)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts</span><br></pre></td></tr></table></figure>
+<pre><code>2012-01-01 00:00:00    244
+2012-01-01 00:00:01    321
+2012-01-01 00:00:02    289
+2012-01-01 00:00:03    285
+2012-01-01 00:00:04     25
+2012-01-01 00:00:05    236
+2012-01-01 00:00:06    299
+2012-01-01 00:00:07    373
+2012-01-01 00:00:08    224
+2012-01-01 00:00:09    342
+2012-01-01 00:00:10     30
+2012-01-01 00:00:11    460
+2012-01-01 00:00:12    274
+2012-01-01 00:00:13    125
+2012-01-01 00:00:14     34
+2012-01-01 00:00:15    293
+2012-01-01 00:00:16    453
+2012-01-01 00:00:17    300
+2012-01-01 00:00:18    217
+2012-01-01 00:00:19    422
+2012-01-01 00:00:20     17
+2012-01-01 00:00:21     12
+2012-01-01 00:00:22    267
+2012-01-01 00:00:23     10
+2012-01-01 00:00:24    232
+2012-01-01 00:00:25    305
+2012-01-01 00:00:26    180
+2012-01-01 00:00:27     89
+2012-01-01 00:00:28    203
+2012-01-01 00:00:29    477
+                      ... 
+2012-01-01 00:01:10    290
+2012-01-01 00:01:11    149
+2012-01-01 00:01:12     15
+2012-01-01 00:01:13    279
+2012-01-01 00:01:14    356
+2012-01-01 00:01:15    316
+2012-01-01 00:01:16    219
+2012-01-01 00:01:17    471
+2012-01-01 00:01:18     43
+2012-01-01 00:01:19     91
+2012-01-01 00:01:20    273
+2012-01-01 00:01:21    134
+2012-01-01 00:01:22    319
+2012-01-01 00:01:23    150
+2012-01-01 00:01:24    390
+2012-01-01 00:01:25    412
+2012-01-01 00:01:26     92
+2012-01-01 00:01:27     43
+2012-01-01 00:01:28    358
+2012-01-01 00:01:29    146
+2012-01-01 00:01:30    328
+2012-01-01 00:01:31    109
+2012-01-01 00:01:32    171
+2012-01-01 00:01:33    247
+2012-01-01 00:01:34    333
+2012-01-01 00:01:35    173
+2012-01-01 00:01:36    251
+2012-01-01 00:01:37    375
+2012-01-01 00:01:38     48
+2012-01-01 00:01:39     28
+Freq: S, Length: 100, dtype: int64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts.resample(<span class="string">'5Min'</span>).sum()</span><br></pre></td></tr></table></figure>
+<pre><code>2012-01-01    22829
+Freq: 5T, dtype: int64
+</code></pre><p>时区表示</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rng = pd.date_range(<span class="string">'3/6/2012 00:00'</span>, periods=<span class="number">5</span>, freq=<span class="string">'D'</span>)</span><br><span class="line">ts = pd.Series(np.random.randn(len(rng)), rng)</span><br><span class="line">ts</span><br></pre></td></tr></table></figure>
+<pre><code>2012-03-06    1.252475
+2012-03-07    1.710185
+2012-03-08    0.054448
+2012-03-09    1.164110
+2012-03-10    0.477958
+Freq: D, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ts_utc = ts.tz_localize(<span class="string">'UTC'</span>)</span><br><span class="line">ts_utc</span><br></pre></td></tr></table></figure>
+<pre><code>2012-03-06 00:00:00+00:00    1.252475
+2012-03-07 00:00:00+00:00    1.710185
+2012-03-08 00:00:00+00:00    0.054448
+2012-03-09 00:00:00+00:00    1.164110
+2012-03-10 00:00:00+00:00    0.477958
+Freq: D, dtype: float64
+</code></pre><p>Convert to another time zone</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts_utc.tz_convert(<span class="string">'US/Eastern'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>2012-03-05 19:00:00-05:00    1.252475
+2012-03-06 19:00:00-05:00    1.710185
+2012-03-07 19:00:00-05:00    0.054448
+2012-03-08 19:00:00-05:00    1.164110
+2012-03-09 19:00:00-05:00    0.477958
+Freq: D, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rng = pd.date_range(<span class="string">'1/1/2012'</span>, periods=<span class="number">5</span>, freq=<span class="string">'M'</span>)</span><br><span class="line">ts = pd.Series(np.random.randn(len(rng)), index=rng)</span><br><span class="line">ts</span><br></pre></td></tr></table></figure>
+<pre><code>2012-01-31   -0.829642
+2012-02-29    1.487379
+2012-03-31   -2.397151
+2012-04-30   -1.783455
+2012-05-31   -0.312436
+Freq: M, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ps = ts.to_period()</span><br><span class="line">ps</span><br></pre></td></tr></table></figure>
+<pre><code>2012-01   -0.829642
+2012-02    1.487379
+2012-03   -2.397151
+2012-04   -1.783455
+2012-05   -0.312436
+Freq: M, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ps.to_timestamp()</span><br></pre></td></tr></table></figure>
+<pre><code>2012-01-01   -0.829642
+2012-02-01    1.487379
+2012-03-01   -2.397151
+2012-04-01   -1.783455
+2012-05-01   -0.312436
+Freq: MS, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">prng = pd.period_range(<span class="string">'1990Q1'</span>, <span class="string">'2000Q4'</span>, freq=<span class="string">'Q-NOV'</span>)</span><br><span class="line">ts = pd.Series(np.random.randn(len(prng)), prng)</span><br><span class="line">ts.index = (prng.asfreq(<span class="string">'M'</span>, <span class="string">'e'</span>) + <span class="number">1</span>).asfreq(<span class="string">'H'</span>, <span class="string">'s'</span>) + <span class="number">9</span></span><br><span class="line">ts.head()</span><br></pre></td></tr></table></figure>
+<pre><code>1990-03-01 09:00    0.913565
+1990-06-01 09:00   -1.160135
+1990-09-01 09:00   -0.539973
+1990-12-01 09:00    0.253567
+1991-03-01 09:00    0.683897
+Freq: H, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prng</span><br></pre></td></tr></table></figure>
+<pre><code>PeriodIndex([&apos;1990Q1&apos;, &apos;1990Q2&apos;, &apos;1990Q3&apos;, &apos;1990Q4&apos;, &apos;1991Q1&apos;, &apos;1991Q2&apos;,
+             &apos;1991Q3&apos;, &apos;1991Q4&apos;, &apos;1992Q1&apos;, &apos;1992Q2&apos;, &apos;1992Q3&apos;, &apos;1992Q4&apos;,
+             &apos;1993Q1&apos;, &apos;1993Q2&apos;, &apos;1993Q3&apos;, &apos;1993Q4&apos;, &apos;1994Q1&apos;, &apos;1994Q2&apos;,
+             &apos;1994Q3&apos;, &apos;1994Q4&apos;, &apos;1995Q1&apos;, &apos;1995Q2&apos;, &apos;1995Q3&apos;, &apos;1995Q4&apos;,
+             &apos;1996Q1&apos;, &apos;1996Q2&apos;, &apos;1996Q3&apos;, &apos;1996Q4&apos;, &apos;1997Q1&apos;, &apos;1997Q2&apos;,
+             &apos;1997Q3&apos;, &apos;1997Q4&apos;, &apos;1998Q1&apos;, &apos;1998Q2&apos;, &apos;1998Q3&apos;, &apos;1998Q4&apos;,
+             &apos;1999Q1&apos;, &apos;1999Q2&apos;, &apos;1999Q3&apos;, &apos;1999Q4&apos;, &apos;2000Q1&apos;, &apos;2000Q2&apos;,
+             &apos;2000Q3&apos;, &apos;2000Q4&apos;],
+            dtype=&apos;period[Q-NOV]&apos;, freq=&apos;Q-NOV&apos;)
+</code></pre><h2 id="Categoricals"><a href="#Categoricals" class="headerlink" title="Categoricals"></a>Categoricals</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(&#123;<span class="string">'id'</span>:[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>], <span class="string">'raw_grade'</span>:[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'b'</span>, <span class="string">'a'</span>, <span class="string">'a'</span>, <span class="string">'e'</span>]&#125;)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>id</th><br>      <th>raw_grade</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>1</td><br>      <td>a</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>2</td><br>      <td>b</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>3</td><br>      <td>b</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>4</td><br>      <td>a</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>5</td><br>      <td>a</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>6</td><br>      <td>e</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'grade'</span>] = df[<span class="string">'raw_grade'</span>].astype(<span class="string">'category'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>id</th><br>      <th>raw_grade</th><br>      <th>grade</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>1</td><br>      <td>a</td><br>      <td>a</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>2</td><br>      <td>b</td><br>      <td>b</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>3</td><br>      <td>b</td><br>      <td>b</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>4</td><br>      <td>a</td><br>      <td>a</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>5</td><br>      <td>a</td><br>      <td>a</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>6</td><br>      <td>e</td><br>      <td>e</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'grade'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>0    a
+1    b
+2    b
+3    a
+4    a
+5    e
+Name: grade, dtype: category
+Categories (3, object): [a, b, e]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.dtypes</span><br></pre></td></tr></table></figure>
+<pre><code>id              int64
+raw_grade      object
+grade        category
+dtype: object
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'grade'</span>].cat.categories = [<span class="string">'very good'</span>, <span class="string">'good'</span>, <span class="string">'very bad'</span>]</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>id</th><br>      <th>raw_grade</th><br>      <th>grade</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>1</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>2</td><br>      <td>b</td><br>      <td>good</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>3</td><br>      <td>b</td><br>      <td>good</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>4</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>5</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>6</td><br>      <td>e</td><br>      <td>very bad</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">"grade"</span>] = df[<span class="string">"grade"</span>].cat.set_categories([<span class="string">"very bad"</span>, <span class="string">"bad"</span>, <span class="string">"medium"</span>, <span class="string">"good"</span>, <span class="string">"very good"</span>])</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>id</th><br>      <th>raw_grade</th><br>      <th>grade</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>1</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>2</td><br>      <td>b</td><br>      <td>good</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>3</td><br>      <td>b</td><br>      <td>good</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>4</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>5</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>6</td><br>      <td>e</td><br>      <td>very bad</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df[<span class="string">'grade'</span>]</span><br></pre></td></tr></table></figure>
+<pre><code>0    very good
+1         good
+2         good
+3    very good
+4    very good
+5     very bad
+Name: grade, dtype: category
+Categories (5, object): [very bad, bad, medium, good, very good]
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.sort_values(by=<span class="string">'grade'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>id</th><br>      <th>raw_grade</th><br>      <th>grade</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>5</th><br>      <td>6</td><br>      <td>e</td><br>      <td>very bad</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>2</td><br>      <td>b</td><br>      <td>good</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>3</td><br>      <td>b</td><br>      <td>good</td><br>    </tr><br>    <tr><br>      <th>0</th><br>      <td>1</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>4</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>5</td><br>      <td>a</td><br>      <td>very good</td><br>    </tr><br>  </tbody><br></table><br></div>
+
+
+
+
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.groupby(<span class="string">'grade'</span>).size()</span><br></pre></td></tr></table></figure>
+<pre><code>grade
+very bad     1
+bad          0
+medium       0
+good         2
+very good    3
+dtype: int64
+</code></pre><h2 id="Plotting"><a href="#Plotting" class="headerlink" title="Plotting"></a>Plotting</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts = pd.Series(np.random.randn(<span class="number">1000</span>), index = pd.date_range(<span class="string">'1/1/2000'</span>, periods=<span class="number">1000</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts</span><br></pre></td></tr></table></figure>
+<pre><code>2000-01-01   -2.162238
+2000-01-02   -1.768627
+2000-01-03    0.405371
+2000-01-04   -0.315177
+2000-01-05   -1.211224
+2000-01-06    0.919112
+2000-01-07   -0.195309
+2000-01-08    0.091487
+2000-01-09    0.936006
+2000-01-10    0.056772
+2000-01-11    0.637328
+2000-01-12    0.250839
+2000-01-13    0.660181
+2000-01-14    0.367384
+2000-01-15    1.480254
+2000-01-16   -3.231503
+2000-01-17    0.879241
+2000-01-18   -0.066371
+2000-01-19    0.565191
+2000-01-20    0.197344
+2000-01-21   -0.049743
+2000-01-22   -1.651110
+2000-01-23    0.158434
+2000-01-24   -1.336556
+2000-01-25   -0.130634
+2000-01-26    0.373046
+2000-01-27    0.486330
+2000-01-28    1.789111
+2000-01-29   -0.631727
+2000-01-30    0.357759
+                ...   
+2002-08-28    0.783561
+2002-08-29    1.981284
+2002-08-30    0.236757
+2002-08-31    0.548455
+2002-09-01   -0.330292
+2002-09-02   -1.025787
+2002-09-03   -1.508711
+2002-09-04   -1.594106
+2002-09-05   -0.083620
+2002-09-06   -0.220504
+2002-09-07    0.077958
+2002-09-08    1.248833
+2002-09-09    1.778093
+2002-09-10    0.296462
+2002-09-11   -0.291047
+2002-09-12    0.147860
+2002-09-13    0.054481
+2002-09-14   -0.598458
+2002-09-15   -0.345856
+2002-09-16    0.369345
+2002-09-17   -0.542375
+2002-09-18    0.784640
+2002-09-19   -1.374230
+2002-09-20   -1.132805
+2002-09-21    0.385017
+2002-09-22    0.709930
+2002-09-23   -0.867157
+2002-09-24   -0.011137
+2002-09-25   -1.980906
+2002-09-26    1.397507
+Freq: D, Length: 1000, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts = ts.cumsum()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ts</span><br></pre></td></tr></table></figure>
+<pre><code>2000-01-01    -2.162238
+2000-01-02    -3.930865
+2000-01-03    -3.525494
+2000-01-04    -3.840671
+2000-01-05    -5.051895
+2000-01-06    -4.132783
+2000-01-07    -4.328092
+2000-01-08    -4.236606
+2000-01-09    -3.300600
+2000-01-10    -3.243828
+2000-01-11    -2.606499
+2000-01-12    -2.355661
+2000-01-13    -1.695480
+2000-01-14    -1.328096
+2000-01-15     0.152158
+2000-01-16    -3.079345
+2000-01-17    -2.200104
+2000-01-18    -2.266475
+2000-01-19    -1.701284
+2000-01-20    -1.503940
+2000-01-21    -1.553683
+2000-01-22    -3.204794
+2000-01-23    -3.046359
+2000-01-24    -4.382915
+2000-01-25    -4.513549
+2000-01-26    -4.140503
+2000-01-27    -3.654174
+2000-01-28    -1.865063
+2000-01-29    -2.496789
+2000-01-30    -2.139030
+                ...    
+2002-08-28   -23.899497
+2002-08-29   -21.918212
+2002-08-30   -21.681456
+2002-08-31   -21.133001
+2002-09-01   -21.463292
+2002-09-02   -22.489079
+2002-09-03   -23.997790
+2002-09-04   -25.591896
+2002-09-05   -25.675517
+2002-09-06   -25.896021
+2002-09-07   -25.818062
+2002-09-08   -24.569230
+2002-09-09   -22.791137
+2002-09-10   -22.494675
+2002-09-11   -22.785722
+2002-09-12   -22.637863
+2002-09-13   -22.583382
+2002-09-14   -23.181840
+2002-09-15   -23.527696
+2002-09-16   -23.158351
+2002-09-17   -23.700727
+2002-09-18   -22.916086
+2002-09-19   -24.290317
+2002-09-20   -25.423122
+2002-09-21   -25.038104
+2002-09-22   -24.328174
+2002-09-23   -25.195331
+2002-09-24   -25.206468
+2002-09-25   -27.187374
+2002-09-26   -25.789867
+Freq: D, Length: 1000, dtype: float64
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">%matplotlib inline</span><br><span class="line">ts.plot()</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.axes._subplots.AxesSubplot at 0x7fc735f83b70&gt;
+</code></pre><p><img src="/image/data/1/1.png" alt="png"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">df = pd.DataFrame(np.random.randn(<span class="number">1000</span>, <span class="number">4</span>), index=ts.index, columns=[<span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>])</span><br><span class="line">df = df.cumsum()</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">plt.figure()</span><br><span class="line">df.plot()</span><br><span class="line">plt.legend(loc=<span class="string">'best'</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>&lt;matplotlib.legend.Legend at 0x7fc7361722b0&gt;
+
+
+
+
+&lt;matplotlib.figure.Figure at 0x7fc735fd6198&gt;
+</code></pre><p><img src="/image/data/1/2.png" alt="png"></p>
+<h2 id="Getting-Data-In-Out"><a href="#Getting-Data-In-Out" class="headerlink" title="Getting Data In/Out"></a>Getting Data In/Out</h2><h3 id="CSV"><a href="#CSV" class="headerlink" title="CSV"></a>CSV</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.to_csv(<span class="string">'foo.csv'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.read_csv(<span class="string">'foo.csv'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>Unnamed: 0</th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>0</th><br>      <td>2000-01-01</td><br>      <td>-0.450872</td><br>      <td>0.395481</td><br>      <td>0.381578</td><br>      <td>1.370232</td><br>    </tr><br>    <tr><br>      <th>1</th><br>      <td>2000-01-02</td><br>      <td>-0.025248</td><br>      <td>0.637189</td><br>      <td>2.049532</td><br>      <td>0.466688</td><br>    </tr><br>    <tr><br>      <th>2</th><br>      <td>2000-01-03</td><br>      <td>-0.036668</td><br>      <td>0.087789</td><br>      <td>0.758993</td><br>      <td>0.217863</td><br>    </tr><br>    <tr><br>      <th>3</th><br>      <td>2000-01-04</td><br>      <td>0.170818</td><br>      <td>1.794943</td><br>      <td>0.323661</td><br>      <td>0.236688</td><br>    </tr><br>    <tr><br>      <th>4</th><br>      <td>2000-01-05</td><br>      <td>0.110068</td><br>      <td>1.556572</td><br>      <td>0.111850</td><br>      <td>0.922194</td><br>    </tr><br>    <tr><br>      <th>5</th><br>      <td>2000-01-06</td><br>      <td>0.178794</td><br>      <td>1.057431</td><br>      <td>0.419542</td><br>      <td>1.425594</td><br>    </tr><br>    <tr><br>      <th>6</th><br>      <td>2000-01-07</td><br>      <td>-0.950411</td><br>      <td>0.937755</td><br>      <td>-1.219101</td><br>      <td>-1.422304</td><br>    </tr><br>    <tr><br>      <th>7</th><br>      <td>2000-01-08</td><br>      <td>-1.036541</td><br>      <td>0.557909</td><br>      <td>-4.537197</td><br>      <td>-1.460412</td><br>    </tr><br>    <tr><br>      <th>8</th><br>      <td>2000-01-09</td><br>      <td>-0.032446</td><br>      <td>1.711535</td><br>      <td>-4.827508</td><br>      <td>-0.237993</td><br>    </tr><br>    <tr><br>      <th>9</th><br>      <td>2000-01-10</td><br>      <td>-1.807038</td><br>      <td>1.744254</td><br>      <td>-3.316153</td><br>      <td>1.231774</td><br>    </tr><br>    <tr><br>      <th>10</th><br>      <td>2000-01-11</td><br>      <td>-0.313481</td><br>      <td>1.862218</td><br>      <td>-2.685499</td><br>      <td>4.072020</td><br>    </tr><br>    <tr><br>      <th>11</th><br>      <td>2000-01-12</td><br>      <td>-0.472608</td><br>      <td>2.521596</td><br>      <td>-2.052473</td><br>      <td>5.084775</td><br>    </tr><br>    <tr><br>      <th>12</th><br>      <td>2000-01-13</td><br>      <td>-0.148892</td><br>      <td>3.313562</td><br>      <td>-0.227369</td><br>      <td>6.297979</td><br>    </tr><br>    <tr><br>      <th>13</th><br>      <td>2000-01-14</td><br>      <td>0.270380</td><br>      <td>2.962082</td><br>      <td>0.097617</td><br>      <td>6.147823</td><br>    </tr><br>    <tr><br>      <th>14</th><br>      <td>2000-01-15</td><br>      <td>-0.701600</td><br>      <td>4.053945</td><br>      <td>-0.245472</td><br>      <td>6.265729</td><br>    </tr><br>    <tr><br>      <th>15</th><br>      <td>2000-01-16</td><br>      <td>0.419939</td><br>      <td>3.971690</td><br>      <td>0.877146</td><br>      <td>7.414280</td><br>    </tr><br>    <tr><br>      <th>16</th><br>      <td>2000-01-17</td><br>      <td>0.772095</td><br>      <td>2.917321</td><br>      <td>1.542346</td><br>      <td>5.491818</td><br>    </tr><br>    <tr><br>      <th>17</th><br>      <td>2000-01-18</td><br>      <td>0.847531</td><br>      <td>2.595248</td><br>      <td>2.641126</td><br>      <td>6.147717</td><br>    </tr><br>    <tr><br>      <th>18</th><br>      <td>2000-01-19</td><br>      <td>0.489138</td><br>      <td>3.462223</td><br>      <td>2.534211</td><br>      <td>5.399866</td><br>    </tr><br>    <tr><br>      <th>19</th><br>      <td>2000-01-20</td><br>      <td>-0.568162</td><br>      <td>1.784301</td><br>      <td>2.697018</td><br>      <td>7.044541</td><br>    </tr><br>    <tr><br>      <th>20</th><br>      <td>2000-01-21</td><br>      <td>-0.190166</td><br>      <td>1.594794</td><br>      <td>2.383903</td><br>      <td>5.663474</td><br>    </tr><br>    <tr><br>      <th>21</th><br>      <td>2000-01-22</td><br>      <td>0.506410</td><br>      <td>0.744354</td><br>      <td>2.116034</td><br>      <td>7.488447</td><br>    </tr><br>    <tr><br>      <th>22</th><br>      <td>2000-01-23</td><br>      <td>1.749586</td><br>      <td>0.140688</td><br>      <td>2.512237</td><br>      <td>8.804555</td><br>    </tr><br>    <tr><br>      <th>23</th><br>      <td>2000-01-24</td><br>      <td>-1.300250</td><br>      <td>-0.798619</td><br>      <td>3.315671</td><br>      <td>8.504480</td><br>    </tr><br>    <tr><br>      <th>24</th><br>      <td>2000-01-25</td><br>      <td>-0.671120</td><br>      <td>-0.312907</td><br>      <td>4.687308</td><br>      <td>8.427058</td><br>    </tr><br>    <tr><br>      <th>25</th><br>      <td>2000-01-26</td><br>      <td>0.539004</td><br>      <td>-0.586919</td><br>      <td>3.529719</td><br>      <td>6.900905</td><br>    </tr><br>    <tr><br>      <th>26</th><br>      <td>2000-01-27</td><br>      <td>-0.322464</td><br>      <td>-1.432399</td><br>      <td>4.854299</td><br>      <td>8.102648</td><br>    </tr><br>    <tr><br>      <th>27</th><br>      <td>2000-01-28</td><br>      <td>-0.049216</td><br>      <td>-0.998291</td><br>      <td>3.351413</td><br>      <td>9.908898</td><br>    </tr><br>    <tr><br>      <th>28</th><br>      <td>2000-01-29</td><br>      <td>0.387226</td><br>      <td>-1.653189</td><br>      <td>3.613029</td><br>      <td>9.805569</td><br>    </tr><br>    <tr><br>      <th>29</th><br>      <td>2000-01-30</td><br>      <td>1.176226</td><br>      <td>-1.884252</td><br>      <td>2.938505</td><br>      <td>9.589174</td><br>    </tr><br>    <tr><br>      <th>…</th><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>    </tr><br>    <tr><br>      <th>970</th><br>      <td>2002-08-28</td><br>      <td>-42.010720</td><br>      <td>32.657803</td><br>      <td>32.730176</td><br>      <td>5.405271</td><br>    </tr><br>    <tr><br>      <th>971</th><br>      <td>2002-08-29</td><br>      <td>-41.928908</td><br>      <td>31.961678</td><br>      <td>33.606972</td><br>      <td>4.608168</td><br>    </tr><br>    <tr><br>      <th>972</th><br>      <td>2002-08-30</td><br>      <td>-42.360815</td><br>      <td>30.102908</td><br>      <td>34.249017</td><br>      <td>4.320361</td><br>    </tr><br>    <tr><br>      <th>973</th><br>      <td>2002-08-31</td><br>      <td>-42.035245</td><br>      <td>31.719768</td><br>      <td>33.841647</td><br>      <td>5.316658</td><br>    </tr><br>    <tr><br>      <th>974</th><br>      <td>2002-09-01</td><br>      <td>-42.023462</td><br>      <td>31.277771</td><br>      <td>32.224844</td><br>      <td>4.491348</td><br>    </tr><br>    <tr><br>      <th>975</th><br>      <td>2002-09-02</td><br>      <td>-41.121725</td><br>      <td>30.576611</td><br>      <td>33.823500</td><br>      <td>3.783267</td><br>    </tr><br>    <tr><br>      <th>976</th><br>      <td>2002-09-03</td><br>      <td>-42.336403</td><br>      <td>29.668299</td><br>      <td>34.613157</td><br>      <td>3.856769</td><br>    </tr><br>    <tr><br>      <th>977</th><br>      <td>2002-09-04</td><br>      <td>-41.955082</td><br>      <td>28.741731</td><br>      <td>34.133296</td><br>      <td>3.824269</td><br>    </tr><br>    <tr><br>      <th>978</th><br>      <td>2002-09-05</td><br>      <td>-43.073106</td><br>      <td>29.933133</td><br>      <td>33.035272</td><br>      <td>3.558779</td><br>    </tr><br>    <tr><br>      <th>979</th><br>      <td>2002-09-06</td><br>      <td>-42.857949</td><br>      <td>29.825473</td><br>      <td>34.213828</td><br>      <td>2.164331</td><br>    </tr><br>    <tr><br>      <th>980</th><br>      <td>2002-09-07</td><br>      <td>-42.155893</td><br>      <td>29.107456</td><br>      <td>35.303512</td><br>      <td>2.868834</td><br>    </tr><br>    <tr><br>      <th>981</th><br>      <td>2002-09-08</td><br>      <td>-42.101632</td><br>      <td>29.097744</td><br>      <td>35.967004</td><br>      <td>3.297489</td><br>    </tr><br>    <tr><br>      <th>982</th><br>      <td>2002-09-09</td><br>      <td>-42.729712</td><br>      <td>29.139733</td><br>      <td>33.576082</td><br>      <td>3.727289</td><br>    </tr><br>    <tr><br>      <th>983</th><br>      <td>2002-09-10</td><br>      <td>-42.603725</td><br>      <td>29.138196</td><br>      <td>34.148339</td><br>      <td>3.314936</td><br>    </tr><br>    <tr><br>      <th>984</th><br>      <td>2002-09-11</td><br>      <td>-43.306158</td><br>      <td>29.303346</td><br>      <td>33.547137</td><br>      <td>3.292155</td><br>    </tr><br>    <tr><br>      <th>985</th><br>      <td>2002-09-12</td><br>      <td>-42.916630</td><br>      <td>31.208726</td><br>      <td>34.173067</td><br>      <td>5.066093</td><br>    </tr><br>    <tr><br>      <th>986</th><br>      <td>2002-09-13</td><br>      <td>-42.238570</td><br>      <td>30.869320</td><br>      <td>33.480628</td><br>      <td>4.901099</td><br>    </tr><br>    <tr><br>      <th>987</th><br>      <td>2002-09-14</td><br>      <td>-41.676238</td><br>      <td>31.758266</td><br>      <td>36.151867</td><br>      <td>3.944074</td><br>    </tr><br>    <tr><br>      <th>988</th><br>      <td>2002-09-15</td><br>      <td>-42.114611</td><br>      <td>30.320999</td><br>      <td>36.610312</td><br>      <td>1.602666</td><br>    </tr><br>    <tr><br>      <th>989</th><br>      <td>2002-09-16</td><br>      <td>-40.724451</td><br>      <td>30.896120</td><br>      <td>38.311355</td><br>      <td>2.015574</td><br>    </tr><br>    <tr><br>      <th>990</th><br>      <td>2002-09-17</td><br>      <td>-40.235064</td><br>      <td>31.141360</td><br>      <td>37.147181</td><br>      <td>3.570815</td><br>    </tr><br>    <tr><br>      <th>991</th><br>      <td>2002-09-18</td><br>      <td>-39.931452</td><br>      <td>31.655201</td><br>      <td>37.492007</td><br>      <td>4.146526</td><br>    </tr><br>    <tr><br>      <th>992</th><br>      <td>2002-09-19</td><br>      <td>-39.617204</td><br>      <td>29.786372</td><br>      <td>36.664344</td><br>      <td>3.721535</td><br>    </tr><br>    <tr><br>      <th>993</th><br>      <td>2002-09-20</td><br>      <td>-39.521188</td><br>      <td>30.992560</td><br>      <td>36.671998</td><br>      <td>3.753192</td><br>    </tr><br>    <tr><br>      <th>994</th><br>      <td>2002-09-21</td><br>      <td>-39.433329</td><br>      <td>32.390220</td><br>      <td>36.189576</td><br>      <td>3.943903</td><br>    </tr><br>    <tr><br>      <th>995</th><br>      <td>2002-09-22</td><br>      <td>-38.268539</td><br>      <td>32.991980</td><br>      <td>35.538837</td><br>      <td>4.397427</td><br>    </tr><br>    <tr><br>      <th>996</th><br>      <td>2002-09-23</td><br>      <td>-37.280640</td><br>      <td>31.944266</td><br>      <td>34.723265</td><br>      <td>3.195354</td><br>    </tr><br>    <tr><br>      <th>997</th><br>      <td>2002-09-24</td><br>      <td>-35.703543</td><br>      <td>29.162965</td><br>      <td>33.190010</td><br>      <td>3.719085</td><br>    </tr><br>    <tr><br>      <th>998</th><br>      <td>2002-09-25</td><br>      <td>-34.481000</td><br>      <td>28.463854</td><br>      <td>34.229579</td><br>      <td>3.300110</td><br>    </tr><br>    <tr><br>      <th>999</th><br>      <td>2002-09-26</td><br>      <td>-34.835530</td><br>      <td>26.924530</td><br>      <td>35.479308</td><br>      <td>5.618561</td><br>    </tr><br>  </tbody><br></table><br><p>1000 rows × 5 columns</p><br></div>
+
+
+
+<h3 id="HDF5"><a href="#HDF5" class="headerlink" title="HDF5"></a>HDF5</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.to_hdf(<span class="string">'foo.h5'</span>, <span class="string">'df'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.read_hdf(<span class="string">'foo.h5'</span>, <span class="string">'df'</span>)</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2000-01-01</th><br>      <td>-0.450872</td><br>      <td>0.395481</td><br>      <td>0.381578</td><br>      <td>1.370232</td><br>    </tr><br>    <tr><br>      <th>2000-01-02</th><br>      <td>-0.025248</td><br>      <td>0.637189</td><br>      <td>2.049532</td><br>      <td>0.466688</td><br>    </tr><br>    <tr><br>      <th>2000-01-03</th><br>      <td>-0.036668</td><br>      <td>0.087789</td><br>      <td>0.758993</td><br>      <td>0.217863</td><br>    </tr><br>    <tr><br>      <th>2000-01-04</th><br>      <td>0.170818</td><br>      <td>1.794943</td><br>      <td>0.323661</td><br>      <td>0.236688</td><br>    </tr><br>    <tr><br>      <th>2000-01-05</th><br>      <td>0.110068</td><br>      <td>1.556572</td><br>      <td>0.111850</td><br>      <td>0.922194</td><br>    </tr><br>    <tr><br>      <th>2000-01-06</th><br>      <td>0.178794</td><br>      <td>1.057431</td><br>      <td>0.419542</td><br>      <td>1.425594</td><br>    </tr><br>    <tr><br>      <th>2000-01-07</th><br>      <td>-0.950411</td><br>      <td>0.937755</td><br>      <td>-1.219101</td><br>      <td>-1.422304</td><br>    </tr><br>    <tr><br>      <th>2000-01-08</th><br>      <td>-1.036541</td><br>      <td>0.557909</td><br>      <td>-4.537197</td><br>      <td>-1.460412</td><br>    </tr><br>    <tr><br>      <th>2000-01-09</th><br>      <td>-0.032446</td><br>      <td>1.711535</td><br>      <td>-4.827508</td><br>      <td>-0.237993</td><br>    </tr><br>    <tr><br>      <th>2000-01-10</th><br>      <td>-1.807038</td><br>      <td>1.744254</td><br>      <td>-3.316153</td><br>      <td>1.231774</td><br>    </tr><br>    <tr><br>      <th>2000-01-11</th><br>      <td>-0.313481</td><br>      <td>1.862218</td><br>      <td>-2.685499</td><br>      <td>4.072020</td><br>    </tr><br>    <tr><br>      <th>2000-01-12</th><br>      <td>-0.472608</td><br>      <td>2.521596</td><br>      <td>-2.052473</td><br>      <td>5.084775</td><br>    </tr><br>    <tr><br>      <th>2000-01-13</th><br>      <td>-0.148892</td><br>      <td>3.313562</td><br>      <td>-0.227369</td><br>      <td>6.297979</td><br>    </tr><br>    <tr><br>      <th>2000-01-14</th><br>      <td>0.270380</td><br>      <td>2.962082</td><br>      <td>0.097617</td><br>      <td>6.147823</td><br>    </tr><br>    <tr><br>      <th>2000-01-15</th><br>      <td>-0.701600</td><br>      <td>4.053945</td><br>      <td>-0.245472</td><br>      <td>6.265729</td><br>    </tr><br>    <tr><br>      <th>2000-01-16</th><br>      <td>0.419939</td><br>      <td>3.971690</td><br>      <td>0.877146</td><br>      <td>7.414280</td><br>    </tr><br>    <tr><br>      <th>2000-01-17</th><br>      <td>0.772095</td><br>      <td>2.917321</td><br>      <td>1.542346</td><br>      <td>5.491818</td><br>    </tr><br>    <tr><br>      <th>2000-01-18</th><br>      <td>0.847531</td><br>      <td>2.595248</td><br>      <td>2.641126</td><br>      <td>6.147717</td><br>    </tr><br>    <tr><br>      <th>2000-01-19</th><br>      <td>0.489138</td><br>      <td>3.462223</td><br>      <td>2.534211</td><br>      <td>5.399866</td><br>    </tr><br>    <tr><br>      <th>2000-01-20</th><br>      <td>-0.568162</td><br>      <td>1.784301</td><br>      <td>2.697018</td><br>      <td>7.044541</td><br>    </tr><br>    <tr><br>      <th>2000-01-21</th><br>      <td>-0.190166</td><br>      <td>1.594794</td><br>      <td>2.383903</td><br>      <td>5.663474</td><br>    </tr><br>    <tr><br>      <th>2000-01-22</th><br>      <td>0.506410</td><br>      <td>0.744354</td><br>      <td>2.116034</td><br>      <td>7.488447</td><br>    </tr><br>    <tr><br>      <th>2000-01-23</th><br>      <td>1.749586</td><br>      <td>0.140688</td><br>      <td>2.512237</td><br>      <td>8.804555</td><br>    </tr><br>    <tr><br>      <th>2000-01-24</th><br>      <td>-1.300250</td><br>      <td>-0.798619</td><br>      <td>3.315671</td><br>      <td>8.504480</td><br>    </tr><br>    <tr><br>      <th>2000-01-25</th><br>      <td>-0.671120</td><br>      <td>-0.312907</td><br>      <td>4.687308</td><br>      <td>8.427058</td><br>    </tr><br>    <tr><br>      <th>2000-01-26</th><br>      <td>0.539004</td><br>      <td>-0.586919</td><br>      <td>3.529719</td><br>      <td>6.900905</td><br>    </tr><br>    <tr><br>      <th>2000-01-27</th><br>      <td>-0.322464</td><br>      <td>-1.432399</td><br>      <td>4.854299</td><br>      <td>8.102648</td><br>    </tr><br>    <tr><br>      <th>2000-01-28</th><br>      <td>-0.049216</td><br>      <td>-0.998291</td><br>      <td>3.351413</td><br>      <td>9.908898</td><br>    </tr><br>    <tr><br>      <th>2000-01-29</th><br>      <td>0.387226</td><br>      <td>-1.653189</td><br>      <td>3.613029</td><br>      <td>9.805569</td><br>    </tr><br>    <tr><br>      <th>2000-01-30</th><br>      <td>1.176226</td><br>      <td>-1.884252</td><br>      <td>2.938505</td><br>      <td>9.589174</td><br>    </tr><br>    <tr><br>      <th>…</th><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>    </tr><br>    <tr><br>      <th>2002-08-28</th><br>      <td>-42.010720</td><br>      <td>32.657803</td><br>      <td>32.730176</td><br>      <td>5.405271</td><br>    </tr><br>    <tr><br>      <th>2002-08-29</th><br>      <td>-41.928908</td><br>      <td>31.961678</td><br>      <td>33.606972</td><br>      <td>4.608168</td><br>    </tr><br>    <tr><br>      <th>2002-08-30</th><br>      <td>-42.360815</td><br>      <td>30.102908</td><br>      <td>34.249017</td><br>      <td>4.320361</td><br>    </tr><br>    <tr><br>      <th>2002-08-31</th><br>      <td>-42.035245</td><br>      <td>31.719768</td><br>      <td>33.841647</td><br>      <td>5.316658</td><br>    </tr><br>    <tr><br>      <th>2002-09-01</th><br>      <td>-42.023462</td><br>      <td>31.277771</td><br>      <td>32.224844</td><br>      <td>4.491348</td><br>    </tr><br>    <tr><br>      <th>2002-09-02</th><br>      <td>-41.121725</td><br>      <td>30.576611</td><br>      <td>33.823500</td><br>      <td>3.783267</td><br>    </tr><br>    <tr><br>      <th>2002-09-03</th><br>      <td>-42.336403</td><br>      <td>29.668299</td><br>      <td>34.613157</td><br>      <td>3.856769</td><br>    </tr><br>    <tr><br>      <th>2002-09-04</th><br>      <td>-41.955082</td><br>      <td>28.741731</td><br>      <td>34.133296</td><br>      <td>3.824269</td><br>    </tr><br>    <tr><br>      <th>2002-09-05</th><br>      <td>-43.073106</td><br>      <td>29.933133</td><br>      <td>33.035272</td><br>      <td>3.558779</td><br>    </tr><br>    <tr><br>      <th>2002-09-06</th><br>      <td>-42.857949</td><br>      <td>29.825473</td><br>      <td>34.213828</td><br>      <td>2.164331</td><br>    </tr><br>    <tr><br>      <th>2002-09-07</th><br>      <td>-42.155893</td><br>      <td>29.107456</td><br>      <td>35.303512</td><br>      <td>2.868834</td><br>    </tr><br>    <tr><br>      <th>2002-09-08</th><br>      <td>-42.101632</td><br>      <td>29.097744</td><br>      <td>35.967004</td><br>      <td>3.297489</td><br>    </tr><br>    <tr><br>      <th>2002-09-09</th><br>      <td>-42.729712</td><br>      <td>29.139733</td><br>      <td>33.576082</td><br>      <td>3.727289</td><br>    </tr><br>    <tr><br>      <th>2002-09-10</th><br>      <td>-42.603725</td><br>      <td>29.138196</td><br>      <td>34.148339</td><br>      <td>3.314936</td><br>    </tr><br>    <tr><br>      <th>2002-09-11</th><br>      <td>-43.306158</td><br>      <td>29.303346</td><br>      <td>33.547137</td><br>      <td>3.292155</td><br>    </tr><br>    <tr><br>      <th>2002-09-12</th><br>      <td>-42.916630</td><br>      <td>31.208726</td><br>      <td>34.173067</td><br>      <td>5.066093</td><br>    </tr><br>    <tr><br>      <th>2002-09-13</th><br>      <td>-42.238570</td><br>      <td>30.869320</td><br>      <td>33.480628</td><br>      <td>4.901099</td><br>    </tr><br>    <tr><br>      <th>2002-09-14</th><br>      <td>-41.676238</td><br>      <td>31.758266</td><br>      <td>36.151867</td><br>      <td>3.944074</td><br>    </tr><br>    <tr><br>      <th>2002-09-15</th><br>      <td>-42.114611</td><br>      <td>30.320999</td><br>      <td>36.610312</td><br>      <td>1.602666</td><br>    </tr><br>    <tr><br>      <th>2002-09-16</th><br>      <td>-40.724451</td><br>      <td>30.896120</td><br>      <td>38.311355</td><br>      <td>2.015574</td><br>    </tr><br>    <tr><br>      <th>2002-09-17</th><br>      <td>-40.235064</td><br>      <td>31.141360</td><br>      <td>37.147181</td><br>      <td>3.570815</td><br>    </tr><br>    <tr><br>      <th>2002-09-18</th><br>      <td>-39.931452</td><br>      <td>31.655201</td><br>      <td>37.492007</td><br>      <td>4.146526</td><br>    </tr><br>    <tr><br>      <th>2002-09-19</th><br>      <td>-39.617204</td><br>      <td>29.786372</td><br>      <td>36.664344</td><br>      <td>3.721535</td><br>    </tr><br>    <tr><br>      <th>2002-09-20</th><br>      <td>-39.521188</td><br>      <td>30.992560</td><br>      <td>36.671998</td><br>      <td>3.753192</td><br>    </tr><br>    <tr><br>      <th>2002-09-21</th><br>      <td>-39.433329</td><br>      <td>32.390220</td><br>      <td>36.189576</td><br>      <td>3.943903</td><br>    </tr><br>    <tr><br>      <th>2002-09-22</th><br>      <td>-38.268539</td><br>      <td>32.991980</td><br>      <td>35.538837</td><br>      <td>4.397427</td><br>    </tr><br>    <tr><br>      <th>2002-09-23</th><br>      <td>-37.280640</td><br>      <td>31.944266</td><br>      <td>34.723265</td><br>      <td>3.195354</td><br>    </tr><br>    <tr><br>      <th>2002-09-24</th><br>      <td>-35.703543</td><br>      <td>29.162965</td><br>      <td>33.190010</td><br>      <td>3.719085</td><br>    </tr><br>    <tr><br>      <th>2002-09-25</th><br>      <td>-34.481000</td><br>      <td>28.463854</td><br>      <td>34.229579</td><br>      <td>3.300110</td><br>    </tr><br>    <tr><br>      <th>2002-09-26</th><br>      <td>-34.835530</td><br>      <td>26.924530</td><br>      <td>35.479308</td><br>      <td>5.618561</td><br>    </tr><br>  </tbody><br></table><br><p>1000 rows × 4 columns</p><br></div>
+
+
+
+<h3 id="Excel"><a href="#Excel" class="headerlink" title="Excel"></a>Excel</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df.to_excel(<span class="string">'foo.xlsx'</span>, sheet_name=<span class="string">'Sheet1'</span>)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pd.read_excel(<span class="string">'foo.xlsx'</span>, <span class="string">'Sheet1'</span>, index_col=<span class="keyword">None</span>, na_values=[<span class="string">'NA'</span>])</span><br></pre></td></tr></table></figure>
+<div><br><style scoped><br>    .dataframe tbody tr th:only-of-type {<br>        vertical-align: middle;<br>    }<br><br>    .dataframe tbody tr th {<br>        vertical-align: top;<br>    }<br><br>    .dataframe thead th {<br>        text-align: right;<br>    }<br></style><br><table border="1" class="dataframe"><br>  <thead><br>    <tr style="text-align: right;"><br>      <th></th><br>      <th>A</th><br>      <th>B</th><br>      <th>C</th><br>      <th>D</th><br>    </tr><br>  </thead><br>  <tbody><br>    <tr><br>      <th>2000-01-01</th><br>      <td>-0.450872</td><br>      <td>0.395481</td><br>      <td>0.381578</td><br>      <td>1.370232</td><br>    </tr><br>    <tr><br>      <th>2000-01-02</th><br>      <td>-0.025248</td><br>      <td>0.637189</td><br>      <td>2.049532</td><br>      <td>0.466688</td><br>    </tr><br>    <tr><br>      <th>2000-01-03</th><br>      <td>-0.036668</td><br>      <td>0.087789</td><br>      <td>0.758993</td><br>      <td>0.217863</td><br>    </tr><br>    <tr><br>      <th>2000-01-04</th><br>      <td>0.170818</td><br>      <td>1.794943</td><br>      <td>0.323661</td><br>      <td>0.236688</td><br>    </tr><br>    <tr><br>      <th>2000-01-05</th><br>      <td>0.110068</td><br>      <td>1.556572</td><br>      <td>0.111850</td><br>      <td>0.922194</td><br>    </tr><br>    <tr><br>      <th>2000-01-06</th><br>      <td>0.178794</td><br>      <td>1.057431</td><br>      <td>0.419542</td><br>      <td>1.425594</td><br>    </tr><br>    <tr><br>      <th>2000-01-07</th><br>      <td>-0.950411</td><br>      <td>0.937755</td><br>      <td>-1.219101</td><br>      <td>-1.422304</td><br>    </tr><br>    <tr><br>      <th>2000-01-08</th><br>      <td>-1.036541</td><br>      <td>0.557909</td><br>      <td>-4.537197</td><br>      <td>-1.460412</td><br>    </tr><br>    <tr><br>      <th>2000-01-09</th><br>      <td>-0.032446</td><br>      <td>1.711535</td><br>      <td>-4.827508</td><br>      <td>-0.237993</td><br>    </tr><br>    <tr><br>      <th>2000-01-10</th><br>      <td>-1.807038</td><br>      <td>1.744254</td><br>      <td>-3.316153</td><br>      <td>1.231774</td><br>    </tr><br>    <tr><br>      <th>2000-01-11</th><br>      <td>-0.313481</td><br>      <td>1.862218</td><br>      <td>-2.685499</td><br>      <td>4.072020</td><br>    </tr><br>    <tr><br>      <th>2000-01-12</th><br>      <td>-0.472608</td><br>      <td>2.521596</td><br>      <td>-2.052473</td><br>      <td>5.084775</td><br>    </tr><br>    <tr><br>      <th>2000-01-13</th><br>      <td>-0.148892</td><br>      <td>3.313562</td><br>      <td>-0.227369</td><br>      <td>6.297979</td><br>    </tr><br>    <tr><br>      <th>2000-01-14</th><br>      <td>0.270380</td><br>      <td>2.962082</td><br>      <td>0.097617</td><br>      <td>6.147823</td><br>    </tr><br>    <tr><br>      <th>2000-01-15</th><br>      <td>-0.701600</td><br>      <td>4.053945</td><br>      <td>-0.245472</td><br>      <td>6.265729</td><br>    </tr><br>    <tr><br>      <th>2000-01-16</th><br>      <td>0.419939</td><br>      <td>3.971690</td><br>      <td>0.877146</td><br>      <td>7.414280</td><br>    </tr><br>    <tr><br>      <th>2000-01-17</th><br>      <td>0.772095</td><br>      <td>2.917321</td><br>      <td>1.542346</td><br>      <td>5.491818</td><br>    </tr><br>    <tr><br>      <th>2000-01-18</th><br>      <td>0.847531</td><br>      <td>2.595248</td><br>      <td>2.641126</td><br>      <td>6.147717</td><br>    </tr><br>    <tr><br>      <th>2000-01-19</th><br>      <td>0.489138</td><br>      <td>3.462223</td><br>      <td>2.534211</td><br>      <td>5.399866</td><br>    </tr><br>    <tr><br>      <th>2000-01-20</th><br>      <td>-0.568162</td><br>      <td>1.784301</td><br>      <td>2.697018</td><br>      <td>7.044541</td><br>    </tr><br>    <tr><br>      <th>2000-01-21</th><br>      <td>-0.190166</td><br>      <td>1.594794</td><br>      <td>2.383903</td><br>      <td>5.663474</td><br>    </tr><br>    <tr><br>      <th>2000-01-22</th><br>      <td>0.506410</td><br>      <td>0.744354</td><br>      <td>2.116034</td><br>      <td>7.488447</td><br>    </tr><br>    <tr><br>      <th>2000-01-23</th><br>      <td>1.749586</td><br>      <td>0.140688</td><br>      <td>2.512237</td><br>      <td>8.804555</td><br>    </tr><br>    <tr><br>      <th>2000-01-24</th><br>      <td>-1.300250</td><br>      <td>-0.798619</td><br>      <td>3.315671</td><br>      <td>8.504480</td><br>    </tr><br>    <tr><br>      <th>2000-01-25</th><br>      <td>-0.671120</td><br>      <td>-0.312907</td><br>      <td>4.687308</td><br>      <td>8.427058</td><br>    </tr><br>    <tr><br>      <th>2000-01-26</th><br>      <td>0.539004</td><br>      <td>-0.586919</td><br>      <td>3.529719</td><br>      <td>6.900905</td><br>    </tr><br>    <tr><br>      <th>2000-01-27</th><br>      <td>-0.322464</td><br>      <td>-1.432399</td><br>      <td>4.854299</td><br>      <td>8.102648</td><br>    </tr><br>    <tr><br>      <th>2000-01-28</th><br>      <td>-0.049216</td><br>      <td>-0.998291</td><br>      <td>3.351413</td><br>      <td>9.908898</td><br>    </tr><br>    <tr><br>      <th>2000-01-29</th><br>      <td>0.387226</td><br>      <td>-1.653189</td><br>      <td>3.613029</td><br>      <td>9.805569</td><br>    </tr><br>    <tr><br>      <th>2000-01-30</th><br>      <td>1.176226</td><br>      <td>-1.884252</td><br>      <td>2.938505</td><br>      <td>9.589174</td><br>    </tr><br>    <tr><br>      <th>…</th><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>      <td>…</td><br>    </tr><br>    <tr><br>      <th>2002-08-28</th><br>      <td>-42.010720</td><br>      <td>32.657803</td><br>      <td>32.730176</td><br>      <td>5.405271</td><br>    </tr><br>    <tr><br>      <th>2002-08-29</th><br>      <td>-41.928908</td><br>      <td>31.961678</td><br>      <td>33.606972</td><br>      <td>4.608168</td><br>    </tr><br>    <tr><br>      <th>2002-08-30</th><br>      <td>-42.360815</td><br>      <td>30.102908</td><br>      <td>34.249017</td><br>      <td>4.320361</td><br>    </tr><br>    <tr><br>      <th>2002-08-31</th><br>      <td>-42.035245</td><br>      <td>31.719768</td><br>      <td>33.841647</td><br>      <td>5.316658</td><br>    </tr><br>    <tr><br>      <th>2002-09-01</th><br>      <td>-42.023462</td><br>      <td>31.277771</td><br>      <td>32.224844</td><br>      <td>4.491348</td><br>    </tr><br>    <tr><br>      <th>2002-09-02</th><br>      <td>-41.121725</td><br>      <td>30.576611</td><br>      <td>33.823500</td><br>      <td>3.783267</td><br>    </tr><br>    <tr><br>      <th>2002-09-03</th><br>      <td>-42.336403</td><br>      <td>29.668299</td><br>      <td>34.613157</td><br>      <td>3.856769</td><br>    </tr><br>    <tr><br>      <th>2002-09-04</th><br>      <td>-41.955082</td><br>      <td>28.741731</td><br>      <td>34.133296</td><br>      <td>3.824269</td><br>    </tr><br>    <tr><br>      <th>2002-09-05</th><br>      <td>-43.073106</td><br>      <td>29.933133</td><br>      <td>33.035272</td><br>      <td>3.558779</td><br>    </tr><br>    <tr><br>      <th>2002-09-06</th><br>      <td>-42.857949</td><br>      <td>29.825473</td><br>      <td>34.213828</td><br>      <td>2.164331</td><br>    </tr><br>    <tr><br>      <th>2002-09-07</th><br>      <td>-42.155893</td><br>      <td>29.107456</td><br>      <td>35.303512</td><br>      <td>2.868834</td><br>    </tr><br>    <tr><br>      <th>2002-09-08</th><br>      <td>-42.101632</td><br>      <td>29.097744</td><br>      <td>35.967004</td><br>      <td>3.297489</td><br>    </tr><br>    <tr><br>      <th>2002-09-09</th><br>      <td>-42.729712</td><br>      <td>29.139733</td><br>      <td>33.576082</td><br>      <td>3.727289</td><br>    </tr><br>    <tr><br>      <th>2002-09-10</th><br>      <td>-42.603725</td><br>      <td>29.138196</td><br>      <td>34.148339</td><br>      <td>3.314936</td><br>    </tr><br>    <tr><br>      <th>2002-09-11</th><br>      <td>-43.306158</td><br>      <td>29.303346</td><br>      <td>33.547137</td><br>      <td>3.292155</td><br>    </tr><br>    <tr><br>      <th>2002-09-12</th><br>      <td>-42.916630</td><br>      <td>31.208726</td><br>      <td>34.173067</td><br>      <td>5.066093</td><br>    </tr><br>    <tr><br>      <th>2002-09-13</th><br>      <td>-42.238570</td><br>      <td>30.869320</td><br>      <td>33.480628</td><br>      <td>4.901099</td><br>    </tr><br>    <tr><br>      <th>2002-09-14</th><br>      <td>-41.676238</td><br>      <td>31.758266</td><br>      <td>36.151867</td><br>      <td>3.944074</td><br>    </tr><br>    <tr><br>      <th>2002-09-15</th><br>      <td>-42.114611</td><br>      <td>30.320999</td><br>      <td>36.610312</td><br>      <td>1.602666</td><br>    </tr><br>    <tr><br>      <th>2002-09-16</th><br>      <td>-40.724451</td><br>      <td>30.896120</td><br>      <td>38.311355</td><br>      <td>2.015574</td><br>    </tr><br>    <tr><br>      <th>2002-09-17</th><br>      <td>-40.235064</td><br>      <td>31.141360</td><br>      <td>37.147181</td><br>      <td>3.570815</td><br>    </tr><br>    <tr><br>      <th>2002-09-18</th><br>      <td>-39.931452</td><br>      <td>31.655201</td><br>      <td>37.492007</td><br>      <td>4.146526</td><br>    </tr><br>    <tr><br>      <th>2002-09-19</th><br>      <td>-39.617204</td><br>      <td>29.786372</td><br>      <td>36.664344</td><br>      <td>3.721535</td><br>    </tr><br>    <tr><br>      <th>2002-09-20</th><br>      <td>-39.521188</td><br>      <td>30.992560</td><br>      <td>36.671998</td><br>      <td>3.753192</td><br>    </tr><br>    <tr><br>      <th>2002-09-21</th><br>      <td>-39.433329</td><br>      <td>32.390220</td><br>      <td>36.189576</td><br>      <td>3.943903</td><br>    </tr><br>    <tr><br>      <th>2002-09-22</th><br>      <td>-38.268539</td><br>      <td>32.991980</td><br>      <td>35.538837</td><br>      <td>4.397427</td><br>    </tr><br>    <tr><br>      <th>2002-09-23</th><br>      <td>-37.280640</td><br>      <td>31.944266</td><br>      <td>34.723265</td><br>      <td>3.195354</td><br>    </tr><br>    <tr><br>      <th>2002-09-24</th><br>      <td>-35.703543</td><br>      <td>29.162965</td><br>      <td>33.190010</td><br>      <td>3.719085</td><br>    </tr><br>    <tr><br>      <th>2002-09-25</th><br>      <td>-34.481000</td><br>      <td>28.463854</td><br>      <td>34.229579</td><br>      <td>3.300110</td><br>    </tr><br>    <tr><br>      <th>2002-09-26</th><br>      <td>-34.835530</td><br>      <td>26.924530</td><br>      <td>35.479308</td><br>      <td>5.618561</td><br>    </tr><br>  </tbody><br></table><br><p>1000 rows × 4 columns</p><br></div>
+
+
+
+<h3 id="Gotchas"><a href="#Gotchas" class="headerlink" title="Gotchas"></a>Gotchas</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> pd.Series([<span class="keyword">False</span>, <span class="keyword">True</span>, <span class="keyword">False</span>]):</span><br><span class="line">    print(<span class="string">"I was true"</span>)</span><br></pre></td></tr></table></figure>
+<pre><code>---------------------------------------------------------------------------
+
+ValueError                                Traceback (most recent call last)
+
+&lt;ipython-input-51-9cae3ab0f79f&gt; in &lt;module&gt;()
+----&gt; 1 if pd.Series([False, True, False]):
+      2     print(&quot;I was true&quot;)
+
+
+/root/anaconda3/lib/python3.6/site-packages/pandas/core/generic.py in __nonzero__(self)
+   1119         raise ValueError(&quot;The truth value of a {0} is ambiguous. &quot;
+   1120                          &quot;Use a.empty, a.bool(), a.item(), a.any() or a.all().&quot;
+-&gt; 1121                          .format(self.__class__.__name__))
+   1122 
+   1123     __bool__ = __nonzero__
+
+
+ValueError: The truth value of a Series is ambiguous. Use a.empty, a.bool(), a.item(), a.any() or a.all().
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/20/10-分钟入门-pandas/" data-id="cjq1zv31n003udrih2hpbxf96" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/27/TensorFlow-基础/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    TensorFlow 基础
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/20/scikit-learn-学习-七-核岭回归/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">scikit-learn 学习 (七) 核岭回归</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

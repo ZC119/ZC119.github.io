@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>scikit-learn 学习 (五) 广义线性模型 | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="一般最小二乘法 123from sklearn import linear_modelreg = linear_model.LinearRegression()reg.fit([[0, 0], [1, 1], [2, 2]], [0, 1, 2]) LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=Fal">
+<meta name="keywords" content="scikit-learn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="scikit-learn 学习 (五) 广义线性模型">
+<meta property="og:url" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="一般最小二乘法 123from sklearn import linear_modelreg = linear_model.LinearRegression()reg.fit([[0, 0], [1, 1], [2, 2]], [0, 1, 2]) LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=Fal">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/3.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_4_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/4.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_9_1.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/5.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_17_4.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_17_5.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_17_6.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_19_1.png">
+<meta property="og:image" content="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/image/scikit-learn/6/output_19_2.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/5.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/6.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/7.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/8.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/9.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/10.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/11.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/12.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/13.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/14.png">
+<meta property="og:image" content="http://zc119.github.io/image/scikit-learn/6/15.png">
+<meta property="og:updated_time" content="2018-01-19T01:01:19.458Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="scikit-learn 学习 (五) 广义线性模型">
+<meta name="twitter:description" content="一般最小二乘法 123from sklearn import linear_modelreg = linear_model.LinearRegression()reg.fit([[0, 0], [1, 1], [2, 2]], [0, 1, 2]) LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=Fal">
+<meta name="twitter:image" content="http://zc119.github.io/image/scikit-learn/6/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-scikit-learn-学习-五-广义线性模型" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            scikit-learn 学习 (五) 广义线性模型
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/01/19/scikit-learn-学习-五-广义线性模型/">
+            <time datetime="2018-01-19T01:00:27.000Z" itemprop="datePublished">2018-01-19</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p><img src="/image/scikit-learn/6/1.png" alt=""></p>
+<p><img src="/image/scikit-learn/6/2.png" alt=""></p>
+<h2 id="一般最小二乘法"><a href="#一般最小二乘法" class="headerlink" title="一般最小二乘法"></a>一般最小二乘法</h2><p><img src="/image/scikit-learn/6/3.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line">reg = linear_model.LinearRegression()</span><br><span class="line">reg.fit([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">2</span>]], [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>LinearRegression(copy_X=True, fit_intercept=True, n_jobs=1, normalize=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.coef_</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 0.5,  0.5])
+</code></pre><p>设计矩阵的列如果近似线性相关，会产生多重共线性。</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Code source: Jaques Grobler</span></span><br><span class="line"><span class="comment"># License: BSD 3 clause</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets, linear_model</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span><br><span class="line"></span><br><span class="line"><span class="comment"># Load the diabetes dataset</span></span><br><span class="line">diabetes = datasets.load_diabetes()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Use only one feature</span></span><br><span class="line">diabetes_X = diabetes.data[:, np.newaxis, <span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Split the data into training/testing sets</span></span><br><span class="line">diabetes_X_train = diabetes_X[:<span class="number">-20</span>]</span><br><span class="line">diabetes_X_test = diabetes_X[<span class="number">-20</span>:]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Split the targets into training/testing sets</span></span><br><span class="line">diabetes_y_train = diabetes.target[:<span class="number">-20</span>]</span><br><span class="line">diabetes_y_test = diabetes.target[<span class="number">-20</span>:]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Create linear regression object</span></span><br><span class="line">regr = linear_model.LinearRegression()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Train the model using the training sets</span></span><br><span class="line">regr.fit(diabetes_X_train, diabetes_y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make predictions using the testing set</span></span><br><span class="line">diabetes_y_pred = regr.predict(diabetes_X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># The coefficients</span></span><br><span class="line">print(<span class="string">'Coefficients: \n'</span>, regr.coef_)</span><br><span class="line"><span class="comment"># The mean squared error</span></span><br><span class="line">print(<span class="string">"Mean squared error: %.2f"</span></span><br><span class="line">      % mean_squared_error(diabetes_y_test, diabetes_y_pred))</span><br><span class="line"><span class="comment"># Explained variance score: 1 is perfect prediction</span></span><br><span class="line">print(<span class="string">'Variance score: %.2f'</span> % r2_score(diabetes_y_test, diabetes_y_pred))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Plot outputs</span></span><br><span class="line">plt.scatter(diabetes_X_test, diabetes_y_test,  color=<span class="string">'black'</span>)</span><br><span class="line">plt.plot(diabetes_X_test, diabetes_y_pred, color=<span class="string">'blue'</span>, linewidth=<span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">plt.xticks(())</span><br><span class="line">plt.yticks(())</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre><code>Coefficients: 
+ [ 938.23786125]
+Mean squared error: 2548.07
+Variance score: 0.47
+</code></pre><p><img src="image/scikit-learn/6/output_4_1.png" alt="png"></p>
+<p>时间复杂度：采用 SVD，如果矩阵(n, p)，则O(np^2)</p>
+<h2 id="岭回归"><a href="#岭回归" class="headerlink" title="岭回归"></a>岭回归</h2><p><img src="/image/scikit-learn/6/4.png" alt=""></p>
+<p>alpha 越大，系数对多重共线性越鲁棒。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line">reg = linear_model.Ridge(alpha=<span class="number">0.5</span>)</span><br><span class="line">reg.fit([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>]], [<span class="number">0</span>, <span class="number">0.1</span>, <span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>Ridge(alpha=0.5, copy_X=True, fit_intercept=True, max_iter=None,
+   normalize=False, random_state=None, solver=&apos;auto&apos;, tol=0.001)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.coef_</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 0.34545455,  0.34545455])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.intercept_</span><br></pre></td></tr></table></figure>
+<pre><code>0.13636363636363641
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Author: Fabian Pedregosa -- &lt;fabian.pedregosa@inria.fr&gt;</span></span><br><span class="line"><span class="comment"># License: BSD 3 clause</span></span><br><span class="line"></span><br><span class="line">print(__doc__)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line"></span><br><span class="line"><span class="comment"># X is the 10x10 Hilbert matrix</span></span><br><span class="line">X = <span class="number">1.</span> / (np.arange(<span class="number">1</span>, <span class="number">11</span>) + np.arange(<span class="number">0</span>, <span class="number">10</span>)[:, np.newaxis])</span><br><span class="line">y = np.ones(<span class="number">10</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Compute paths</span></span><br><span class="line"></span><br><span class="line">n_alphas = <span class="number">200</span></span><br><span class="line">alphas = np.logspace(<span class="number">-10</span>, <span class="number">-2</span>, n_alphas)</span><br><span class="line"></span><br><span class="line">coefs = []</span><br><span class="line"><span class="keyword">for</span> a <span class="keyword">in</span> alphas:</span><br><span class="line">    ridge = linear_model.Ridge(alpha=a, fit_intercept=<span class="keyword">False</span>)</span><br><span class="line">    ridge.fit(X, y)</span><br><span class="line">    coefs.append(ridge.coef_)</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Display results</span></span><br><span class="line"></span><br><span class="line">ax = plt.gca()</span><br><span class="line"></span><br><span class="line">ax.plot(alphas, coefs)</span><br><span class="line">ax.set_xscale(<span class="string">'log'</span>)</span><br><span class="line">ax.set_xlim(ax.get_xlim()[::<span class="number">-1</span>])  <span class="comment"># reverse axis</span></span><br><span class="line">plt.xlabel(<span class="string">'alpha'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'weights'</span>)</span><br><span class="line">plt.title(<span class="string">'Ridge coefficients as a function of the regularization'</span>)</span><br><span class="line">plt.axis(<span class="string">'tight'</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre><code>Automatically created module for IPython interactive environment
+</code></pre><p><img src="image/scikit-learn/6/output_9_1.png" alt="png"></p>
+<h3 id="设置正则化参数：广义交叉验证"><a href="#设置正则化参数：广义交叉验证" class="headerlink" title="设置正则化参数：广义交叉验证"></a>设置正则化参数：广义交叉验证</h3><p>RidgeCV 默认使用GCV 广义交叉验证，是留一的有效形式。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line">reg = linear_model.RidgeCV(alphas=[<span class="number">0.1</span>, <span class="number">1.0</span>, <span class="number">10.0</span>])</span><br><span class="line">reg.fit([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>]], [<span class="number">0</span>, <span class="number">0.1</span>, <span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>RidgeCV(alphas=[0.1, 1.0, 10.0], cv=None, fit_intercept=True, gcv_mode=None,
+    normalize=False, scoring=None, store_cv_values=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.alpha_</span><br></pre></td></tr></table></figure>
+<pre><code>0.10000000000000001
+</code></pre><h2 id="Lasso"><a href="#Lasso" class="headerlink" title="Lasso"></a>Lasso</h2><p>Lasso 是一个估计稀疏系数的线性模型。Lasso 和它的变体是压缩感知的<a href="http://scikit-learn.org/stable/auto_examples/applications/plot_tomography_l1_reconstruction.html#sphx-glr-auto-examples-applications-plot-tomography-l1-reconstruction-py" target="_blank" rel="noopener">基础</a>。</p>
+<p><img src="/image/scikit-learn/6/5.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line">reg = linear_model.Lasso(alpha=<span class="number">0.1</span>)</span><br><span class="line">reg.fit([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>]], [<span class="number">0</span>, <span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>Lasso(alpha=0.1, copy_X=True, fit_intercept=True, max_iter=1000,
+   normalize=False, positive=False, precompute=False, random_state=None,
+   selection=&apos;cyclic&apos;, tol=0.0001, warm_start=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.predict([[<span class="number">1</span>, <span class="number">1</span>]])</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 0.8])
+</code></pre><p><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_and_elasticnet.html#sphx-glr-auto-examples-linear-model-plot-lasso-and-elasticnet-py" target="_blank" rel="noopener">Lasso and Elastic Net for Sparse Signals</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line">print(__doc__)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Author: Olivier Grisel, Gael Varoquaux, Alexandre Gramfort</span></span><br><span class="line"><span class="comment"># License: BSD 3 clause</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LassoCV, LassoLarsCV, LassoLarsIC</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"></span><br><span class="line">diabetes = datasets.load_diabetes()</span><br><span class="line">X = diabetes.data</span><br><span class="line">y = diabetes.target</span><br><span class="line"></span><br><span class="line">rng = np.random.RandomState(<span class="number">42</span>)</span><br><span class="line">X = np.c_[X, rng.randn(X.shape[<span class="number">0</span>], <span class="number">14</span>)]  <span class="comment"># add some bad features</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># normalize data as done by Lars to allow for comparison</span></span><br><span class="line">X /= np.sqrt(np.sum(X ** <span class="number">2</span>, axis=<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># LassoLarsIC: least angle regression with BIC/AIC criterion</span></span><br><span class="line"></span><br><span class="line">model_bic = LassoLarsIC(criterion=<span class="string">'bic'</span>)</span><br><span class="line">t1 = time.time()</span><br><span class="line">model_bic.fit(X, y)</span><br><span class="line">t_bic = time.time() - t1</span><br><span class="line">alpha_bic_ = model_bic.alpha_</span><br><span class="line"></span><br><span class="line">model_aic = LassoLarsIC(criterion=<span class="string">'aic'</span>)</span><br><span class="line">model_aic.fit(X, y)</span><br><span class="line">alpha_aic_ = model_aic.alpha_</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">plot_ic_criterion</span><span class="params">(model, name, color)</span>:</span></span><br><span class="line">    alpha_ = model.alpha_</span><br><span class="line">    alphas_ = model.alphas_</span><br><span class="line">    criterion_ = model.criterion_</span><br><span class="line">    plt.plot(-np.log10(alphas_), criterion_, <span class="string">'--'</span>, color=color,</span><br><span class="line">             linewidth=<span class="number">3</span>, label=<span class="string">'%s criterion'</span> % name)</span><br><span class="line">    plt.axvline(-np.log10(alpha_), color=color, linewidth=<span class="number">3</span>,</span><br><span class="line">                label=<span class="string">'alpha: %s estimate'</span> % name)</span><br><span class="line">    plt.xlabel(<span class="string">'-log(alpha)'</span>)</span><br><span class="line">    plt.ylabel(<span class="string">'criterion'</span>)</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plot_ic_criterion(model_aic, <span class="string">'AIC'</span>, <span class="string">'b'</span>)</span><br><span class="line">plot_ic_criterion(model_bic, <span class="string">'BIC'</span>, <span class="string">'r'</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.title(<span class="string">'Information-criterion for model selection (training time %.3fs)'</span></span><br><span class="line">          % t_bic)</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># LassoCV: coordinate descent</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Compute paths</span></span><br><span class="line">print(<span class="string">"Computing regularization path using the coordinate descent lasso..."</span>)</span><br><span class="line">t1 = time.time()</span><br><span class="line">model = LassoCV(cv=<span class="number">20</span>).fit(X, y)</span><br><span class="line">t_lasso_cv = time.time() - t1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Display results</span></span><br><span class="line">m_log_alphas = -np.log10(model.alphas_)</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">ymin, ymax = <span class="number">2300</span>, <span class="number">3800</span></span><br><span class="line">plt.plot(m_log_alphas, model.mse_path_, <span class="string">':'</span>)</span><br><span class="line">plt.plot(m_log_alphas, model.mse_path_.mean(axis=<span class="number">-1</span>), <span class="string">'k'</span>,</span><br><span class="line">         label=<span class="string">'Average across the folds'</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">plt.axvline(-np.log10(model.alpha_), linestyle=<span class="string">'--'</span>, color=<span class="string">'k'</span>,</span><br><span class="line">            label=<span class="string">'alpha: CV estimate'</span>)</span><br><span class="line"></span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">'-log(alpha)'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Mean square error'</span>)</span><br><span class="line">plt.title(<span class="string">'Mean square error on each fold: coordinate descent '</span></span><br><span class="line">          <span class="string">'(train time: %.2fs)'</span> % t_lasso_cv)</span><br><span class="line">plt.axis(<span class="string">'tight'</span>)</span><br><span class="line">plt.ylim(ymin, ymax)</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># LassoLarsCV: least angle regression</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Compute paths</span></span><br><span class="line">print(<span class="string">"Computing regularization path using the Lars lasso..."</span>)</span><br><span class="line">t1 = time.time()</span><br><span class="line">model = LassoLarsCV(cv=<span class="number">20</span>).fit(X, y)</span><br><span class="line">t_lasso_lars_cv = time.time() - t1</span><br><span class="line"></span><br><span class="line"><span class="comment"># Display results</span></span><br><span class="line">m_log_alphas = -np.log10(model.cv_alphas_)</span><br><span class="line"></span><br><span class="line">plt.figure()</span><br><span class="line">plt.plot(m_log_alphas, model.mse_path_, <span class="string">':'</span>)</span><br><span class="line">plt.plot(m_log_alphas, model.mse_path_.mean(axis=<span class="number">-1</span>), <span class="string">'k'</span>,</span><br><span class="line">         label=<span class="string">'Average across the folds'</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">plt.axvline(-np.log10(model.alpha_), linestyle=<span class="string">'--'</span>, color=<span class="string">'k'</span>,</span><br><span class="line">            label=<span class="string">'alpha CV'</span>)</span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line">plt.xlabel(<span class="string">'-log(alpha)'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Mean square error'</span>)</span><br><span class="line">plt.title(<span class="string">'Mean square error on each fold: Lars (train time: %.2fs)'</span></span><br><span class="line">          % t_lasso_lars_cv)</span><br><span class="line">plt.axis(<span class="string">'tight'</span>)</span><br><span class="line">plt.ylim(ymin, ymax)</span><br><span class="line"></span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre><code>Automatically created module for IPython interactive environment
+
+
+/root/anaconda3/lib/python3.6/site-packages/ipykernel_launcher.py:42: RuntimeWarning: divide by zero encountered in log10
+
+
+Computing regularization path using the coordinate descent lasso...
+Computing regularization path using the Lars lasso...
+
+
+/root/anaconda3/lib/python3.6/site-packages/ipykernel_launcher.py:95: RuntimeWarning: divide by zero encountered in log10
+</code></pre><p><img src="image/scikit-learn/6/output_17_4.png" alt="png"></p>
+<p><img src="image/scikit-learn/6/output_17_5.png" alt="png"></p>
+<p><img src="image/scikit-learn/6/output_17_6.png" alt="png"></p>
+<h2 id="多任务-Lasso"><a href="#多任务-Lasso" class="headerlink" title="多任务 Lasso"></a>多任务 Lasso</h2><p>MultiTaskLasso 是一个线性模型，对多回归问题估计稀疏系数:</p>
+<p>y 是 2d 数组，(n_samples, n_tasks)。 这里的约束是在不同的回归问题上特征是一样的。</p>
+<p><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_multi_task_lasso_support.html#sphx-glr-auto-examples-linear-model-plot-multi-task-lasso-support-py" target="_blank" rel="noopener">Examples</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line">print(__doc__)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Author: Alexandre Gramfort &lt;alexandre.gramfort@inria.fr&gt;</span></span><br><span class="line"><span class="comment"># License: BSD 3 clause</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> MultiTaskLasso, Lasso</span><br><span class="line"></span><br><span class="line">rng = np.random.RandomState(<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Generate some 2D coefficients with sine waves with random frequency and phase</span></span><br><span class="line">n_samples, n_features, n_tasks = <span class="number">100</span>, <span class="number">30</span>, <span class="number">40</span></span><br><span class="line">n_relevant_features = <span class="number">5</span></span><br><span class="line">coef = np.zeros((n_tasks, n_features))</span><br><span class="line">times = np.linspace(<span class="number">0</span>, <span class="number">2</span> * np.pi, n_tasks)</span><br><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> range(n_relevant_features):</span><br><span class="line">    coef[:, k] = np.sin((<span class="number">1.</span> + rng.randn(<span class="number">1</span>)) * times + <span class="number">3</span> * rng.randn(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">X = rng.randn(n_samples, n_features)</span><br><span class="line">Y = np.dot(X, coef.T) + rng.randn(n_samples, n_tasks)</span><br><span class="line"></span><br><span class="line">coef_lasso_ = np.array([Lasso(alpha=<span class="number">0.5</span>).fit(X, y).coef_ <span class="keyword">for</span> y <span class="keyword">in</span> Y.T])</span><br><span class="line">coef_multi_task_lasso_ = MultiTaskLasso(alpha=<span class="number">1.</span>).fit(X, Y).coef_</span><br><span class="line"></span><br><span class="line"><span class="comment"># #############################################################################</span></span><br><span class="line"><span class="comment"># Plot support and time series</span></span><br><span class="line">fig = plt.figure(figsize=(<span class="number">8</span>, <span class="number">5</span>))</span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">1</span>)</span><br><span class="line">plt.spy(coef_lasso_)</span><br><span class="line">plt.xlabel(<span class="string">'Feature'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Time (or Task)'</span>)</span><br><span class="line">plt.text(<span class="number">10</span>, <span class="number">5</span>, <span class="string">'Lasso'</span>)</span><br><span class="line">plt.subplot(<span class="number">1</span>, <span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">plt.spy(coef_multi_task_lasso_)</span><br><span class="line">plt.xlabel(<span class="string">'Feature'</span>)</span><br><span class="line">plt.ylabel(<span class="string">'Time (or Task)'</span>)</span><br><span class="line">plt.text(<span class="number">10</span>, <span class="number">5</span>, <span class="string">'MultiTaskLasso'</span>)</span><br><span class="line">fig.suptitle(<span class="string">'Coefficient non-zero location'</span>)</span><br><span class="line"></span><br><span class="line">feature_to_plot = <span class="number">0</span></span><br><span class="line">plt.figure()</span><br><span class="line">lw = <span class="number">2</span></span><br><span class="line">plt.plot(coef[:, feature_to_plot], color=<span class="string">'seagreen'</span>, linewidth=lw,</span><br><span class="line">         label=<span class="string">'Ground truth'</span>)</span><br><span class="line">plt.plot(coef_lasso_[:, feature_to_plot], color=<span class="string">'cornflowerblue'</span>, linewidth=lw,</span><br><span class="line">         label=<span class="string">'Lasso'</span>)</span><br><span class="line">plt.plot(coef_multi_task_lasso_[:, feature_to_plot], color=<span class="string">'gold'</span>, linewidth=lw,</span><br><span class="line">         label=<span class="string">'MultiTaskLasso'</span>)</span><br><span class="line">plt.legend(loc=<span class="string">'upper center'</span>)</span><br><span class="line">plt.axis(<span class="string">'tight'</span>)</span><br><span class="line">plt.ylim([<span class="number">-1.1</span>, <span class="number">1.1</span>])</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<pre><code>Automatically created module for IPython interactive environment
+</code></pre><p><img src="image/scikit-learn/6/output_19_1.png" alt="png"></p>
+<p><img src="image/scikit-learn/6/output_19_2.png" alt="png"></p>
+<p><img src="/image/scikit-learn/6/5.png" alt=""></p>
+<h2 id="Elastic-Net"><a href="#Elastic-Net" class="headerlink" title="Elastic Net"></a>Elastic Net</h2><p>Elastic Net（弹性网线性模型）结合了岭回归和Lasso回归的优点，即在目标函数中对系数的约束既有L1范数，也有L2范数。这个模型求出来的表示系数，既有稀疏性，又有正则化约束的特性，继承了岭回归的健壮性。</p>
+<p><img src="/image/scikit-learn/6/6.png" alt=""></p>
+<p>ElasticNetCV 可以通过交叉验证调整 alpha 与 l1_ratio。</p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_and_elasticnet.html#sphx-glr-auto-examples-linear-model-plot-lasso-and-elasticnet-py" target="_blank" rel="noopener">Lasso and Elastic Net for Sparse Signals</a></li>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_coordinate_descent_path.html#sphx-glr-auto-examples-linear-model-plot-lasso-coordinate-descent-path-py" target="_blank" rel="noopener">Lasso and Elastic Net</a></li>
+</ul>
+<h2 id="多任务-Elastic-Net"><a href="#多任务-Elastic-Net" class="headerlink" title="多任务 Elastic Net"></a>多任务 Elastic Net</h2><p><img src="/image/scikit-learn/6/7.png" alt=""></p>
+<h2 id="Least-Angle-Regression"><a href="#Least-Angle-Regression" class="headerlink" title="Least Angle Regression"></a>Least Angle Regression</h2><p>LAR 最小角回归是一个针对高维数据集的回归算法。LARS 类似于前向梯度算法。在每一步找到与 response 最相关的 predictor。当两个 predictors 与 response 的相关性相同时，选择角平分线方向继续走。</p>
+<p>优势：</p>
+<ul>
+<li>适合于特征维数 p 远高于样本数 n</li>
+<li>算法的最坏计算复杂度和最小二乘法类似，但是其计算速度几乎和前向选择算法一样</li>
+<li>可以产生分段线性结果的完整路径，这在模型的交叉验证中极为有用</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>对噪音敏感</li>
+</ul>
+<h2 id="LARS-Lasso"><a href="#LARS-Lasso" class="headerlink" title="LARS Lasso"></a>LARS Lasso</h2><p><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_lasso_lars.html#sphx-glr-auto-examples-linear-model-plot-lasso-lars-py" target="_blank" rel="noopener">Lasso path using LARS</a></p>
+<p>LassoLars 是一个用 LARS 算法实现的 lasso 模型。不像那些基于坐标下降的算法，它产生了精确解。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line">reg = linear_model.LassoLars(alpha=<span class="number">0.1</span>)</span><br><span class="line">reg.fit([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>]], [<span class="number">0</span>, <span class="number">1</span>])</span><br></pre></td></tr></table></figure>
+<pre><code>LassoLars(alpha=0.1, copy_X=True, eps=2.2204460492503131e-16,
+     fit_intercept=True, fit_path=True, max_iter=500, normalize=True,
+     positive=False, precompute=&apos;auto&apos;, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.coef_</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 0.71715729,  0.        ])
+</code></pre><h2 id="Orthogonal-Matching-Pursuit-OMP-正交匹配追踪法"><a href="#Orthogonal-Matching-Pursuit-OMP-正交匹配追踪法" class="headerlink" title="Orthogonal Matching Pursuit (OMP) 正交匹配追踪法"></a>Orthogonal Matching Pursuit (OMP) 正交匹配追踪法</h2><p><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_omp.html#sphx-glr-auto-examples-linear-model-plot-omp-py" target="_blank" rel="noopener">Orthogonal Matching Pursuit</a></p>
+<p><img src="/image/scikit-learn/6/8.png" alt=""></p>
+<h2 id="Bayesian-回归"><a href="#Bayesian-回归" class="headerlink" title="Bayesian 回归"></a>Bayesian 回归</h2><p>岭回归中的l2范数正则化等价于参数 w 和精度 lambda^-1 的高斯先验的 MAP 估计。</p>
+<p>对于 lambda 参数，把它视为随机变量，从数据中估计</p>
+<p><img src="/image/scikit-learn/6/9.png" alt=""></p>
+<p>详见 PRML</p>
+<h3 id="Bayesian-岭回归"><a href="#Bayesian-岭回归" class="headerlink" title="Bayesian 岭回归"></a>Bayesian 岭回归</h3><p><img src="/image/scikit-learn/6/10.png" alt=""></p>
+<p>alpha,lambda 选择为 gamma 分布，这是高斯分布的共轭先验。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> linear_model</span><br><span class="line">X = [[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>], [<span class="number">2</span>, <span class="number">2</span>], [<span class="number">3</span>, <span class="number">3</span>]]</span><br><span class="line">Y = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">reg = linear_model.BayesianRidge()</span><br><span class="line">reg.fit(X, Y)</span><br></pre></td></tr></table></figure>
+<pre><code>BayesianRidge(alpha_1=1e-06, alpha_2=1e-06, compute_score=False, copy_X=True,
+       fit_intercept=True, lambda_1=1e-06, lambda_2=1e-06, n_iter=300,
+       normalize=False, tol=0.001, verbose=False)
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.predict([[<span class="number">1</span>, <span class="number">0</span>]])</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 0.50000013])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">reg.coef_</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 0.49999993,  0.49999993])
+</code></pre><p>在贝叶斯框架下，权重参数与一般最小二乘有区别。但贝叶斯岭回归对病态矩阵更鲁棒。</p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_bayesian_ridge.html#sphx-glr-auto-examples-linear-model-plot-bayesian-ridge-py" target="_blank" rel="noopener">Bayesian Ridge Regression</a></li>
+</ul>
+<h3 id="Automatic-Relevance-Determination-ARD"><a href="#Automatic-Relevance-Determination-ARD" class="headerlink" title="Automatic Relevance Determination - ARD"></a>Automatic Relevance Determination - ARD</h3><p>ARD 回归与贝叶斯岭回归相似，但是它的权重 w 是稀疏的。ARD 回归提出了关于 w 的不同的先验，它舍弃了球形高斯分布的假设。反之，它假设高斯分布是椭圆形的，与坐标轴平行。</p>
+<p>这意味着每个权重采样自中心为0精度为 $\lambda _i$ 的高斯分布</p>
+<p><img src="/image/scikit-learn/6/11.png" alt=""></p>
+<p>与贝叶斯岭回归不同， 每个坐标 $w_i$ 有它自己的标准差 $\lambda _i$。所有 $\lambda _i$ 的先验有相同的 gamma 分布。</p>
+<p>ARD 是稀疏贝叶斯学习和相关向量机的代表。</p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_ard.html#sphx-glr-auto-examples-linear-model-plot-ard-py" target="_blank" rel="noopener">Automatic Relevance Determination Regression</a></li>
+</ul>
+<h2 id="Logistic-回归"><a href="#Logistic-回归" class="headerlink" title="Logistic 回归"></a>Logistic 回归</h2><p>Logistic 回归，不管它的名字，它是一个线性分类模型而不是回归。Logistic 回归也被称为 logit 回归，最大熵分类 (MaxEnt) 或者 log-linear 分类器. 在这个模型中, 描述单一尝试的可能结果的概率用的是 logistic 函数.</p>
+<p>在 scikit-learn 中实现 Logistic 回归的类是 LogisticRegression. 它可以实现 L2 或 L1 正则下的二分类, One-vs-Rest, 多分类回归.</p>
+<p><img src="/image/scikit-learn/6/12.png" alt=""></p>
+<p><img src="/image/scikit-learn/6/13.png" alt=""></p>
+<p>Examples:</p>
+<ul>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic_l1_l2_sparsity.html#sphx-glr-auto-examples-linear-model-plot-logistic-l1-l2-sparsity-py" target="_blank" rel="noopener">L1 Penalty and Sparsity in Logistic Regression</a></li>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic_path.html#sphx-glr-auto-examples-linear-model-plot-logistic-path-py" target="_blank" rel="noopener">Path with L1- Logistic Regression</a></li>
+<li><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic_multinomial.html#sphx-glr-auto-examples-linear-model-plot-logistic-multinomial-py" target="_blank" rel="noopener">Plot multinomial and One-vs-Rest Logistic Regression</a><br><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_sparse_logistic_regression_20newsgroups.html#sphx-glr-auto-examples-linear-model-plot-sparse-logistic-regression-20newsgroups-py" target="_blank" rel="noopener">Multiclass sparse logisitic regression on newgroups20</a><br><a href="http://scikit-learn.org/stable/auto_examples/linear_model/plot_sparse_logistic_regression_mnist.html#sphx-glr-auto-examples-linear-model-plot-sparse-logistic-regression-mnist-py" target="_blank" rel="noopener">MNIST classfification using multinomial logistic + L1</a></li>
+</ul>
+<h2 id="随机梯度下降-SGD"><a href="#随机梯度下降-SGD" class="headerlink" title="随机梯度下降 -SGD"></a>随机梯度下降 -SGD</h2><p>随机梯度下降是拟合线性模型的一个简单而高效的方法. 当样本数量很大时非常有效. </p>
+<p>SGDClassifier 和 SGDRegressor 分别用于拟合分类问题和回归问题的线性模型，可使用不同的（凸）损失函数，支持不同的惩罚项。 例如，设定 loss=”log” ，则 SGDClassifier 拟合一个 logistic 回归模型，而 loss=”hinge” 拟合线性支持向量机(SVM).</p>
+<h2 id="Perceptron-感知器"><a href="#Perceptron-感知器" class="headerlink" title="Perceptron 感知器"></a>Perceptron 感知器</h2><h2 id="Passive-Aggressive-Algorithms（被动攻击算法）"><a href="#Passive-Aggressive-Algorithms（被动攻击算法）" class="headerlink" title="Passive Aggressive Algorithms（被动攻击算法）"></a>Passive Aggressive Algorithms（被动攻击算法）</h2><h2 id="Robustness-回归-outliers-and-modeling-errors"><a href="#Robustness-回归-outliers-and-modeling-errors" class="headerlink" title="Robustness 回归: outliers and modeling errors"></a>Robustness 回归: outliers and modeling errors</h2><p>Robustness 回归用于拟合有损坏数据的回归模型</p>
+<p><img src="/image/scikit-learn/6/14.png" alt=""></p>
+<h2 id="多项式回归"><a href="#多项式回归" class="headerlink" title="多项式回归"></a>多项式回归</h2><p><img src="/image/scikit-learn/6/15.png" alt=""></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> PolynomialFeatures</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">X = np.arange(<span class="number">6</span>).reshape(<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line">X</span><br></pre></td></tr></table></figure>
+<pre><code>array([[0, 1],
+       [2, 3],
+       [4, 5]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">poly = PolynomialFeatures(degree=<span class="number">2</span>)</span><br><span class="line">poly.fit_transform(X)</span><br></pre></td></tr></table></figure>
+<pre><code>array([[  1.,   0.,   1.,   0.,   0.,   1.],
+       [  1.,   2.,   3.,   4.,   6.,   9.],
+       [  1.,   4.,   5.,  16.,  20.,  25.]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> PolynomialFeatures</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.pipeline <span class="keyword">import</span> Pipeline</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">model = Pipeline([(<span class="string">'poly'</span>, PolynomialFeatures(degree=<span class="number">3</span>)),</span><br><span class="line">                 (<span class="string">'linear'</span>, LinearRegression(fit_intercept=<span class="keyword">False</span>))])</span><br><span class="line"><span class="comment"># fit to an order-3 polynomial data</span></span><br><span class="line">x = np.arange(<span class="number">5</span>)</span><br><span class="line">y = <span class="number">3</span> - <span class="number">2</span> * x + x ** <span class="number">2</span> - x ** <span class="number">3</span></span><br><span class="line">model = model.fit(x[:, np.newaxis], y)</span><br><span class="line">model.named_steps[<span class="string">'linear'</span>].coef_</span><br></pre></td></tr></table></figure>
+<pre><code>array([ 3., -2.,  1., -1.])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">x[:, np.newaxis]</span><br></pre></td></tr></table></figure>
+<pre><code>array([[0],
+       [1],
+       [2],
+       [3],
+       [4]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> Perceptron</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> PolynomialFeatures</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">X = np.array([[<span class="number">0</span>, <span class="number">0</span>], [<span class="number">0</span>, <span class="number">1</span>], [<span class="number">1</span>, <span class="number">0</span>], [<span class="number">1</span>, <span class="number">1</span>]])</span><br><span class="line">y = X[:, <span class="number">0</span>] ^ X[:, <span class="number">1</span>]</span><br><span class="line">y</span><br></pre></td></tr></table></figure>
+<pre><code>array([0, 1, 1, 0])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X = PolynomialFeatures(interaction_only=<span class="keyword">True</span>).fit_transform(X).astype(int)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">X</span><br></pre></td></tr></table></figure>
+<pre><code>array([[1, 0, 0, 0],
+       [1, 0, 1, 0],
+       [1, 1, 0, 0],
+       [1, 1, 1, 1]])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">clf = Perceptron(fit_intercept=<span class="keyword">False</span>, max_iter=<span class="number">10</span>, tol=<span class="keyword">None</span>,</span><br><span class="line">                  shuffle=<span class="keyword">False</span>).fit(X, y)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.predict(X)</span><br></pre></td></tr></table></figure>
+<pre><code>array([0, 1, 1, 0])
+</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clf.score(X, y)</span><br></pre></td></tr></table></figure>
+<pre><code>1.0
+</code></pre>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/" data-id="cjq1zv308001rdrih6fn5ojku" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2018/01/20/scikit-learn-学习-六-线性和二次判别分析/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    scikit-learn 学习 (六) 线性和二次判别分析
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/01/07/scikit-learn-学习（四）处理文本数据/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">scikit-learn 学习（四）处理文本数据</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

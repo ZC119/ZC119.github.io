@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>tf.estimator Quickstart | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="TensorFlow 的高级 machine learning API(tf.estimator) 使我们方便地构建，训练和评估大量 machine learning models。在本教程中，你将使用 tf.estimator 来建立一个 neural network classifier 并在鸢尾花卉数据集(Iris data set) 上基于萼片/花瓣(sepal/petal)的几何形状预测">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tf.estimator Quickstart">
+<meta property="og:url" content="http://zc119.github.io/2017/12/17/tf-estimator-Quickstart/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="TensorFlow 的高级 machine learning API(tf.estimator) 使我们方便地构建，训练和评估大量 machine learning models。在本教程中，你将使用 tf.estimator 来建立一个 neural network classifier 并在鸢尾花卉数据集(Iris data set) 上基于萼片/花瓣(sepal/petal)的几何形状预测">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/tf.estimator%20Quickstart/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/tf.estimator%20Quickstart/2.png">
+<meta property="og:updated_time" content="2017-12-18T03:10:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="tf.estimator Quickstart">
+<meta name="twitter:description" content="TensorFlow 的高级 machine learning API(tf.estimator) 使我们方便地构建，训练和评估大量 machine learning models。在本教程中，你将使用 tf.estimator 来建立一个 neural network classifier 并在鸢尾花卉数据集(Iris data set) 上基于萼片/花瓣(sepal/petal)的几何形状预测">
+<meta name="twitter:image" content="http://zc119.github.io/image/tf.estimator%20Quickstart/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-tf-estimator-Quickstart" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            tf.estimator Quickstart
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/17/tf-estimator-Quickstart/">
+            <time datetime="2017-12-17T12:14:58.000Z" itemprop="datePublished">2017-12-17</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>TensorFlow 的高级 machine learning API(tf.estimator) 使我们方便地构建，训练和评估大量 machine learning models。在本教程中，你将使用 tf.estimator 来建立一个 neural network classifier 并在鸢尾花卉数据集(Iris data set) 上基于萼片/花瓣(sepal/petal)的几何形状预测花的种类。</p>
+<a id="more"></a>
+<p>你将编写代码来实现以下5个步骤：</p>
+<ol>
+<li>加载 CSVs 文件–包含有鸢尾花卉训练/测试集(Iris training/test set) 为一个 TensorFlow Dataset</li>
+<li>构建一个 <a href="https://tensorflow.google.cn/api_docs/python/tf/estimator/DNNClassifier" target="_blank" rel="noopener">neural network classifier</a></li>
+<li>使用训练数据训练模型</li>
+<li>评估模型精度</li>
+<li>对新的样本分类</li>
+</ol>
+<p><strong>注意</strong>: 在开始本教程之前要安装好 TensorFlow</p>
+<h2 id="完整的-Neural-Network-源码"><a href="#完整的-Neural-Network-源码" class="headerlink" title="完整的 Neural Network 源码"></a>完整的 Neural Network 源码</h2><p>以下是完整的 neural network classifier 源码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> six.moves.urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="comment"># Data sets</span></span><br><span class="line">IRIS_TRAINING = <span class="string">"iris_training.csv"</span></span><br><span class="line">IRIS_TRAINING_URL = <span class="string">"http://download.tensorflow.org/data/iris_training.csv"</span></span><br><span class="line"></span><br><span class="line">IRIS_TEST = <span class="string">"iris_test.csv"</span></span><br><span class="line">IRIS_TEST_URL = <span class="string">"http://download.tensorflow.org/data/iris_test.csv"</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">  <span class="comment"># If the training and test sets aren't stored locally, download them.</span></span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(IRIS_TRAINING):</span><br><span class="line">    raw = urlopen(IRIS_TRAINING_URL).read()</span><br><span class="line">    <span class="keyword">with</span> open(IRIS_TRAINING, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">      f.write(raw)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(IRIS_TEST):</span><br><span class="line">    raw = urlopen(IRIS_TEST_URL).read()</span><br><span class="line">    <span class="keyword">with</span> open(IRIS_TEST, <span class="string">"wb"</span>) <span class="keyword">as</span> f:</span><br><span class="line">      f.write(raw)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Load datasets.</span></span><br><span class="line">  training_set = tf.contrib.learn.datasets.base.load_csv_with_header(</span><br><span class="line">      filename=IRIS_TRAINING,</span><br><span class="line">      target_dtype=np.int,</span><br><span class="line">      features_dtype=np.float32)</span><br><span class="line">  test_set = tf.contrib.learn.datasets.base.load_csv_with_header(</span><br><span class="line">      filename=IRIS_TEST,</span><br><span class="line">      target_dtype=np.int,</span><br><span class="line">      features_dtype=np.float32)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Specify that all features have real-value data</span></span><br><span class="line">  feature_columns = [tf.feature_column.numeric_column(<span class="string">"x"</span>, shape=[<span class="number">4</span>])]</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Build 3 layer DNN with 10, 20, 10 units respectively.</span></span><br><span class="line">  classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,</span><br><span class="line">                                          hidden_units=[<span class="number">10</span>, <span class="number">20</span>, <span class="number">10</span>],</span><br><span class="line">                                          n_classes=<span class="number">3</span>,</span><br><span class="line">                                          model_dir=<span class="string">"/tmp/iris_model"</span>)</span><br><span class="line">  <span class="comment"># Define the training inputs</span></span><br><span class="line">  train_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">      x=&#123;<span class="string">"x"</span>: np.array(training_set.data)&#125;,</span><br><span class="line">      y=np.array(training_set.target),</span><br><span class="line">      num_epochs=<span class="keyword">None</span>,</span><br><span class="line">      shuffle=<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Train model.</span></span><br><span class="line">  classifier.train(input_fn=train_input_fn, steps=<span class="number">2000</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Define the test inputs</span></span><br><span class="line">  test_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">      x=&#123;<span class="string">"x"</span>: np.array(test_set.data)&#125;,</span><br><span class="line">      y=np.array(test_set.target),</span><br><span class="line">      num_epochs=<span class="number">1</span>,</span><br><span class="line">      shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Evaluate accuracy.</span></span><br><span class="line">  accuracy_score = classifier.evaluate(input_fn=test_input_fn)[<span class="string">"accuracy"</span>]</span><br><span class="line"></span><br><span class="line">  print(<span class="string">"\nTest Accuracy: &#123;0:f&#125;\n"</span>.format(accuracy_score))</span><br><span class="line"></span><br><span class="line">  <span class="comment"># Classify two new flower samples.</span></span><br><span class="line">  new_samples = np.array(</span><br><span class="line">      [[<span class="number">6.4</span>, <span class="number">3.2</span>, <span class="number">4.5</span>, <span class="number">1.5</span>],</span><br><span class="line">       [<span class="number">5.8</span>, <span class="number">3.1</span>, <span class="number">5.0</span>, <span class="number">1.7</span>]], dtype=np.float32)</span><br><span class="line">  predict_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">      x=&#123;<span class="string">"x"</span>: new_samples&#125;,</span><br><span class="line">      num_epochs=<span class="number">1</span>,</span><br><span class="line">      shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">  predictions = list(classifier.predict(input_fn=predict_input_fn))</span><br><span class="line">  predicted_classes = [p[<span class="string">"classes"</span>] <span class="keyword">for</span> p <span class="keyword">in</span> predictions]</span><br><span class="line"></span><br><span class="line">  print(</span><br><span class="line">      <span class="string">"New Samples, Class Predictions:    &#123;&#125;\n"</span></span><br><span class="line">      .format(predicted_classes))</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+<pre><code>INFO:tensorflow:Using default config.
+INFO:tensorflow:Using config: {&apos;_model_dir&apos;: &apos;/tmp/iris_model&apos;, &apos;_tf_random_seed&apos;: None, &apos;_save_summary_steps&apos;: 100, &apos;_save_checkpoints_steps&apos;: None, &apos;_save_checkpoints_secs&apos;: 600, &apos;_session_config&apos;: None, &apos;_keep_checkpoint_max&apos;: 5, &apos;_keep_checkpoint_every_n_hours&apos;: 10000, &apos;_log_step_count_steps&apos;: 100, &apos;_service&apos;: None, &apos;_cluster_spec&apos;: &lt;tensorflow.python.training.server_lib.ClusterSpec object at 0x7f5ae685de10&gt;, &apos;_task_type&apos;: &apos;worker&apos;, &apos;_task_id&apos;: 0, &apos;_master&apos;: &apos;&apos;, &apos;_is_chief&apos;: True, &apos;_num_ps_replicas&apos;: 0, &apos;_num_worker_replicas&apos;: 1}
+INFO:tensorflow:Create CheckpointSaverHook.
+INFO:tensorflow:Restoring parameters from /tmp/iris_model/model.ckpt-2000
+INFO:tensorflow:Saving checkpoints for 2001 into /tmp/iris_model/model.ckpt.
+INFO:tensorflow:loss = 5.46321, step = 2001
+INFO:tensorflow:global_step/sec: 866.16
+INFO:tensorflow:loss = 6.87284, step = 2101 (0.116 sec)
+INFO:tensorflow:global_step/sec: 1041.16
+INFO:tensorflow:loss = 3.69508, step = 2201 (0.096 sec)
+INFO:tensorflow:global_step/sec: 985.203
+INFO:tensorflow:loss = 2.3037, step = 2301 (0.101 sec)
+INFO:tensorflow:global_step/sec: 983.131
+INFO:tensorflow:loss = 7.33763, step = 2401 (0.102 sec)
+INFO:tensorflow:global_step/sec: 916.557
+INFO:tensorflow:loss = 7.2439, step = 2501 (0.110 sec)
+INFO:tensorflow:global_step/sec: 987.515
+INFO:tensorflow:loss = 5.76083, step = 2601 (0.101 sec)
+INFO:tensorflow:global_step/sec: 980.429
+INFO:tensorflow:loss = 2.64258, step = 2701 (0.102 sec)
+INFO:tensorflow:global_step/sec: 969.033
+INFO:tensorflow:loss = 10.926, step = 2801 (0.103 sec)
+INFO:tensorflow:global_step/sec: 963.906
+INFO:tensorflow:loss = 5.91679, step = 2901 (0.104 sec)
+INFO:tensorflow:global_step/sec: 994.896
+INFO:tensorflow:loss = 1.67117, step = 3001 (0.100 sec)
+INFO:tensorflow:global_step/sec: 989.437
+INFO:tensorflow:loss = 8.41107, step = 3101 (0.101 sec)
+INFO:tensorflow:global_step/sec: 1042.21
+INFO:tensorflow:loss = 10.0648, step = 3201 (0.096 sec)
+INFO:tensorflow:global_step/sec: 981.781
+INFO:tensorflow:loss = 2.24606, step = 3301 (0.102 sec)
+INFO:tensorflow:global_step/sec: 985.14
+INFO:tensorflow:loss = 5.87443, step = 3401 (0.101 sec)
+INFO:tensorflow:global_step/sec: 975.12
+INFO:tensorflow:loss = 4.06221, step = 3501 (0.103 sec)
+INFO:tensorflow:global_step/sec: 956.165
+INFO:tensorflow:loss = 0.989045, step = 3601 (0.104 sec)
+INFO:tensorflow:global_step/sec: 941.931
+INFO:tensorflow:loss = 3.49446, step = 3701 (0.107 sec)
+INFO:tensorflow:global_step/sec: 954.209
+INFO:tensorflow:loss = 4.13903, step = 3801 (0.104 sec)
+INFO:tensorflow:global_step/sec: 1044.03
+INFO:tensorflow:loss = 3.30474, step = 3901 (0.096 sec)
+INFO:tensorflow:Saving checkpoints for 4000 into /tmp/iris_model/model.ckpt.
+INFO:tensorflow:Loss for final step: 6.47402.
+INFO:tensorflow:Starting evaluation at 2017-12-17-12:11:46
+INFO:tensorflow:Restoring parameters from /tmp/iris_model/model.ckpt-4000
+INFO:tensorflow:Finished evaluation at 2017-12-17-12:11:46
+INFO:tensorflow:Saving dict for global step 4000: accuracy = 0.966667, average_loss = 0.0702326, global_step = 4000, loss = 2.10698
+
+Test Accuracy: 0.966667
+
+INFO:tensorflow:Restoring parameters from /tmp/iris_model/model.ckpt-4000
+New Samples, Class Predictions:    [array([b&apos;1&apos;], dtype=object), array([b&apos;2&apos;], dtype=object)]
+</code></pre><p>下面部分会详细地分析这段代码。</p>
+<h2 id="加载-Iris-CSV-data-到-TensorFlow"><a href="#加载-Iris-CSV-data-到-TensorFlow" class="headerlink" title="加载 Iris CSV data 到 TensorFlow"></a>加载 Iris CSV data 到 TensorFlow</h2><p>Iris data sets 包含150行的数据，包括3个相关的 Iris 品种：<em>Iris setosa, Iris virginica, and Iris versicolor</em> 的各50个样本。</p>
+<p>每一行是包括下列数据的一个花的样本：sepal length，sepal width，petal length，petal width，和 flower species。花的品种用0,1,2这3个整数表示。</p>
+<p><img src="/image/tf.estimator Quickstart/1.png" alt=""></p>
+<p>本教程中，Iris 数据已经被随机打乱并分成了两个 CSVs：</p>
+<ul>
+<li>120个样本的训练集 iris_training.csv</li>
+<li>30个样本的测试集 iris_test.csv</li>
+</ul>
+<p>首先 import 所有必要的 modules，定义下载和存储数据的地址：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> absolute_import</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> division</span><br><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> print_function</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> six.moves.urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line">IRIS_TRAINING = <span class="string">'iris_training.csv'</span></span><br><span class="line">IRIS_TRAINING_URL = <span class="string">'http://download.tensorflow.org/data/iris_training.csv'</span></span><br><span class="line"></span><br><span class="line">IRIS_TEST = <span class="string">'iris_test.csv'</span></span><br><span class="line">IRIS_TEST_URL = <span class="string">'http;//download.tensorflow.org/data/iris_test.csv'</span></span><br></pre></td></tr></table></figure></p>
+<p>然后，如果训练集和测试集没有下载本地，就下载它们：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(IRIS_TRAINING):</span><br><span class="line">    raw = urlopen(IRIS_TRAINING_URL).read()</span><br><span class="line">    <span class="keyword">with</span> open(IRIS_TRAINING, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(raw)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(IRIS_TEST):</span><br><span class="line">    raw = urlopen(IRIS_TEST_URL).read()</span><br><span class="line">    <span class="keyword">with</span> open(IRIS_TEST, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">        f.write(raw)</span><br></pre></td></tr></table></figure>
+<p>接下来，使用 load_csv_with_header() 方法将训练集与测试集载入到 Datasets 中。它有3个参数：</p>
+<ul>
+<li>filename CSV文件的路径名称</li>
+<li>target_dtype target value 的numpy数据类型</li>
+<li>features_dtype feature values 的numpy数据类型</li>
+</ul>
+<p>这里，target 是 flower species，从0到2的整数，类型是 np.int:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Load datasets.</span></span><br><span class="line">training_set = tf.contrib.learn.datasets.base.load_csv_with_header(</span><br><span class="line">    filename=IRIS_TRAINING,</span><br><span class="line">    target_dtype=np.int,</span><br><span class="line">    features_dtype=np.float32)</span><br><span class="line">test_set = tf.contrib.learn.datasets.base.load_csv_with_header(</span><br><span class="line">    filename=IRIS_TEST,</span><br><span class="line">    target_dtype=np.int,</span><br><span class="line">    feature_dtype=np.float32)</span><br></pre></td></tr></table></figure>
+<p>Datasets 在 tf.contrib.learn 中是 named tuples。你可以通过 data 或 target 这两个 fields 来访问特征数据与目标值。training_set.data 和 training_set.target 包含了训练集的特征数据和目标值。test_set.data 和 test_set.target 包含了测试集的特征数据和目标值。</p>
+<p>之后几个部分，你将会使用 training_set.data 和 training_set.target 来训练你的模型，test_set.data 和 test_set.target 来评估你的模型。但首先你要构建你的模型</p>
+<h2 id="构建一个-DNN-分类器"><a href="#构建一个-DNN-分类器" class="headerlink" title="构建一个 DNN 分类器"></a>构建一个 DNN 分类器</h2><p>tf.estimator 提供了大量的预定义的模型，称为 Estimators。这里，你将构建一个 DNN 分类器模型来拟合 Iris data。使用 tf.estimator，你可以用带有 tf.estimator.DNNClassifier 的几行代码来实例化：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Specify that all features have real_value data</span></span><br><span class="line">feature_columns = [tf.feature_coluimn.numeric_column(<span class="string">'x'</span>, shape=[<span class="number">4</span>])]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Build 3 layer DNN with 10, 20, 10 units respectively</span></span><br><span class="line">classifier = tf.estimator.DNNClassifier(feature_columns=feature_columns,</span><br><span class="line">                                      hidden_units=[<span class="number">10</span>, <span class="number">20</span>, <span class="number">10</span>].</span><br><span class="line">                                        n_classes=<span class="number">3</span>,</span><br><span class="line">                                        model_dir=<span class="string">'/tmp/iris_model'</span>)</span><br></pre></td></tr></table></figure>
+<p>上面的代码首先定义了模型的特征的列数，并指定了数据类型。所有的特征数据是连续的，因此 tf.feature_column.numeric_column 是一个合适的函数。</p>
+<p>然后，代码创建了一个 DNNClassifier model 使用以下参数：</p>
+<ul>
+<li>feature_columns=feature_columns</li>
+<li>hidden_units=[10, 20, 10] 3个 hidden layers，各自包含10, 20, 10个 neurons</li>
+<li>n_classes=3 目标种类有3种</li>
+<li>model_dir=/tmp/iris_model TensowFlow 在训练的过程中将会用来存储 checkpoint 数据 和 TensorBoard summaries 的目录</li>
+</ul>
+<h2 id="描述训练输出管线-training-input-pipeline"><a href="#描述训练输出管线-training-input-pipeline" class="headerlink" title="描述训练输出管线 (training input pipeline)"></a>描述训练输出管线 (training input pipeline)</h2><p>tf.estimator API 使用输入函数来创建 TensorFLow 操作用来生成模型的数据。我们可以使用 tf.estimator.inputs.numpy_input_fn 来产生输入管线：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Define the training inputs</span></span><br><span class="line">train_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">    x=&#123;<span class="string">'x'</span>: np.array(training_set.data)&#125;,</span><br><span class="line">    y=np.array(training_set.target),</span><br><span class="line">    num_epochs=<span class="keyword">None</span>,</span><br><span class="line">    shuffle=<span class="keyword">True</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="拟合-DNNClassifier"><a href="#拟合-DNNClassifier" class="headerlink" title="拟合 DNNClassifier"></a>拟合 DNNClassifier</h2><p>现在你已经构建了你的 DNN classifier model。你可以使用 <a href="https://tensorflow.google.cn/api_docs/python/tf/estimator/Estimator#train" target="_blank" rel="noopener">train</a> 方法来拟合。传入 train_input_fn 作为 input_fn，和训练迭代的次数，这里是2000次。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Train model.</span></span><br><span class="line">classifier.train(input_fn=train_input_fn, steps=<span class="number">2000</span>)</span><br></pre></td></tr></table></figure>
+<p>模型的 state 在这个 classifier 里是保存的。因此你可以迭代地训练例如上述代码等价于：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">classifier.train(input_fn=train_input_fn, steps=<span class="number">1000</span>)</span><br><span class="line">classifier.train(input_fn=train_input_fn, steps=<span class="number">1000</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="评估模型精度"><a href="#评估模型精度" class="headerlink" title="评估模型精度"></a>评估模型精度</h2><p>你已经训练了你的 DNNClassifier model 在 Iris training data 上。现在，你可以使用 <a href="https://tensorflow.google.cn/api_docs/python/tf/estimator/Estimator#evaluate" target="_blank" rel="noopener">evaluate</a> 方法检查测试集上的精度。和 train 类似，evaluate 作为一个输入函数建立输入管线。 evaluate 返回一个 dict 带有评估结果。下面代码传入 Iris test 数据到 evaluate 中并从结果中打印 accuracy：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Define the test inputs</span></span><br><span class="line">test_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">    x=&#123;<span class="string">'x'</span>: np.array(test_set.data)&#125;,</span><br><span class="line">    y=np.array(test_set.target),</span><br><span class="line">    num_epochs=<span class="number">1</span>,</span><br><span class="line">    shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Evaluate accuracy</span></span><br><span class="line">accuracy_score = classifier.evaluate(input_fn=test_input_fn)[<span class="string">'accuracy'</span>]</span><br><span class="line"></span><br><span class="line">print(<span class="string">'\nTest Accuracy: &#123;0:f&#125;\n'</span>.format(accuracy_score))</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>注意</strong>: num_epochs=1 参数十分重要。test_input_fn 将会在整个数据上迭代一次，然后 raise OutOfRangeError。这个 error 发出信号使这个分类器停止评估，所以它会评估整个输入一次</p>
+</blockquote>
+<p>当你运行后，将会打印如下结果：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Test Accuracy: <span class="number">0.966667</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="分类新的样本"><a href="#分类新的样本" class="headerlink" title="分类新的样本"></a>分类新的样本</h2><p>使用 estimator的 predict() 方法来分类新的样本。例如，对以下两个新的花样本分类。<br><img src="/image/tf.estimator Quickstart/2.png" alt=""></p>
+<p>predict 返回的是一个 generator of dicts。可以转换为 list。下列代码实现：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Classify two new flower samples.</span></span><br><span class="line">new_samples = np.array(</span><br><span class="line">    [[<span class="number">6.4</span>, <span class="number">3.2</span>, <span class="number">4.5</span>, <span class="number">1.5</span>],</span><br><span class="line">     [<span class="number">5.8</span>, <span class="number">3.1</span>, <span class="number">5.0</span>, <span class="number">1.7</span>]], dtype=np.float32)</span><br><span class="line">predict_input_fn = tf.estimator.inputs.numpy_input_fn(</span><br><span class="line">    x=&#123;<span class="string">'x'</span>: new_samples&#125;,</span><br><span class="line">    num_epochs=<span class="number">1</span>,</span><br><span class="line">    shuffle=<span class="keyword">False</span>)</span><br><span class="line"></span><br><span class="line">predictions = list(classifier.predict(input_fn=predict_input_fn))</span><br><span class="line">predicted_classes = [p[<span class="string">'classes'</span>] <span class="keyword">for</span> p <span class="keyword">in</span> predictions]</span><br><span class="line"></span><br><span class="line">print(<span class="string">'New Samples, Class Predictions: &#123;&#125;\n'</span>.format(predicted_classes))</span><br></pre></td></tr></table></figure>
+<p>你的结果应该如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">New Samples, Class Predictions: [<span class="number">1</span> <span class="number">2</span>]</span><br></pre></td></tr></table></figure>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/17/tf-estimator-Quickstart/" data-id="cjq1zv30e002bdrihmeyrtfr9" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/18/Building-Input-Functions-with-tf-estimator/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Building Input Functions with tf.estimator
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/17/TensorFlow-Mechanics-101/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorFlow Mechanics 101</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

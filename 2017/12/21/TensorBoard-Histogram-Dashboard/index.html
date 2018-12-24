@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>TensorBoard Histogram Dashboard | 写字的地方</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="TensorBoard 直方图仪表盘展示了在 TensorFlow 图中一些 Tensor 的分布是如何随着时间所改变的。它通过展示很多关于你的张量在不同时间点的的直方图来实现。">
+<meta name="keywords" content="TensorFlow">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorBoard Histogram Dashboard">
+<meta property="og:url" content="http://zc119.github.io/2017/12/21/TensorBoard-Histogram-Dashboard/index.html">
+<meta property="og:site_name" content="写字的地方">
+<meta property="og:description" content="TensorBoard 直方图仪表盘展示了在 TensorFlow 图中一些 Tensor 的分布是如何随着时间所改变的。它通过展示很多关于你的张量在不同时间点的的直方图来实现。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/1.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/2.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/3.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/4.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/5.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/6.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/7.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/8.png">
+<meta property="og:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/9.png">
+<meta property="og:updated_time" content="2017-12-21T10:15:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TensorBoard Histogram Dashboard">
+<meta name="twitter:description" content="TensorBoard 直方图仪表盘展示了在 TensorFlow 图中一些 Tensor 的分布是如何随着时间所改变的。它通过展示很多关于你的张量在不同时间点的的直方图来实现。">
+<meta name="twitter:image" content="http://zc119.github.io/image/TensorBoard%20Histogram%20Dashboard/1.png">
+    
+
+    
+        <link rel="alternate" href="/" title="写字的地方" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+    
+    
+
+
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">写字的地方</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">Home</a>
+                
+                    <a class="main-nav-link" href="/archives">Archives</a>
+                
+                    <a class="main-nav-link" href="/categories">Categories</a>
+                
+                    <a class="main-nav-link" href="/tags">Tags</a>
+                
+                    <a class="main-nav-link" href="/about">About</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">Home</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">Archives</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">Categories</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">Tags</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">About</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" src="/css/images/avatar.png">
+            <h2 id="name">Chi Zhou</h2>
+            <h3 id="title">ZJUer &amp; Learner</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>HangZhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/ZC119/">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                40
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                5
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/ZC119/" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-TensorBoard-Histogram-Dashboard" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            TensorBoard Histogram Dashboard
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2017/12/21/TensorBoard-Histogram-Dashboard/">
+            <time datetime="2017-12-21T10:13:35.000Z" itemprop="datePublished">2017-12-21</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/TensorFlow/">TensorFlow</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/TensorFlow/">TensorFlow</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>TensorBoard 直方图仪表盘展示了在 TensorFlow 图中一些 Tensor 的分布是如何随着时间所改变的。它通过展示很多关于你的张量在不同时间点的的直方图来实现。</p>
+<a id="more"></a>
+<h2 id="一个基本的例子"><a href="#一个基本的例子" class="headerlink" title="一个基本的例子"></a>一个基本的例子</h2><p>让我们从一个简单的情况开始：一个正态分布随机变量，均值随着时间改变。TensorFlow 有一个 ops <a href="https://www.tensorflow.org/api_docs/python/tf/random_normal" target="_blank" rel="noopener">tf.random_normal</a>可以实现。在TensorBoard，我们经常使用 summary ops 来读入数据，tf.summary.histogram。</p>
+<p>下面是部分代码，生成一些直方图的 summaries 包括正态分布数据，且均值随着时间增加。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line">k = tf.placeholder(tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make a normal distribution, with a shifting mean</span></span><br><span class="line">mean_moving_normal = tf.random_normal(shape=[<span class="number">1000</span>], mean=(<span class="number">5</span>*k), stddev=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># Record that distribution into a histogram summary</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/moving_mean'</span>, mean_moving_normal)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup a session and summary writer</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line">writer = tf.summary.FileWriter(<span class="string">'./tmp/histogram_example'</span>)</span><br><span class="line"></span><br><span class="line">summaries = tf.summary.merge_all()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup a loop and write the summaries to disk</span></span><br><span class="line">N = <span class="number">400</span></span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(N):</span><br><span class="line">    k_val = step/float(N)</span><br><span class="line">    summ = sess.run(summaries, feed_dict=&#123;k: k_val&#125;)</span><br><span class="line">    writer.add_summary(summ, global_step=step)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!tensorboard --logdir=./tmp/histogram_example</span><br></pre></td></tr></table></figure>
+<p>可以在 TensorBoard 看到</p>
+<p><img src="/image/TensorBoard Histogram Dashboard/1.png" alt=""></p>
+<p>tf.summary.histogram 接受任意 size 和 shape 的tensor，并且把它压缩到一个直方图数据结构包括很多 widths 和 counts 的 bins 中。例如，将要组织数据 [0.5, 1.1, 1.3, 2.2, 2.9, 2.99] 到 bins 中。我们可以做 3 个 bins：一个包含0到1的 bin，这将包含元素0.5,一个包含1到2的 bin，这将包含1.1,1.3,一个包含2-3的 bin，这将包含2.2,2.9,2.99。</p>
+<p>TensorFlow 使用一个相似的方法来创建 bins，但是不像我们的例子，它没有创建整数 bins。对于大的，稀疏的数据集，这可能会产生数千个 bins。因此， bins 是指数分布的，很多 bins 接近于0而对于大的数则相对少。然而，可视化指数分布的 bins 是困难的，如果高度被用来编码数量，则宽的 bins 将会产据更多空间，即使它们有同样多的元素。反之，编码区域内数目使高度无法比较。因此，histograms 重采样数据到均匀的 bins 中，这将在一些情况导致一些 unfortunate artifacts。</p>
+<p>histogram visualizer 的每一个切片展示了一个单一的 histogram。切片是一步步组织的。老的切片(例如 step 0)放在后面且颜色更深，新的切片(例如 step 400)放在前面颜色更浅。y 轴演示了迭代步的序号。</p>
+<p>你可以用鼠标在 histogram 上移动来看更详细的信息。例如，下图我们可以看到 histogram 在第176步有一个中心在 2.25 并且有177个元素的 bin。</p>
+<p><img src="/image/TensorBoard Histogram Dashboard/2.png" alt=""></p>
+<p>另外，你可能注意到 histogram 切片没有总是在步骤数或时间上均匀分布。这是因为 TensorBoard 使用(<a href="https://en.wikipedia.org/wiki/Reservoir_sampling" target="_blank" rel="noopener">Reservoir sampling</a>)蓄水池抽样来保持所有histogram 的一个子集，来存在内存中。蓄水池抽样保证了每一个样本有总样的似然度被选中，但是因为它是一个随机算法，抽样并不总是在均匀的步长中发生。</p>
+<h2 id="Overlay-重叠模式"><a href="#Overlay-重叠模式" class="headerlink" title="Overlay 重叠模式"></a>Overlay 重叠模式</h2><p>左边有控制面板允许你改变 histogram 的模式从 offset 到 overlay：</p>
+<p><img src="/image/TensorBoard Histogram Dashboard/3.png" alt=""></p>
+<p>在 offset 模式中，可视化旋转 45 度，所以独立的 histogram 切片可以随时间伸展，另一个模式则把所有的都在一样的 y 轴上。</p>
+<p><img src="/image/TensorBoard Histogram Dashboard/4.png" alt=""></p>
+<p>现在，每一个切片是分离的先，y 轴展示了 item 数目在每一个 bucket 中。颜色越深越早，越浅越近，你同样可以用鼠标移动获取信息。</p>
+<p>通常，重叠模式在你像直接比较不同 histograms 的数目时比较有用。</p>
+<h2 id="多峰的分布"><a href="#多峰的分布" class="headerlink" title="多峰的分布"></a>多峰的分布</h2><p>Histogram 方便可视化多峰分布。例如构建一个简单的双峰分布通过把不同的正态分布的输出联系起来。代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">k = tf.placeholder(tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make a normal distribution, with a shifting mean</span></span><br><span class="line">mean_moving_normal = tf.random_normal(shape=[<span class="number">1000</span>], mean=(<span class="number">5</span>*k), stddev=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># Record that distribution into a histogram summary</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/moving_mean'</span>, mean_moving_normal)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make a normal distribution with shrinking variance</span></span><br><span class="line">variance_shrinking_normal = tf.random_normal(shape=[<span class="number">1000</span>], mean=<span class="number">0</span>, stddev=<span class="number">1</span>-(k))</span><br><span class="line"><span class="comment"># Record that distribution too</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/shrinking_variance'</span>, variance_shrinking_normal)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Let's combine both of those distribution into one dataset</span></span><br><span class="line">normal_combined = tf.concat([mean_moving_normal, variance_shrinking_normal], <span class="number">0</span>)</span><br><span class="line"><span class="comment"># We add anothor hisotgram summary to record the combined distribution</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/bimodal'</span>, normal_combined)</span><br><span class="line"></span><br><span class="line">summaries = tf.summary.merge_all()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup a session and summary writer</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line">writer = tf.summary.FileWriter(<span class="string">'./tmp/histogram_example'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup a loop and write the summaries to disk</span></span><br><span class="line">N = <span class="number">400</span></span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(N):</span><br><span class="line">    k_val = step/float(N)</span><br><span class="line">    summ = sess.run(summaries, feed_dict=&#123;k: k_val&#125;)</span><br><span class="line">    writer.add_summary(summ, global_step=step)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!tensorboard --logdir=./tmp/histogram_example</span><br></pre></td></tr></table></figure>
+<p>从上面的例子中你已经知道了 moving mean 正态分布。现在我们有一个 shrinking variance 分布：</p>
+<p><img src="/image/TensorBoard Histogram Dashboard/5.png" alt=""></p>
+<p>当我们联合它们，我们的到一张图清晰地显示了 divergent，bimodal 结构：</p>
+<p><img src="/image/TensorBoard Histogram Dashboard/6.png" alt=""></p>
+<h2 id="一些更多的分布"><a href="#一些更多的分布" class="headerlink" title="一些更多的分布"></a>一些更多的分布</h2><p>just for fon。我们生成并可视化一些更多的分布，并且联合它们到一张图表里，下面是代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line">k = tf.placeholder(tf.float32)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make a normal distribution, with a shifting mean</span></span><br><span class="line">mean_moving_normal = tf.random_normal(shape=[<span class="number">1000</span>], mean=(<span class="number">5</span>*k), stddev=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># Record that distribution into a histogram summary</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/moving_mean'</span>, mean_moving_normal)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Make a normal distribution with shrinking variance</span></span><br><span class="line">variance_shrinking_normal = tf.random_normal(shape=[<span class="number">1000</span>], mean=<span class="number">0</span>, stddev=<span class="number">1</span>-(k))</span><br><span class="line"><span class="comment"># Record that distribution too</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/shrinking_variance'</span>, variance_shrinking_normal)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Let's combine both of those distribution into one dataset</span></span><br><span class="line">normal_combined = tf.concat([mean_moving_normal, variance_shrinking_normal], <span class="number">0</span>)</span><br><span class="line"><span class="comment"># We add anothor hisotgram summary to record the combined distribution</span></span><br><span class="line">tf.summary.histogram(<span class="string">'normal/bimodal'</span>, normal_combined)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Add a gamma distribution</span></span><br><span class="line">gamma = tf.random_gamma(shape=[<span class="number">1000</span>], alpha=k)</span><br><span class="line">tf.summary.histogram(<span class="string">'gamma'</span>, gamma)</span><br><span class="line"></span><br><span class="line"><span class="comment"># And a poisson distribution</span></span><br><span class="line">poisson = tf.random_poisson(shape=[<span class="number">1000</span>], lam=k)</span><br><span class="line">tf.summary.histogram(<span class="string">'poisson'</span>, poisson)</span><br><span class="line"></span><br><span class="line"><span class="comment"># And a uniform distribution</span></span><br><span class="line">uniform = tf.random_uniform(shape=[<span class="number">1000</span>], maxval=k*<span class="number">10</span>)</span><br><span class="line">tf.summary.histogram(<span class="string">'uniform'</span>, uniform)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Finally, combine everything together!</span></span><br><span class="line">all_distributions = [mean_moving_normal, variance_shrinking_normal,</span><br><span class="line">                     gamma, poisson, uniform]</span><br><span class="line">all_combined = tf.concat(all_distributions, <span class="number">0</span>)</span><br><span class="line">tf.summary.histogram(<span class="string">"all_combined"</span>, all_combined)</span><br><span class="line"></span><br><span class="line">summaries = tf.summary.merge_all()</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup a session and summary writer</span></span><br><span class="line">sess = tf.Session()</span><br><span class="line">writer = tf.summary.FileWriter(<span class="string">'./tmp/histogram_example1'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Setup a loop and write the summaries to disk</span></span><br><span class="line">N = <span class="number">400</span></span><br><span class="line"><span class="keyword">for</span> step <span class="keyword">in</span> range(N):</span><br><span class="line">    k_val = step/float(N)</span><br><span class="line">    summ = sess.run(summaries, feed_dict=&#123;k: k_val&#125;)</span><br><span class="line">    writer.add_summary(summ, global_step=step)</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">!tensorboard --logdir=./tmp/histogram_example1</span><br></pre></td></tr></table></figure>
+<p><img src="/image/TensorBoard Histogram Dashboard/7.png" alt=""><br><img src="/image/TensorBoard Histogram Dashboard/8.png" alt=""><br><img src="/image/TensorBoard Histogram Dashboard/9.png" alt=""></p>
+<p>poisson 分布定义在整数上，所以所有的值生成在整数上，histogram 压缩到浮点的 bins中，造成了可视化有一些小的凸起而不是完美的峰。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2017/12/21/TensorBoard-Histogram-Dashboard/" data-id="cjq1zv2zw000kdrihewe9hchw" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2017/12/23/Programmers-Guide/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    Programmers Guide
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2017/12/20/TensorBoard-Graph-Visualization/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">TensorBoard Graph Visualization</div>
+        </a>
+    
+</nav>
+
+
+    
+</article>
+
+
+    
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">最新文章</h3>
+        <div class="widget">
+            <ul id="recent-post" class="no-thumbnail">
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现卷积神经网络/" class="title">TensorFlow 实现卷积神经网络</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T12:42:20.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/28/TensorFlow-实现自编码器及多层感知机/" class="title">TensorFlow 实现自编码器及多层感知机</a></p>
+                            <p class="item-date"><time datetime="2018-01-28T01:55:14.000Z" itemprop="datePublished">2018-01-28</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/Tensorflow-第一步/" class="title">TensorFlow 第一步</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:58:51.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
+                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
+                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/data-analysis/">data analysis</a></p>
+                            <p class="item-title"><a href="/2018/01/20/10-分钟入门-pandas/" class="title">10 分钟入门 pandas</a></p>
+                            <p class="item-date"><time datetime="2018-01-20T11:10:04.000Z" itemprop="datePublished">2018-01-20</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">归档</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="http://hexo.io">Hexo</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 Chi Zhou<br>
+            Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
+        </div>
+    </div>
+</footer>
+        
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
