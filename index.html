@@ -154,11 +154,11 @@
         </div>
         <div class="article-info profile-block">
             <div class="article-info-block">
-                41
+                42
                 <span>文章</span>
             </div>
             <div class="article-info-block">
-                6
+                7
                 <span>标签</span>
             </div>
         </div>
@@ -207,6 +207,162 @@
 
             
             <section id="main">
+    <article id="post-Docker实践" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 itemprop="name">
+            <a class="article-title" href="/2019/01/07/Docker实践/">Docker实践</a>
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2019/01/07/Docker实践/">
+            <time datetime="2019-01-07T07:13:17.000Z" itemprop="datePublished">2019-01-07</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/linux/">linux</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/linux/">linux</a>
+    </div>
+
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>本文是由<a href="https://arxiv.org/pdf/1812.09764.pdf" target="_blank" rel="noopener">ICLR2019 Neural persistence</a>论文中的项目出发接触 docker. 参考了<a href="http://www.runoob.com/docker/docker-tutorial.html" target="_blank" rel="noopener">菜鸟教程</a>.</p>
+<h2 id="Docker-架构"><a href="#Docker-架构" class="headerlink" title="Docker 架构"></a>Docker 架构</h2><p>Docker架构模式为客户端-服务器. 通过Docker镜像创建Docker容器.<br><img src="/image/docker/docker_1.png" alt=""></p>
+<h2 id="ubuntu18-04-安装-docker"><a href="#ubuntu18-04-安装-docker" class="headerlink" title="ubuntu18.04 安装 docker"></a>ubuntu18.04 安装 docker</h2><p>直接从软件源中安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install docker-ce</span><br></pre></td></tr></table></figure></p>
+<p>添加当前用户到 docker 用户组，可以不用 sudo 运行 docker<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo groupadd docker</span><br><span class="line">sudo usermod -aG docker <span class="variable">$USER</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Docker-使用"><a href="#Docker-使用" class="headerlink" title="Docker 使用"></a>Docker 使用</h2><h3 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h3><p><code>docker run</code>命令在容器内运行程序<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run ubuntu /bin/<span class="built_in">echo</span> <span class="string">"Hello world"</span></span><br></pre></td></tr></table></figure></p>
+<p>其中<code>ubuntu</code>为指定要运行的镜像.<br><img src="/image/docker/docker_2.png" alt=""></p>
+<h3 id="交互式容器"><a href="#交互式容器" class="headerlink" title="交互式容器"></a>交互式容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -it ubuntu /bin/bash</span><br></pre></td></tr></table></figure>
+<p><code>-i</code>允许交互, <code>-t</code>新容器内制定终端</p>
+<p><img src="/image/docker/docker_3.png" alt=""></p>
+<h3 id="后台容器"><a href="#后台容器" class="headerlink" title="后台容器"></a>后台容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d ubuntu /bin/sh -c <span class="string">"while true; do echo hello world; sleep 1; done"</span></span><br></pre></td></tr></table></figure>
+<p><img src="/image/docker/docker_4.png" alt=""></p>
+<p>通过<code>docker ps</code>查看进程</p>
+<p><img src="/image/docker/docker_5.png" alt=""></p>
+<p><code>docker logs</code>查看输出</p>
+<p><img src="/image/docker/docker_6.png" alt=""></p>
+<p><code>docker stop</code>停止进程</p>
+<p><img src="/image/docker/docker_7.png" alt=""></p>
+<h2 id="Docker-镜像使用"><a href="#Docker-镜像使用" class="headerlink" title="Docker 镜像使用"></a>Docker 镜像使用</h2><h3 id="镜像列表"><a href="#镜像列表" class="headerlink" title="镜像列表"></a>镜像列表</h3><p><code>docker images</code>列出本地镜像</p>
+<p><img src="/image/docker/docker_8.png" alt=""></p>
+<h3 id="获取镜像"><a href="#获取镜像" class="headerlink" title="获取镜像"></a>获取镜像</h3><p><code>docker pull ubuntu</code></p>
+<h3 id="查找镜像"><a href="#查找镜像" class="headerlink" title="查找镜像"></a>查找镜像</h3><p><code>docker search ubuntu</code></p>
+<h3 id="Dockerfile-构建镜像"><a href="#Dockerfile-构建镜像" class="headerlink" title="Dockerfile 构建镜像"></a>Dockerfile 构建镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">FROM tensorflow/tensorflow:1.6.0-py3</span><br><span class="line">RUN mkdir /Software</span><br><span class="line">WORKDIR /Software</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Aleph dependencies</span></span><br><span class="line">RUN apt-get update &amp;&amp; apt-get install -y apt-utils</span><br><span class="line">RUN apt-get install -y cmake git python3-dev</span><br><span class="line">RUN pip3 install pytest</span><br><span class="line">RUN git <span class="built_in">clone</span> https://github.com/pybind/pybind11.git pybind11</span><br><span class="line">RUN mkdir pybind11/build</span><br><span class="line">WORKDIR pybind11/build</span><br><span class="line">RUN cmake ..</span><br><span class="line"><span class="comment">#RUN make -j 4</span></span><br><span class="line">RUN make -j 4 install</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install Aleph python module</span></span><br><span class="line">RUN apt-get install -y libboost-dev libboost-regex-dev </span><br><span class="line">RUN git <span class="built_in">clone</span> https://github.com/Submanifold/Aleph.git Aleph</span><br><span class="line">RUN mkdir Aleph/build</span><br><span class="line">WORKDIR Aleph/build</span><br><span class="line">RUN git checkout 8c88506</span><br><span class="line">RUN cmake ..</span><br><span class="line">RUN make aleph</span><br><span class="line">RUN pip3 install bindings/python/aleph</span><br><span class="line"></span><br><span class="line"><span class="comment"># Install python dependencies</span></span><br><span class="line">RUN pip3 install sacred matplotlib seaborn pandas</span><br><span class="line"></span><br><span class="line">RUN mkdir /Neuropersistence</span><br><span class="line">WORKDIR /Neuropersistence</span><br><span class="line">ADD . /Neuropersistence</span><br></pre></td></tr></table></figure>
+<p><code>From</code>指定镜像源, <code>RUN</code>让docker在镜像内执行命令, <code>WORKDIR</code>指定目录. <code>ADD</code>将主机的文件拷贝到镜像中. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker build -t neuropersistence .</span><br></pre></td></tr></table></figure>
+<p><code>-t</code>指定目标镜像名, <code>.</code>为Dockerfile文件所在目录. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker run -v <span class="variable">$PWD</span>/results/:/Neuropersistence/results/ neuropersistence python3 -u run_experiments.py</span><br><span class="line">docker run -v <span class="variable">$PWD</span>/results/:/Neuropersistence/results/ neuropersistence python3 combine_runs.py results/runs/* --output results/combined_runs.csv</span><br></pre></td></tr></table></figure>
+<p><code>-v</code>使docker容器启动时挂载主机的目录, 用<code>:</code>分隔. </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -v <span class="variable">$PWD</span>/results/:/Neuropersistence/results/ neuropersistence python3 create_plots.py results/combined_runs.csv results/combined_runs.pdf</span><br></pre></td></tr></table></figure>
+        
+        </div>
+        <footer class="article-footer">
+            <div class="share-container">
+
+
+
+</div>
+
+    <a data-url="http://zc119.github.io/2019/01/07/Docker实践/" data-id="cjqlzsbng00014lihsm51tt0n" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+<script>
+    (function ($) {
+        // Prevent duplicate binding
+        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
+            __SHARE_BUTTON_BINDED__ = true;
+        } else {
+            return;
+        }
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+            
+    
+
+        </footer>
+    </div>
+    
+</article>
+
+
+
     <article id="post-MAKEFILE" class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
@@ -262,7 +418,7 @@
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/12/24/MAKEFILE/" data-id="cjq2aoxob0007psihlzqguwdh" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/12/24/MAKEFILE/" data-id="cjqlzsbnp000d4lihz98cwasb" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -434,7 +590,7 @@ Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/28/TensorFlow-实现卷积神经网络/" data-id="cjq2aoxoq001gpsihuma6c441" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/28/TensorFlow-实现卷积神经网络/" data-id="cjqlzsbo3001m4lih8dr05svy" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -589,7 +745,7 @@ Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/28/TensorFlow-实现自编码器及多层感知机/" data-id="cjq2aoxos001mpsihkyv3lll0" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/28/TensorFlow-实现自编码器及多层感知机/" data-id="cjqlzsbo1001g4lih08k6kp7l" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -734,7 +890,7 @@ Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/27/Tensorflow-第一步/" data-id="cjq2aoxoq001dpsihe9ggdec2" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/27/Tensorflow-第一步/" data-id="cjqlzsbo4001p4lihdpif432x" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -893,7 +1049,7 @@ Extracting MNIST_data/t10k-labels-idx1-ubyte.gz
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/27/TensorFlow-基础/" data-id="cjq2aoxol000wpsiho02q38zy" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/27/TensorFlow-基础/" data-id="cjqlzsbnw000x4lihbt8u2gmr" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1039,7 +1195,7 @@ dtype: float64
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/20/10-分钟入门-pandas/" data-id="cjq2aoxq4003tpsihnhrljavi" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/20/10-分钟入门-pandas/" data-id="cjqlzsbpw00464lihcshvhu03" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1174,7 +1330,7 @@ dtype: float64
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/20/scikit-learn-学习-七-核岭回归/" data-id="cjq2aoxor001jpsihv17emrio" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/20/scikit-learn-学习-七-核岭回归/" data-id="cjqlzsbo6001v4lih88smwhpz" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1321,7 +1477,7 @@ dtype: float64
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/20/scikit-learn-学习-六-线性和二次判别分析/" data-id="cjq2aoxot001rpsihk67qck2g" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/20/scikit-learn-学习-六-线性和二次判别分析/" data-id="cjqlzsbo5001s4liha24uxj25" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1459,156 +1615,7 @@ dtype: float64
 
 </div>
 
-    <a data-url="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/" data-id="cjq2aoxow0022psiho45eu8h1" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
-<script>
-    (function ($) {
-        // Prevent duplicate binding
-        if (typeof(__SHARE_BUTTON_BINDED__) === 'undefined' || !__SHARE_BUTTON_BINDED__) {
-            __SHARE_BUTTON_BINDED__ = true;
-        } else {
-            return;
-        }
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="fa fa-twitter article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="fa fa-facebook article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="fa fa-pinterest article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="fa fa-google article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-            
-    
-
-        </footer>
-    </div>
-    
-</article>
-
-
-
-    <article id="post-scikit-learn-学习（四）处理文本数据" class="article article-type-post" itemscope="" itemprop="blogPost">
-    <div class="article-inner">
-        
-        
-            <header class="article-header">
-                
-    
-        <h1 itemprop="name">
-            <a class="article-title" href="/2018/01/07/scikit-learn-学习（四）处理文本数据/">scikit-learn 学习（四）处理文本数据</a>
-        </h1>
-    
-
-                
-                    <div class="article-meta">
-                        
-    <div class="article-date">
-        <i class="fa fa-calendar"></i>
-        <a href="/2018/01/07/scikit-learn-学习（四）处理文本数据/">
-            <time datetime="2018-01-07T09:09:35.000Z" itemprop="datePublished">2018-01-07</time>
-        </a>
-    </div>
-
-
-                        
-    <div class="article-category">
-    	<i class="fa fa-folder"></i>
-        <a class="article-category-link" href="/categories/scikit-learn/">scikit-learn</a>
-    </div>
-
-                        
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link" href="/tags/scikit-learn/">scikit-learn</a>
-    </div>
-
-                    </div>
-                
-            </header>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-        
-            <p></p><p>本指南旨在一个单独实际任务中探索一些主要的 scikit-learn 工具: 分析关于 20 个不同主题的一个文档集合（新闻组帖子）。</p>
-<p>在本节中，我们将会学习如何:</p>
-<ul>
-<li>读取文件内容以及所属的类别</li>
-<li>提取合适于机器学习的特征向量</li>
-<li>训练一个线性模型来进行分类</li>
-<li>使用网格搜索策略找到特征提取组件和分类器的最佳配置</li>
-</ul>
-<h2 id="教程设置"><a href="#教程设置" class="headerlink" title="教程设置"></a>教程设置</h2><p>本教程源码在 scikit-learn 文件夹中</p>
-<p><code>scikit-learn/doc/tutorial/text_analytics/</code></p>
-<p>教程文件夹包含下列文件夹：</p>
-<ul>
-<li>*.rst files - 教程文档源文件</li>
-<li>data - 输入数据集的文件夹</li>
-<li>skeletons - 为了练习用的不完整样本</li>
-<li>solutions - 练习的答案</li>
-</ul>
-<h2 id="载入-20-新闻组数据集"><a href="#载入-20-新闻组数据集" class="headerlink" title="载入 20 新闻组数据集"></a>载入 20 新闻组数据集</h2><p>这个数据集包含20000个新闻文档，几乎被平均分成20个不同的组。这是在文本应用中非常流行的数据。</p>
-<p>首先，我们只考虑20个类中的其中4个</p><p></p>
-            <p class="article-more-link">
-                <a href="/2018/01/07/scikit-learn-学习（四）处理文本数据/#more">查看更多</a>
-            </p>
-        
-        </div>
-        <footer class="article-footer">
-            <div class="share-container">
-
-
-
-</div>
-
-    <a data-url="http://zc119.github.io/2018/01/07/scikit-learn-学习（四）处理文本数据/" data-id="cjq2aoxp1002jpsihzr2kvfay" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://zc119.github.io/2018/01/19/scikit-learn-学习-五-广义线性模型/" data-id="cjqlzsbo700234lihzx12jjt5" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         // Prevent duplicate binding
@@ -1701,6 +1708,15 @@ dtype: float64
                     <li>
                         
                         <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/linux/">linux</a></p>
+                            <p class="item-title"><a href="/2019/01/07/Docker实践/" class="title">Docker实践</a></p>
+                            <p class="item-date"><time datetime="2019-01-07T07:13:17.000Z" itemprop="datePublished">2019-01-07</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/c/">c++</a></p>
                             <p class="item-title"><a href="/2018/12/24/MAKEFILE/" class="title">TopologySmooth 项目 Makefile 编译</a></p>
                             <p class="item-date"><time datetime="2018-12-24T12:25:05.000Z" itemprop="datePublished">2018-12-24</time></p>
@@ -1734,15 +1750,6 @@ dtype: float64
                         </div>
                     </li>
                 
-                    <li>
-                        
-                        <div class="item-inner">
-                            <p class="item-category"><a class="article-category-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a></p>
-                            <p class="item-title"><a href="/2018/01/27/TensorFlow-基础/" class="title">TensorFlow 基础</a></p>
-                            <p class="item-date"><time datetime="2018-01-27T05:01:49.000Z" itemprop="datePublished">2018-01-27</time></p>
-                        </div>
-                    </li>
-                
             </ul>
         </div>
     </div>
@@ -1752,7 +1759,7 @@ dtype: float64
     <div class="widget-wrap">
         <h3 class="widget-title">分类</h3>
         <div class="widget">
-            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow/">TensorFlow</a><span class="category-list-count">14</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/TensorFlow-实战/">TensorFlow 实战</a><span class="category-list-count">4</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/c/">c++</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/data-analysis/">data analysis</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/linux/">linux</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/python-scraper/">python scraper</a><span class="category-list-count">12</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/scikit-learn/">scikit-learn</a><span class="category-list-count">8</span></li></ul>
         </div>
     </div>
 
@@ -1761,7 +1768,7 @@ dtype: float64
     <div class="widget-wrap">
         <h3 class="widget-title">归档</h3>
         <div class="widget">
-            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">一月 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">十二月 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">一月 2018</a><span class="archive-list-count">13</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">十二月 2017</a><span class="archive-list-count">27</span></li></ul>
         </div>
     </div>
 
@@ -1770,7 +1777,7 @@ dtype: float64
     <div class="widget-wrap">
         <h3 class="widget-title">标签</h3>
         <div class="widget">
-            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">14</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow-实战/">TensorFlow 实战</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/">c++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/data-analysis/">data analysis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python-scraper/">python scraper</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/scikit-learn/">scikit-learn</a><span class="tag-list-count">8</span></li></ul>
         </div>
     </div>
 
@@ -1779,7 +1786,7 @@ dtype: float64
     <div class="widget-wrap">
         <h3 class="widget-title">标签云</h3>
         <div class="widget tagcloud">
-            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
+            <a href="/tags/TensorFlow/" style="font-size: 20px;">TensorFlow</a> <a href="/tags/TensorFlow-实战/" style="font-size: 12.5px;">TensorFlow 实战</a> <a href="/tags/c/" style="font-size: 10px;">c++</a> <a href="/tags/data-analysis/" style="font-size: 10px;">data analysis</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/python-scraper/" style="font-size: 17.5px;">python scraper</a> <a href="/tags/scikit-learn/" style="font-size: 15px;">scikit-learn</a>
         </div>
     </div>
 
@@ -1808,7 +1815,7 @@ dtype: float64
         <footer id="footer">
     <div class="outer">
         <div id="footer-info" class="inner">
-            &copy; 2018 Chi Zhou<br>
+            &copy; 2019 Chi Zhou<br>
             Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>. Theme by <a href="http://github.com/ppoffice">PPOffice</a>
         </div>
     </div>
